@@ -1,0 +1,10 @@
+created: 20250517170433427
+list-before: $:/core/ui/ViewTemplate/body
+modified: 20250517170737823
+tags: $:/tags/ViewTemplate
+title: $:/_/rham/viewtemplates/policy-alias
+type: text/vnd.tiddlywiki
+
+<% if [<currentTiddler>tag[PolicyAlias]] %>
+<div class="alias">This policy is an alias of <$link to={{!!alias-of}}><$text text={{{ [{!!alias-of}get[caption]] }}} /></$link>.  Please view that one for details.</div>
+<% endif %>

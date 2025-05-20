@@ -1,0 +1,69 @@
+@media print {
+	@page {
+        @bottom-left {content: ""; font-size: 9pt; color: #333;}
+		@bottom-center {content: ""; font-size: 9pt; color: #333;}
+		@bottom-right {content: "Page " counter(page) " of " counter(pages); font-size: 9pt; color: #333;}
+
+		margin: 30mm 20mm 25mm;
+
+		@bottom-left {
+			border-top-width: 2px;
+			border-top-style: solid;
+			vertical-align: top;
+			padding-top:10px;
+		}
+
+		@bottom-center {
+			border-top-width: 2px;
+			border-top-style: solid;
+			vertical-align: top;
+			padding-top:10px;
+		}
+
+		@bottom-right {
+			border-top-width: 2px;
+			border-top-style: solid;
+			vertical-align: top;
+			padding-top:10px;
+		}
+	}
+
+    .tc-tiddler-frame { break-after: page; }
+    .tc-tiddler-frame:last-of-type { break-after: avoid; }
+
+	body.tc-body {
+		background-color: transparent;
+	}
+
+	.tc-sidebar-header, .tc-topbar {
+		display: none;
+	}
+
+	.tc-story-river {
+		margin: 0;
+		padding: 0;
+	}
+
+	.tc-story-river .tc-tiddler-frame {
+		margin: 0;
+		border: none;
+		padding: 0;
+	}
+
+	.tc-tiddler-controls, .tc-titlebar, .tc-subtitle, .tc-tags-wrapper {display: none; } 
+
+    .font-family {serif;}
+
+    div.policy-header {
+        display: block;
+        font-size: 135%;
+        text-transform: uppercase;
+        font-weight: bold;
+        h2.intro {text-align: center; margin: 0;}
+        h3 {
+            &.pol-number {text-align: right; text-transform: none; margin-top: 0;}
+            &.section {text-decoration: underline;}
+            &.pol-title {text-align: center; text-decoration: underline; }  
+        }
+    }
+};
