@@ -1,0 +1,14 @@
+created: 20250521011311740
+modified: 20250521012856981
+tags: $:/tags/Global
+title: $:/_/rham/procedures/history
+type: text/vnd.tiddlywiki
+
+\procedure history()
+<$let tid={{{ [<currentTiddler>addsuffix[-History]] }}}>
+<div class="history">
+<h3><$link to=<<tid>> >History</$link></h3>
+<$transclude $tiddler=<<tid>> $mode="block" />
+</div>
+</$let>
+\end

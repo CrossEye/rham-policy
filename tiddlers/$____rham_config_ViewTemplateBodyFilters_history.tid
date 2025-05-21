@@ -1,0 +1,8 @@
+created: 20250521031952807
+list-before: $:/config/ViewTemplateBodyFilters/default
+modified: 20250521032757155
+tags: $:/tags/ViewTemplateBodyFilter
+title: $:/_/rham/config/ViewTemplateBodyFilters/history
+type: text/vnd.tiddlywiki
+
+[field:caption[History]then[$:/_/rham/core/ui/ViewTemplate/body/history]]
