@@ -66,4 +66,5 @@
             &.pol-title {text-align: center; text-decoration: underline; }  
         }
     }
+    div.pdf-link {display: none;}
 };

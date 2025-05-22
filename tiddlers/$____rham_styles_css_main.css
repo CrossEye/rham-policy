@@ -1,0 +1,14 @@
+div.policy-header {
+    display: none;
+}
+div.history ul, div.legal ul  {list-style: none;}
+div[data-tiddler-title^="Policy"][data-tiddler-title$="-History"] ul {list-style: none;}
+div[data-tiddler-title^="Policy"][data-tiddler-title$="-Legal"] ul {list-style: none;}
+.pdf-link {
+  float: right;
+  text-align: center;
+  display: inline-box;
+  border: 1px solid #ccc;
+  margin: 1em .5em .5em;
+  a {text-decoration: none; font-size: 75%; padding: 1em; display: block; width: 100%; height: 100%;}
+}

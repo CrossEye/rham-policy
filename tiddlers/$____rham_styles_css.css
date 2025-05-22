@@ -1,6 +1,0 @@
-div.policy-header {
-    display: none;
-}
-div.history ul, div.legal ul  {list-style: none;}
-div[data-tiddler-title^="Policy"][data-tiddler-title$="-History"] ul {list-style: none;}
-div[data-tiddler-title^="Policy"][data-tiddler-title$="-Legal"] ul {list-style: none;}
