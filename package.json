@@ -1,0 +1,29 @@
+{
+  "name": "RHAM_Policies",
+  "version": "0.1.0",
+  "description": "Online version of RHAM's Policy Manual",
+  "main": "index.js",
+  "scripts": {
+    "pkg": "cross-var echo Package $npm_package_version",
+    "build": "cross-var node scripts/updateVersion latest && tiddlywiki . --output docs/latest --build index",
+    "release": "cross-var node scripts/updateVersion $npm_package_version && tiddlywiki . --output docs --build index && cross-var shx mkdir -p docs/$npm_package_version && cross-var shx cp docs/index.html docs/$npm_package_version/index.html",
+    "start": "tiddlywiki . --listen port=7425"
+  },
+  "keywords": [
+    "TiddlyWiki",
+    "SQL"
+  ],
+  "author": "Scott Sauyet",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CrossEye/rham-policy/issues"
+  },
+  "homepage": "https://github.com/CrossEye/rham-policy/#readme",
+  "dependencies": {
+    "tiddlywiki": "^5.3.6"
+  },
+  "devDependencies": {
+    "cross-var": "^1.1.0",
+    "shx": "^0.3.4"
+  }
+}

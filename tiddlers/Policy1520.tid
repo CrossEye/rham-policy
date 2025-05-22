@@ -1,10 +1,9 @@
 caption: 1520 - Outside Funded Athletic Teams
 created: 20250522191728140
 description: Outside Funded Athletic Teams
-modified: 20250522193353218
+modified: 20250522215203284
 pdf-url: https://www.rhamschools.org/common/pages/GetFile.ashx?key=vEG6Bfm7
 policy-nbr: 1520
-revision: 4
 section: Section1000
 tags: Policy Section1000
 title: Policy1520
@@ -12,8 +11,6 @@ type: text/vnd.tiddlywiki
 
 {{Policy1520(1)}}
 
-{{1520(2)}}
+{{Policy1520(2)}}
 
-Any athletic program which does not comply with the above requirements shall not be considered a Board
-program, or an athletic program offered, sponsored or supervised by the Region 8 Board of Education.
-
+{{Policy1520(3)}}
