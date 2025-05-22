@@ -1,0 +1,15 @@
+created: 20250521192032804
+modified: 20250521192528221
+revision: 2
+tags: $:/tags/Global
+title: $:/_/rham/procedures/legal
+type: text/vnd.tiddlywiki
+
+\procedure legal()
+<$let tid={{{ [<currentTiddler>addsuffix[-Legal]] }}}>
+<div class="legal">
+<h3><$link to=<<tid>> >Legal</$link></h3>
+<$transclude $tiddler=<<tid>> $mode="block" />
+</div>
+</$let>
+\end

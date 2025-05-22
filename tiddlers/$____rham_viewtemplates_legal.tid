@@ -1,0 +1,12 @@
+created: 20250521191043616
+list-before: $:/core/ui/ViewTemplate/body
+modified: 20250521191207367
+revision: 2
+tags: $:/tags/ViewTemplate
+title: $:/_/rham/viewtemplates/legal
+type: text/vnd.tiddlywiki
+
+<% if [<currentTiddler>caption[Legal]] %>
+
+!! Legal References for <$link to={{!!parent}} />
+<% endif %>

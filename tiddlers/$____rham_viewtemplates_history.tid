@@ -1,0 +1,12 @@
+created: 20250521032541190
+list-before: $:/core/ui/ViewTemplate/body
+modified: 20250521191023805
+revision: 2
+tags: $:/tags/ViewTemplate
+title: $:/_/rham/viewtemplates/history
+type: text/vnd.tiddlywiki
+
+<% if [<currentTiddler>caption[History]] %>
+
+!! History for <$link to={{!!parent}} />
+<% endif %>
