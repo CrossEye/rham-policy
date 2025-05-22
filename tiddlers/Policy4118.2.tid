@@ -2,21 +2,19 @@ adopted: February, 2006
 caption: 4118.2 - Alcohol, Tobacco, and Drug-Free Workplace
 created: 20250517173925294
 description: Alcohol, Tobacco, and Drug-Free Workplace
-modified: 20250522021017378
+modified: 20250522034110965
 pdf-url: https://www.rhamschools.org/common/pages/GetFile.ashx?key=qZxSBgRl
 policy-nbr: 4118.2
-revised: [[April, 2007]] [[March, 2009]] [[November 2011]] [[October, 2014]] [[November, 2015]] [[February, 2020]] [[January, 2024]]
+revised: [[April, 2007]] [[March, 2009]] [[November, 2011]] [[October, 2014]] [[November, 2015]] [[February, 2020]] [[January, 2024]]
 section: Section4000
 tags: Policy Section4000
 title: Policy4118.2
 type: text/vnd.tiddlywiki
 
 <$list filter="[parent<currentTiddler>] -[<currentTiddler>addsuffix[-Legal]] -[<currentTiddler>addsuffix[-History]] +[sortan[]]">
+<div class={{!!section-type}}>
 
 !! <$link>{{!!caption}}</$link>
-
 {{!!text}}
+</div>
 </$list>
-
-<<legal>>
-<<history>>
