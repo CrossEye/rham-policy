@@ -1,10 +1,10 @@
+code-body: yes
 created: 20250522182628076
-modified: 20250522183205082
-revision: 0
+modified: 20250522232023298
 tags: $:/tags/Global
 title: $:/_/rham/procedures/usc
 type: text/vnd.tiddlywiki
 
 \procedure usc(title, section, text)
-<a class="usc" href=`https://www.law.cornell.edu/uscode/text/$(title)$/$(section)$`><<title>> U.S.C. § <<section>></a>
+<a class="usc" href=`https://www.law.cornell.edu/uscode/text/$(title)$/$(section)$` target="_blank"><<title>> U.S.C. § <<section>></a>
 \end

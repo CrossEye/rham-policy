@@ -89,7 +89,7 @@ Run the macro
 */
 exports.run = function(section, text="") {
 	const url = cgsUrl(section)
-	return url ? `<a class="cgs" href="${url}">${text || section}</a>` : section
+	return url ? `<a class="cgs" href="${url}" target="_blank">${text || section}</a>` : section
 };
 
 })();

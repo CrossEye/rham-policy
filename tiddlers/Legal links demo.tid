@@ -1,17 +1,17 @@
 created: 20250522143619622
-modified: 20250522183841328
-revision: 0
+modified: 20250523003437809
 tags: 
 title: Legal links demo
 type: text/vnd.tiddlywiki
 
 !!! Tests of CGS Macro
+* `<<cgs 10-222gg>>`: <<cgs 10-222gg>>
 * `<<cgs 10-220p>>`: <<cgs 10-220p>>
 * `<<cgs 47-36bb>>`: <<cgs 47-36bb>>
 * `<<cgs 10-22-f "Safety committee">>`: <<cgs 10-22-f "Safety committee">>
 * `<<cgs 42a-4A-206>>`: <<cgs 42a-4A-206>>
-* `<<cgs 12345a-9876>>`: <<cgs 12345a-9876>>
+* `<<cgs 12345a-9876>>`: <<cgs 12345a-9876>>    # When not found, there is no link, just the original text
 
-!!! Tests if USC Procedure
+!!! Tests of USC Procedure
 * `<<usc 41 8101>>`: <<usc 41 8101>>
 * `<<usc 20 7973>>`: <<usc 20 7973>>
