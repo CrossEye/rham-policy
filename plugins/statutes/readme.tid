@@ -1,0 +1,45 @@
+title: $:/plugins/crosseye/statutes/cgs/readme
+type: text/vnd.tiddlywiki
+
+!! Link to Connecticut General Statutes.
+
+This exposes a procedure to make a link to a specific section of Connecticut law.  It is used like this:
+
+> `<<cgs 10-220p>>`
+
+yielding
+
+> <<cgs 10-220p>> 
+> (which is a link to `https://www.cga.ct.gov/current/pub/chap_170.htm#sec_10-220p`)
+
+You can also change the text, with the same link
+
+> `<<cgs 10-220p "Material for career options">>`
+
+to get
+
+> <<cgs 10-220p "Material for career options">> 
+> (which links to the same place.)
+
+
+!! Background
+
+Print references to Connecticut law look like:
+
+> C.G.S. 10-220p
+
+That means "Section 220p of Title 10 of the Connecticut General Statutes."  However the URL for that is
+
+> `https://www.cga.ct.gov/current/pub/chap_170.htm#sec_10-220p`
+
+The trouble is that the "chap_170" in that text is not easily derived from "Title 10" / "Section 220p".  And finding that link is a tedious process.  
+
+This procedure makes it simple, as it just looks these up in its own tiddlers. 
+
+!!! Note
+
+This is a heavyweight plugin, weighing in at over 300KB.  That's because it ends up doing a lookup from the title/section to the chapter number, and there are:
+
+* 81 titles
+* 1033 chapters
+* 28298 sections

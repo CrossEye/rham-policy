@@ -1,6 +1,6 @@
 {
   "name": "RHAM_Policies",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Online version of RHAM's Policy Manual",
   "main": "index.js",
   "scripts": {

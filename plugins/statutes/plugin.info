@@ -1,0 +1,10 @@
+{
+    "title": "$:/plugins/crosseye/statutes/cgs",
+    "name": "Statute Lookup",
+    "description": "Info to create external links given statute number",
+    "author": "Scott Sauyet",
+    "version": "0.1.0",
+    "core-version": ">=5.3.6",
+    "list": "readme samples code license",
+    "plugin-type": "plugin"
+}

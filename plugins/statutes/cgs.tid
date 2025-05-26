@@ -1,0 +1,19 @@
+title: $:/plugins/crosseye/statutes/cgs/procedure/cgs
+tags: $:/tags/Global
+
+\procedure cgs(section, text)
+<$let
+  title={{{ [<section>split[-]first[]] }}}
+  sect={{{ [<section>removeprefix<title>removeprefix[-]] }}}
+  display={{{ [<text>!match[]then<text>else<section>] }}}
+  _chap={{{ [[$:/plugins/crosseye/statutes/cgs/title/]addsuffix<title>getindex<sect>] }}}
+  type={{{ [<_chap>prefix[A]then[art]else[chap]] }}}
+  chap={{{ [<_chap>trim:prefix[A]] }}}
+>
+<% if [<chap>!match[]] %>
+<a href=`https://www.cga.ct.gov/current/pub/$(type)$_$(chap)$.htm#sec_$(section)$` target="_blank" class="cgs"><<display>></a>
+<% else %>
+<<section>>
+<% endif %>
+</$let>
+\end

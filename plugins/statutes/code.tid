@@ -1,0 +1,221 @@
+title: $:/plugins/crosseye/statutes/cgs/code
+type: text/vnd.tiddlywiki
+
+This plugin's data was found by scraping the website of the [[Connecticut General Statutes|https://www.cga.ct.gov/current/pub/titles.htm]].
+
+I'm memorializing the code used to build this plugin here, as it really should be rerun every two years when the statutes are updated.
+
+This is JavaScript code meant to run in Node.js.  It should take only minor modification to run in the browser.  It has one direct dependency, on [[jsdom|https://github.com/jsdom/jsdom]].
+
+!! Scraping
+
+We first scrape the website to get output that looks like this:
+
+```json
+[
+  /* ... */
+  {
+    "url": "https://www.cga.ct.gov/current/pub/title_10.htm",
+    "nbr": "10",
+    "name": "Education and Culture",
+    "chapters": [
+      /* ... */
+      {
+        "url": "https://www.cga.ct.gov/current/pub/chap_170.htm",
+        "chapType": "chapter",
+        "nbr": "170",
+        "name": "Boards of Education",
+        "sections": [
+          /* ... */ 
+          {
+            "url": "https://www.cga.ct.gov/current/pub/chap_170.htm#sec_10-220m",
+            "nbr": "10-220m",
+            "name": "Review of transportation arrangements of special needs students."
+          },
+          {
+            "url": "https://www.cga.ct.gov/current/pub/chap_170.htm#sec_10-220p",
+            "nbr": "10-220p",
+            "name": "Materials provided to students when discussing career options."
+          },
+          /* ... */
+        ],
+        /* ... */
+      }
+    ]
+  },
+  /* ... */
+]
+```
+
+This is the code that collects that, run as `node scrape > titles.json`:
+
+```js
+const jsdom = require("jsdom")
+const { JSDOM } = jsdom
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0  // shouldn't be necessary. No idea why it was
+
+const fetchTitles = (url) =>
+  fetch(url)
+    .then(r => r.text())
+    .then(html  => {
+      const { document } = (new JSDOM(html, {url})).window; 
+      return [...document.querySelectorAll('a:has(span.toc_ttl_name)')].map(a => {
+        const url = a.href
+        const nbr = url.split('_')[1].slice(0, -4).replace(/^0+/, '')
+        const name = a.textContent
+        return {url, nbr, name}
+      })
+    })
+
+const fetchChapters = ([title, ...titles]) =>
+  title == undefined
+    ? Promise.resolve([])
+    : fetchChapter(title).then(chapters => fetchChapters(titles).then(completeTitles => [{...title, chapters}, ...completeTitles]))
+
+const fetchChapter = (title) => 
+  fetch(title.url)
+    .then(r => r.text())
+    .then(html  => {
+      const { document } = (new JSDOM(html, {url: title.url})).window; 
+      return [...document.querySelectorAll('td+td a.toc_ch_link')].map(a => {
+        const url = a.href
+        const chapType = url.includes('art_') ? 'article' : 'chapter'
+        const _nbr = url.split('_')[1].slice(0, -4).replace(/^0+/, '')
+        const nbr = chapType == 'article' ? _nbr.toUpperCase() : _nbr
+        const name = a.textContent
+        return {url, chapType, nbr, name}
+      })
+    }).then(fetchSections)
+
+const fetchSections = ([chapter, ...chapters]) => 
+  chapter == undefined
+    ? Promise.resolve([])
+    : fetchSection(chapter).then(sections => fetchSections(chapters).then(completeChapters => [{...chapter, sections}, ...completeChapters]))
+
+
+const fetchSection = (chapter) => 
+  fetch(chapter.url)
+    .then(r => r.text())
+    .then(html  => {
+      const { document } = (new JSDOM(html, {url: chapter.url})).window; 
+      return [...document.querySelectorAll('p.toc_catchln a')].map(a => {
+      const url = a.href
+      const nbr = url.split('#sec_')[1]
+      const name = a.textContent.replace('Sec. ' + nbr + '. ', '')
+      return {url, nbr, name}
+  }).filter(r => r.nbr)
+})
+
+
+fetchTitles('https://www.cga.ct.gov/current/pub/titles.htm')
+  .then(fetchChapters)
+  .then((x) => JSON.stringify(x))
+  .then(console.log)
+  .catch(console.warn)
+```
+
+Note that this code was hacked together quickly.  There are several variables that really should be renamed, and probably other useful refactorings.
+
+This will take several minutes to run; it requests and parses over 80 titles and over 1000 chapters to formulate its output.
+
+
+!! Stats
+
+To get the stats out of this, we can run `node stats > stats.txt`
+
+```js
+const titles = require('./titles.json');
+console.log('total titles: ' + titles.length)
+
+const chapters = titles.flatMap(t => t.chapters).filter(c => c.sections.length > 0)
+console.log('total chapters: ' + chapters.length)
+
+const sections = chapters.flatMap(c => c.sections)
+console.log('total sections: ' + sections.length)
+```
+
+to get
+
+```txt
+total titles: 81
+total chapters: 1033
+total sections: 28198
+```
+
+!! Creating Tiddlers
+
+And then to create the title tiddlers, we call `node makeDictionaryTids`
+
+```js
+const {writeFile} = require('fs/promises')
+const titles = require('./titles.json')
+
+
+Promise.all(
+  titles.filter(t => t.chapters.length > 0).map(t => {
+    const s = t.chapters.filter(c => c.sections.length > 0).flatMap(c => c.sections.map(
+      s => `${
+        s.nbr.split('-').slice(1).join('-')}:${
+          c.chapType =="article" ? 'A' : ''
+        }${c.url.slice(c.url.lastIndexOf('/') + 1, -4).replace('chap_', '').replace('art_', '')}`
+    ).join('\n')).join('\n')
+    return writeFile(
+      `./wiki/plugins/statutes/cgs/$__plugins_crosseye_statutes_cgs_title_${t.nbr}.tid`, 
+      `title: $:/plugins/crosseye/statutes/cgs/title/${t.nbr}
+type: application/x-tiddler-dictionary
+tags: SectionToChapterForTitle
+
+` + s)
+  })
+) .then (() => console.log('Wrote all titles'))
+  .catch(console.warn)
+```
+
+This will create a plugin tiddler for every title.  Those look like this:
+
+```tid
+title: $:/plugins/crosseye/statutes/cgs/title/10
+type: application/x-tiddler-dictionary
+tags: SectionToChapterForTitle
+
+1:163
+2:163
+2a:163
+3:163
+
+...
+
+220m:170
+220p:170
+220q:170
+
+...
+```
+
+and which are stored as `.tid` files in the plugin directory.
+
+Note that there is one exception.  `Title 42A: UNIFORM COMMERCIAL CODE` does not call its subdivisions "sections", but "articles", and the URLs used for them have `art_` in the title instead of `chap_`.  That title has an 'A' at the start of the chapters:
+
+```tid
+title: $:/plugins/crosseye/statutes/cgs/title/42a
+type: application/x-tiddler-dictionary
+tags: SectionToChapterForTitle
+
+1-101:A001
+1-102:A001
+1-103:A001
+
+...
+
+2-101:A002
+2-102:A002
+
+...
+```
+
+!! Runtime
+
+The code that runs this is in [[$:/plugins/crosseye/statutes/cgs/procedure/cgs]]:
+
+
+<$codeblock code={{$:/plugins/crosseye/statutes/cgs/procedure/cgs}} language="tiddlywiki"/>

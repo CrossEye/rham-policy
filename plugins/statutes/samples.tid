@@ -1,0 +1,10 @@
+title: $:/plugins/crosseye/statutes/cgs/samples
+type: text/vnd.tiddlywiki
+
+* `<<cgs 10-222gg>>`: <<cgs 10-222gg>>
+* `<<cgs 10-220p>>`: <<cgs 10-220p>>
+* `<<cgs 42a-7-205>>`: <<cgs 42a-7-205>>
+* `<<cgs 47-36bb>>`: <<cgs 47-36bb>>
+* `<<cgs 10-222f "College informational forums">>`: <<cgs 10-222f "College informational forums">>
+* `<<cgs 42a-4A-206>>`: <<cgs 42a-4A-206>>
+* `<<cgs 12345a-9876>>`: <<cgs 12345a-9876>>    @@color:#999;# When not found, there is no link, just the original text@@
