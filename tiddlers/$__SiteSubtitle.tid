@@ -1,7 +1,7 @@
 created: 20250517153058613
-modified: 20250517153105164
-revision: 0
+modified: 20250527123223557
+revision: 89
 title: $:/SiteSubtitle
 type: text/vnd.tiddlywiki
 
-Scott's attempt at conversion
+Version {{About!!version}} (Last updated <$text text={{{ [all[tiddlers+shadows]!sort[modified]first[]get[modified]format:date[MMM DD, YYYY]] }}}/>)

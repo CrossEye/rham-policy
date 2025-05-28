@@ -12,3 +12,4 @@ div[data-tiddler-title^="Policy"][data-tiddler-title$="-Legal"] ul {list-style: 
   margin: 1em .5em .5em;
   a {text-decoration: none; font-size: 75%; padding: 1em; display: block; width: 100%; height: 100%;}
 }
+div[data-tags~="Legal"] ul, div[data-tags~="History"] ul {list-style: none;]
