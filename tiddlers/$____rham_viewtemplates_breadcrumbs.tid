@@ -1,0 +1,10 @@
+created: 20250529145457442
+list-before: $:/core/ui/ViewTemplate/title
+modified: 20250529185942346
+revision: 6
+tags: $:/tags/ViewTemplate
+title: $:/_/rham/viewtemplates/breadcrumbs
+
+<%if [<currentTiddler>has[parent]] %>
+<$transclude $variable="breadcrumbs" tid={{{ [<currentTiddler>] }}}> />
+<% endif %>

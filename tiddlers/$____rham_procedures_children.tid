@@ -1,0 +1,47 @@
+code-body: yes
+created: 20250528181300967
+modified: 20250529181738032
+revision: 6
+tags: $:/tags/Global
+title: $:/_/rham/procedures/children
+
+\procedure children()
+
+  \procedure heading2()
+    <div class={{!!section-type}}>
+      <h2><$link>{{!!caption}}</$link></h2>
+      <$transclude $mode="block"/>
+    </div>
+  \end heading2
+
+  \procedure definition()
+    <div class="definition">
+      <div class="term"><$link>{{!!marker}}. {{!!caption}}</$link>: </div>
+      <$transclude $mode="block"/>
+    </div>
+  \end definition
+
+  \procedure list()
+    <div class="list-item">
+      <div class="marker"><$link>{{!!marker}}</$link>. </div>
+      <$transclude $mode="block"/>
+    </div>
+  \end list
+
+  \procedure plain()
+    <div class={{!!section-type}}>
+      <% if [<currentTiddler>section-type[legal]] %>
+        <h2><$link>{{!!caption}}</$link></h2>
+      <% endif %>
+      <% if [<currentTiddler>section-type[history]] %>
+        <h2><$link>{{!!caption}}</$link></h2>
+      <% endif %>      <$transclude $mode="block"/>
+    </div>
+  \end plain
+
+  <$parameters type $params="params" >
+    <$list filter="[parent<currentTiddler>!has[draft.of]sortan[]]" >
+      <$transclude $variable=<<type>> $mode="block" />
+    </$list>
+  </$parameters>
+\end

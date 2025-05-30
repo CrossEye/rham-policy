@@ -1,10 +1,9 @@
 created: 20250517171040487
-modified: 20250522030916017
-revision: 0
+modified: 20250529174216316
+revision: 2
 tags: 
 title: $:/_/rham/core/ui/ViewTemplate/title/caption
 type: text/vnd.tiddlywiki
 
-<h2 class="tc-title"
-><$view field="caption"/><% if [<currentTiddler>has[parent]] %> <span class="tc-system-title-prefix">[{{!!title}}]</span><% endif 
-%></h2>
+<h2 class="tc-title"><% if [<currentTiddler>has[marker]] %> <span class="tc-system-title-prefix">{{!!marker}}: </span><% endif 
+%><$view field="caption"/></h2>

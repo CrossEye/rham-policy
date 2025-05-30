@@ -1,9 +1,11 @@
 caption: 6175 - Parent
+created: 20250529173756373
 description: Parent
+modified: 20250529173756373
+parent: Section6000
 pdf-url: https://www.rhamschools.org/common/pages/GetFile.ashx?key=BEe6BUG9
 policy-nbr: 6175
-revision: 0
-section: Section6000
+revision: 2
 tags: Policy Section6000
 title: Policy6175
 type: text/vnd.tiddlywiki

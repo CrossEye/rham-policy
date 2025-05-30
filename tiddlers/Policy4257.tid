@@ -1,10 +1,12 @@
 alias-of: Policy4157
 caption: 4257 - Employment and Student Teacher Checks
+created: 20250529190815984
 description: Employment and Student Teacher Checks
+modified: 20250529190815984
+parent: Section4000
 pdf-url: https://www.rhamschools.org/common/pages/GetFile.ashx?key=vJxSBhFl
 policy-nbr: 4257
-revision: 0
-section: Section4000
+revision: 2
 tags: PolicyAlias Section4000
 title: Policy4257
 type: text/vnd.tiddlywiki

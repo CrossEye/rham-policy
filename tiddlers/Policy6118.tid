@@ -1,22 +1,13 @@
 caption: 6118 - Student Use of District Computer Systems
 created: 20250527123528820
 description: Student Use of District Computer Systems
-modified: 20250527125804445
+modified: 20250529190137499
+parent: Section6000
 pdf-url: https://www.rhamschools.org/common/pages/GetFile.ashx?key=abBSBsRJ
 policy-nbr: 6118
-revision: 10
-section: Section6000
+revision: 4
 tags: Policy Section6000
 title: Policy6118
 type: text/vnd.tiddlywiki
 
-<$list filter="[parent<currentTiddler>] -[<currentTiddler>addsuffix[-Legal]] -[<currentTiddler>addsuffix[-History]] +[sortan[]]">
-<div class={{!!section-type}}>
-
-<% if [<currentTiddler>!section-type[complete-body]] %>
-
-!! <$link>{{!!caption}}</$link>
-<% endif %>
-{{!!text}}
-</div>
-</$list>
+<<children plain>>

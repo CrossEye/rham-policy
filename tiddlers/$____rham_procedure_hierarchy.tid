@@ -1,0 +1,11 @@
+code-body: yes
+created: 20250528201630795
+modified: 20250528203310579
+revision: 3
+tags: $:/tags/Global
+title: $:/_/rham/procedure/hierarchy
+
+\procedure hierarchy(node) 
+<% if [<node>has[parent]] %><$transclude variable="hierarchy" node={{{ [<node>get[parent]] }}} /><% endif %>
+<$link to=<<node>> /><br/>
+\end

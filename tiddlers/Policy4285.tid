@@ -1,10 +1,12 @@
 alias-of: Policy4185
 caption: 4285 - Exposure Control Plan For Bloodborne Pathogens
+created: 20250529190815984
 description: Exposure Control Plan For Bloodborne Pathogens
+modified: 20250529190815984
+parent: Section4000
 pdf-url: https://www.rhamschools.org/common/pages/GetFile.ashx?key=Tku6BQux
 policy-nbr: 4285
-revision: 0
-section: Section4000
+revision: 2
 tags: PolicyAlias Section4000
 title: Policy4285
 type: text/vnd.tiddlywiki

@@ -1,0 +1,22 @@
+code-body: yes
+created: 20250529144751399
+modified: 20250529185920171
+revision: 10
+tags: $:/tags/Global
+title: $:/_/rham/procedures/breadcrumbs
+
+\procedure ancestry(tid)
+  <$list filter="[<tid>get[parent]]">
+    <$transclude $variable="ancestry" tid=<<currentTiddler>> />
+  </$list>
+  <% if [<tid>has[parent]] %><div class="sep">&gt;</div><% endif %>
+  <div class="crumb"><$link to=<<tid>> ><$view tiddler=<<tid>> field="caption"/></$link></div>
+\end ancestry
+
+\procedure breadcrumbs(tid)
+  <nav class="breadcrumbs"><$transclude $variable="ancestry" tid={{{ [<tid>get[parent]] }}}> /></nav>
+\end
+
+\procedure full-path(tid)
+  <nav class="breadcrumbs"><$transclude $variable="ancestry" tid=<<tid>> > /></nav>
+\end

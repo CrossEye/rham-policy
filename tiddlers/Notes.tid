@@ -1,0 +1,13 @@
+created: 20250202202709233
+modified: 20250529185600995
+revision: 11
+tags: 
+title: Notes
+type: text/vnd.tiddlywiki
+
+<dl class="notes">
+<$list filter="[has[scotts-note]!has[draft.of]sortan[caption]]">
+  <dt><$transclude $variable="full-path" tid=<<currentTiddler>> /></dt>
+  <dd>{{!!scotts-note}}</dd>
+</$list>
+</dl>
