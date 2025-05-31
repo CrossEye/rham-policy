@@ -1,0 +1,17 @@
+created: 20250530185430297
+modified: 20250530190106301
+revision: 0
+tags: $:/tags/Stylesheet
+title: $:/_/rham/styles/css/dynamic
+type: text/vnd.tiddlywiki
+
+<$list filter="[range[10]]" variable="num">
+<$let start={{{ [<num>subtract[1]] }}}>
+
+ol.list-start-<<num>> { 
+  list-style: none; counter-reset: item 0; li { counter-increment: item; } 
+  li::before { content: counter(item) ". "; }  counter-set: item <<start>>;  margin-left: -1em;
+}
+
+</$let>
+</$list>

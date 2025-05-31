@@ -47,17 +47,17 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE." />
 <link id="faviconLink" rel="shortcut icon" href="favicon.ico">
-<title>RHAM Policy Manual — Version 0.3.0+ (Last updated May 29, 2025)</title>
+<title>RHAM Policy Manual — Version 0.4.0+ (Last updated May 30, 2025)</title>
 <!--~~ This is a Tiddlywiki file. The points of interest in the file are marked with this pattern ~~-->
 
 <!--~~ Raw markup ~~-->
 
 
-<meta name="description" content="Version 0.3.0+ (Last updated May 29, 2025)">
+<meta name="description" content="Version 0.4.0+ (Last updated May 30, 2025)">
 <meta property="og:title" content="RHAM Policy Manual">
-<meta property="og:description" content="Version 0.3.0+ (Last updated May 29, 2025)">
+<meta property="og:description" content="Version 0.4.0+ (Last updated May 30, 2025)">
 <meta name="twitter:title" content="RHAM Policy Manual">
-<meta name="twitter:description" content="Version 0.3.0+ (Last updated May 29, 2025)">
+<meta name="twitter:description" content="Version 0.4.0+ (Last updated May 30, 2025)">
 
 </head>
 <body class="tc-body">
@@ -169,6 +169,8 @@ Error message and password prompt
 <li>$:/_/rham/procedures/history</li>
 
 <li>$:/_/rham/procedures/usc</li>
+
+<li>$:/_/rham/styles/css/dynamic</li>
 
 <li>$:/_/rham/styles/css/main</li>
 
@@ -486,6 +488,72 @@ Error message and password prompt
 
 <li>Policy5113</li>
 
+<li>Policy5113(HS)</li>
+
+<li>Policy5113(MS)</li>
+
+<li>Policy5113(MS)(I)</li>
+
+<li>Policy5113(MS)(I)(A)</li>
+
+<li>Policy5113(MS)(I)(B)</li>
+
+<li>Policy5113(MS)(II)</li>
+
+<li>Policy5113(MS)(II)(A)</li>
+
+<li>Policy5113(MS)(II)(B)</li>
+
+<li>Policy5113(MS)(III)</li>
+
+<li>Policy5113(MS)(IV)</li>
+
+<li>Policy5113(MS)(IV)(A)</li>
+
+<li>Policy5113(MS)(IV)(B)</li>
+
+<li>Policy5113(MS)(IV)(C)</li>
+
+<li>Policy5113(MS)(IV)(D)</li>
+
+<li>Policy5113(MS)(V)</li>
+
+<li>Policy5113(MS)(V)(A)</li>
+
+<li>Policy5113(MS)(V)(B)</li>
+
+<li>Policy5113(MS)(V)(C)</li>
+
+<li>Policy5113(MS)(V)(D)</li>
+
+<li>Policy5113(MS)(V)(E)</li>
+
+<li>Policy5113(MS)(V)(F)</li>
+
+<li>Policy5113(MS)(V)(G)</li>
+
+<li>Policy5113(MS)(VI)</li>
+
+<li>Policy5113(MS)(VI)(A)</li>
+
+<li>Policy5113(MS)(VI)(B)</li>
+
+<li>Policy5113(MS)(VI)(C)</li>
+
+<li>Policy5113(MS)(VII)(A)</li>
+
+<li>Policy5113(MS)(VII)(B)</li>
+
+<li>Policy5113(MS)(VII)(C)</li>
+
+<li>Policy5113(MS)(VII)(D)</li>
+
+<li>Policy5113(MS)(VII)(E)</li>
+
+<li>Policy5113(MS)(VII)(F)</li>
+
+<li>Policy5113(MS)(VIII)</li>
+
 <li>Policy5114</li>
 
 <li>Policy5118</li>
@@ -725,7 +793,7 @@ Error message and password prompt
 ,
 {"title":"$:/_/rham/procedures/breadcrumbs","code-body":"yes","created":"20250529144751399","modified":"20250529185920171","revision":"0","tags":"$:/tags/Global","text":"\\procedure ancestry(tid)\n  \u003C$list filter=\"[\u003Ctid>get[parent]]\">\n    \u003C$transclude $variable=\"ancestry\" tid=\u003C\u003CcurrentTiddler>> />\n  \u003C/$list>\n  \u003C% if [\u003Ctid>has[parent]] %>\u003Cdiv class=\"sep\">&gt;\u003C/div>\u003C% endif %>\n  \u003Cdiv class=\"crumb\">\u003C$link to=\u003C\u003Ctid>> >\u003C$view tiddler=\u003C\u003Ctid>> field=\"caption\"/>\u003C/$link>\u003C/div>\n\\end ancestry\n\n\\procedure breadcrumbs(tid)\n  \u003Cnav class=\"breadcrumbs\">\u003C$transclude $variable=\"ancestry\" tid={{{ [\u003Ctid>get[parent]] }}}> />\u003C/nav>\n\\end\n\n\\procedure full-path(tid)\n  \u003Cnav class=\"breadcrumbs\">\u003C$transclude $variable=\"ancestry\" tid=\u003C\u003Ctid>> > />\u003C/nav>\n\\end","bag":"default"}
 ,
-{"title":"$:/_/rham/procedures/children","code-body":"yes","created":"20250528181300967","modified":"20250529181738032","revision":"0","tags":"$:/tags/Global","text":"\\procedure children()\n\n  \\procedure heading2()\n    \u003Cdiv class={{!!section-type}}>\n      \u003Ch2>\u003C$link>{{!!caption}}\u003C/$link>\u003C/h2>\n      \u003C$transclude $mode=\"block\"/>\n    \u003C/div>\n  \\end heading2\n\n  \\procedure definition()\n    \u003Cdiv class=\"definition\">\n      \u003Cdiv class=\"term\">\u003C$link>{{!!marker}}. {{!!caption}}\u003C/$link>: \u003C/div>\n      \u003C$transclude $mode=\"block\"/>\n    \u003C/div>\n  \\end definition\n\n  \\procedure list()\n    \u003Cdiv class=\"list-item\">\n      \u003Cdiv class=\"marker\">\u003C$link>{{!!marker}}\u003C/$link>. \u003C/div>\n      \u003C$transclude $mode=\"block\"/>\n    \u003C/div>\n  \\end list\n\n  \\procedure plain()\n    \u003Cdiv class={{!!section-type}}>\n      \u003C% if [\u003CcurrentTiddler>section-type[legal]] %>\n        \u003Ch2>\u003C$link>{{!!caption}}\u003C/$link>\u003C/h2>\n      \u003C% endif %>\n      \u003C% if [\u003CcurrentTiddler>section-type[history]] %>\n        \u003Ch2>\u003C$link>{{!!caption}}\u003C/$link>\u003C/h2>\n      \u003C% endif %>      \u003C$transclude $mode=\"block\"/>\n    \u003C/div>\n  \\end plain\n\n  \u003C$parameters type $params=\"params\" >\n    \u003C$list filter=\"[parent\u003CcurrentTiddler>!has[draft.of]sortan[]]\" >\n      \u003C$transclude $variable=\u003C\u003Ctype>> $mode=\"block\" />\n    \u003C/$list>\n  \u003C/$parameters>\n\\end","bag":"default"}
+{"title":"$:/_/rham/procedures/children","code-body":"yes","created":"20250528181300967","modified":"20250531021421546","tags":"$:/tags/Global","type":"text/vnd.tiddlywiki","text":"\\procedure children()\n\n  \\procedure heading2()\n    \u003Cdiv class={{!!section-type}}>\n      \u003Ch2>\u003C$link>{{!!caption}}\u003C/$link>\u003C/h2>\n      \u003C$transclude $mode=\"block\"/>\n    \u003C/div>\n  \\end heading2\n\n  \\procedure definition()\n    \u003Cdiv class=\"definition\">\n      \u003Cdiv class=\"term\">\u003C$link>{{!!marker}}. {{!!caption}}\u003C/$link>: \u003C/div>\n      \u003C$transclude $mode=\"block\"/>\n    \u003C/div>\n  \\end definition\n\n  \\procedure outline()\n    \u003Cdiv class=\"level\">\n      \u003Cdiv class=\"heading\">\u003C$link>\u003C% if [\u003CcurrentTiddler>has[marker]] %>{{!!marker}}. \u003C% endif %>{{!!caption}}\u003C/$link>\u003C/div>\n      \u003C$transclude $mode=\"block\"/>\n    \u003C/div>\n  \\end outline\n\n  \\procedure outline-block()\n    \u003Cdiv class=\"level\">\n      \u003Cdiv class=\"term\">\u003C$link>{{!!marker}}. \u003C/$link>\u003C/div>\n      \u003C$transclude $mode=\"block\"/>\n    \u003C/div>\n  \\end outline-block\n\n  \\procedure list()\n    \u003Cdiv class=\"list-item\">\n      \u003Cdiv class=\"marker\">\u003C$link>{{!!marker}}\u003C/$link>. \u003C/div>\n      \u003C$transclude $mode=\"block\"/>\n    \u003C/div>\n  \\end list\n\n  \\procedure plain()\n    \u003Cdiv class={{!!section-type}}>\n      \u003C% if [\u003CcurrentTiddler>section-type[legal]] %>\n        \u003Ch2>\u003C$link>{{!!caption}}\u003C/$link>\u003C/h2>\n      \u003C% endif %>\n      \u003C% if [\u003CcurrentTiddler>section-type[history]] %>\n        \u003Ch2>\u003C$link>{{!!caption}}\u003C/$link>\u003C/h2>\n      \u003C% endif %>      \u003C$transclude $mode=\"block\"/>\n    \u003C/div>\n  \\end plain\n\n  \u003C$parameters type $params=\"params\" >\n    \u003C$list filter=\"[parent\u003CcurrentTiddler>!has[draft.of]sortan[]]\" >\n      \u003C$transclude $variable=\u003C\u003Ctype>> $mode=\"block\" />\n    \u003C/$list>\n  \u003C/$parameters>\n\\end","revision":"0","bag":"default"}
 ,
 {"title":"$:/_/rham/procedures/general","code-body":"yes","created":"20241111011429987","modified":"20250522215035209","revision":"0","tags":"$:/tags/Global","type":"text/vnd.tiddlywiki","text":"\\procedure icon(_) \u003Cspan class=\"doc-icon\">\u003C$transclude $tiddler=\u003C\u003C_>>/>\u003C/span>\n\\procedure display-link(section) \u003C$link to=\u003C\u003Csection>> >\u003C$text text={{{ [{$:/info/url/full}addsuffix[#]addsuffix\u003Csection>] }}} /> \u003C/$link>\n\n","bag":"default"}
 ,
@@ -733,7 +801,9 @@ Error message and password prompt
 ,
 {"title":"$:/_/rham/procedures/usc","code-body":"yes","created":"20250527010038412","modified":"20250528180105917","revision":"0","tags":"$:/tags/Global","type":"text/vnd.tiddlywiki","text":"\\define parens() [\\(\\)]+\n\n\\procedure usc()\n\u003C$parameters title section $params=\"params\" >\n\u003C$let \n  sect={{{ [\u003Csection>split[(]first[]] }}}\n  subs={{{ [\u003Csection>removeprefix\u003Csect>splitregexp\u003Cparens>join[_]trim[_]] }}}\n  frag = {{{ [\u003Csubs>addprefix[#]] }}}\n  hash={{{ [\u003Cfrag>match[#]then[]else\u003Cfrag>] }}}\n  url=`https://www.law.cornell.edu/uscode/text/$(title)$/$(sect)$$(hash)$`\n  text={{{ [\u003Cparams>jsonindexes[]butfirst[2]] :map[\u003Cparams>jsonget\u003CcurrentTiddler>] +[join[ ]] }}}\n  display={{{ =[\u003Ctitle>] U.S.C. § [\u003Csection>] +[join[ ]] }}}\n  content={{{ [\u003Ctext>match[]then\u003Cdisplay>else\u003Ctext>] }}}\n>\n\u003Ca class=\"usc\" target=\"_blank\" href=\u003C\u003Curl>> >\u003C\u003Ccontent>>\u003C/a>\n\u003C/$let>\n\u003C/$parameters>\n\\end\n","bag":"default"}
 ,
-{"title":"$:/_/rham/styles/css/main","text":"div.policy-header {\n    display: none;\n}\ndiv.history ul, div.legal ul  {list-style: none;}\ndiv[data-tiddler-title^=\"Policy\"][data-tiddler-title$=\"-History\"] ul {list-style: none;}\ndiv[data-tiddler-title^=\"Policy\"][data-tiddler-title$=\"-Legal\"] ul {list-style: none;}\n.pdf-link {\n  float: right;\n  text-align: center;\n  display: inline-box;\n  border: 1px solid #ccc;\n  margin: 1em .5em .5em;\n  a {text-decoration: none; font-size: 75%; padding: 1em; display: block; width: 100%; height: 100%;}\n}\ndiv[data-tags~=\"Legal\"] ul, div[data-tags~=\"History\"] ul {list-style: none;]}\ndiv.school-addresses {\n  display: flex;\n  flex-direction: row;\n  address {flex: 1 1 33%;}\n}\naddress {display: inline-block; white-space: pre; font-style: normal;  padding-left: 3em;}\ndiv.term, div.marker {float: left; padding-right: .5em;}\n.conjugation {display: block; margin: 0 1em;}\ndiv.event {\n  display: flex;\n  flex-direction: row;\n  margin: 0 0 0 2em;\n  padding: 0;\n  div {margin: 0}\n  .event-name {flex: 0 0 7em;}\n  .event-date {flex: 1 0 auto;}\n}\np:has(div.event) {margin: 0; padding: 0;}\nnav.breadcrumbs {\n  opacity: 50%; \n  display: flex;\n  flex-direction: row;\n  justify-content: flex-start;\n  min-width: 0;\n  margin-bottom: .5em;\n  div.sep {padding: 0 .5em; min-width: 0;}\n  div.crumb {overflow: hidden; white-space: nowrap; text-overflow: ellipsis; min-width: 0;}\n}\ndl.notes nav.breadcrumbs {\n  opacity: 100%;\n}","created":"20250517171518931","modified":"20250529185723355","revision":"0","tags":"$:/tags/Stylesheet","type":"text/css","bag":"default"}
+{"title":"$:/_/rham/styles/css/dynamic","created":"20250530185430297","modified":"20250530190106301","revision":"0","tags":"$:/tags/Stylesheet","type":"text/vnd.tiddlywiki","text":"\u003C$list filter=\"[range[10]]\" variable=\"num\">\n\u003C$let start={{{ [\u003Cnum>subtract[1]] }}}>\n\nol.list-start-\u003C\u003Cnum>> { \n  list-style: none; counter-reset: item 0; li { counter-increment: item; } \n  li::before { content: counter(item) \". \"; }  counter-set: item \u003C\u003Cstart>>;  margin-left: -1em;\n}\n\n\u003C/$let>\n\u003C/$list>","bag":"default"}
+,
+{"title":"$:/_/rham/styles/css/main","text":".level {\n  padding-left: 0;\n  .heading {font-size: 1.5em; font-weight: 500; margin-bottom: 1em;}\n  .level {\n    padding-left: 1.5em;\n    .heading {font-size: 1.35em;}\n    .level {\n      padding-left: 1.5em;\n      .heading {font-size: 1.25em;}\n      .level {\n        padding-left: 1.5em;\n        .heading {font-size: 1.1em;}\n      }\n    }\n  }\n}\ndiv.policy-header {\n    display: none;\n}\ndiv.history ul, div.legal ul  {list-style: none;}\ndiv[data-tiddler-title^=\"Policy\"][data-tiddler-title$=\"-History\"] ul {list-style: none;}\ndiv[data-tiddler-title^=\"Policy\"][data-tiddler-title$=\"-Legal\"] ul {list-style: none;}\n.pdf-link {\n  float: right;\n  text-align: center;\n  display: inline-box;\n  border: 1px solid #ccc;\n  margin: 1em .5em .5em;\n  a {text-decoration: none; font-size: 75%; padding: 1em; display: block; width: 100%; height: 100%;}\n}\ndiv[data-tags~=\"Legal\"] ul, div[data-tags~=\"History\"] ul {list-style: none;]}\ndiv.school-addresses {\n  display: flex;\n  flex-direction: row;\n  address {flex: 1 1 33%;}\n}\naddress {display: inline-block; white-space: pre; font-style: normal;  padding-left: 3em;}\ndiv.term, div.marker {float: left; padding-right: .5em;}\n.conjugation {display: block; margin: 0 1em;}\ndiv.event {\n  display: flex;\n  flex-direction: row;\n  margin: 0 0 0 2em;\n  padding: 0;\n  div {margin: 0}\n  .event-name {flex: 0 0 7em;}\n  .event-date {flex: 1 0 auto;}\n}\np:has(div.event) {margin: 0; padding: 0;}\nnav.breadcrumbs {\n  opacity: 50%; \n  display: flex;\n  flex-direction: row;\n  justify-content: flex-start;\n  min-width: 0;\n  margin-bottom: .5em;\n  div.sep {padding: 0 .5em; min-width: 0;}\n  div.crumb {overflow: hidden; white-space: nowrap; text-overflow: ellipsis; min-width: 0;}\n}\ndl.notes nav.breadcrumbs {\n  opacity: 100%;\n}\nol.continued { \n  counter-reset: none;\n}","created":"20250517171518931","modified":"20250531021711708","tags":"$:/tags/Stylesheet","type":"text/css","revision":"0","bag":"default"}
 ,
 {"title":"$:/_/rham/styles/css/print","text":"@media print {\n\t@page {\n        @bottom-left {content: \"\"; font-size: 9pt; color: #333;}\n\t\t@bottom-center {content: \"\"; font-size: 9pt; color: #333;}\n\t\t@bottom-right {content: \"Page \" counter(page) \" of \" counter(pages); font-size: 9pt; color: #333;}\n\n\t\tmargin: 30mm 20mm 25mm;\n\n\t\t@bottom-left {\n\t\t\tborder-top-width: 2px;\n\t\t\tborder-top-style: solid;\n\t\t\tvertical-align: top;\n\t\t\tpadding-top:10px;\n\t\t}\n\n\t\t@bottom-center {\n\t\t\tborder-top-width: 2px;\n\t\t\tborder-top-style: solid;\n\t\t\tvertical-align: top;\n\t\t\tpadding-top:10px;\n\t\t}\n\n\t\t@bottom-right {\n\t\t\tborder-top-width: 2px;\n\t\t\tborder-top-style: solid;\n\t\t\tvertical-align: top;\n\t\t\tpadding-top:10px;\n\t\t}\n\t}\n\n    .tc-tiddler-frame { break-after: page; }\n    .tc-tiddler-frame:last-of-type { break-after: avoid; }\n\n\tbody.tc-body {\n\t\tbackground-color: transparent;\n\t}\n\n\t.tc-sidebar-header, .tc-topbar {\n\t\tdisplay: none;\n\t}\n\n\t.tc-story-river {\n\t\tmargin: 0;\n\t\tpadding: 0;\n\t}\n\n\t.tc-story-river .tc-tiddler-frame {\n\t\tmargin: 0;\n\t\tborder: none;\n\t\tpadding: 0;\n\t}\n\n\t.tc-tiddler-controls, .tc-titlebar, .tc-subtitle, .tc-tags-wrapper {display: none; } \n\n    .font-family {serif;}\n\n    div.policy-header {\n        display: block;\n        font-size: 135%;\n        text-transform: uppercase;\n        font-weight: bold;\n        h2.intro {text-align: center; margin: 0;}\n        h3 {\n            &.pol-number {text-align: right; text-transform: none; margin-top: 0;}\n            &.section {text-decoration: underline;}\n            &.pol-title {text-align: center; text-decoration: underline; }  \n        }\n    }\n    div.pdf-link {display: none;}\n};","created":"20250518024120715","modified":"20250522231047731","revision":"0","tags":"$:/tags/Stylesheet","type":"text/css","bag":"default"}
 ,
@@ -775,7 +845,7 @@ Error message and password prompt
 ,
 {"title":"$:/images/svg-icon/doc-pdf","caption":"doc-pdf","collection":"zero","library":"svg-icon","revision":"0","tags":"$:/tags/Image Icons Images SVG","type":"text/vnd.tiddlywiki","text":"\u003Csvg class=\"tc-image-doc-pdf tc-image-button\" width=\"22pt\" height=\"22pt\" viewBox=\"0 0 14 14\">\u003Cpath d=\"M11.024 0H.487C.197 0 0 .197 0 .438v13.125c0 .24.197.437.438.437h13.125c.24 0 .437-.197.437-.438V3l-2.976-3zM13 13H1V1h9.024v3H13v9zM11 3V1l2 2h-2zM2 5v5h1V8h2V5H2zm2 2H3V6h1v1zm3 2h1v1H6V5h2v1H7v3zm1-3h1v3H8V6zm2-1h2v1h-1v1h1v1h-1v2h-1V5z\"/>\u003C/svg>","bag":"default"}
 ,
-{"title":"$:/Import","revision":"0","status":"complete","text":"The following tiddlers were imported:\n\n# [[Notes]]","bag":"default"}
+{"title":"$:/Import","revision":"0","status":"complete","type":"text/vnd.tiddlywiki","text":"The following tiddlers were imported:\n\n# [[$:/_/rham/procedures/children]]","bag":"default"}
 ,
 {"title":"$:/isEncrypted","text":"no","revision":"0","bag":"default"}
 ,
@@ -819,13 +889,13 @@ Error message and password prompt
 ,
 {"title":"$:/themes/tiddlywiki/vanilla/options/stickytitles","revision":"0","tags":"","type":"text/vnd.tiddlywiki","text":"yes","bag":"default"}
 ,
-{"title":"About","caption":"About","created":"20230326150914405","list-after":"","modified":"20250527122316624","revision":"0","tags":"TableOfContents","type":"text/vnd.tiddlywiki","version":"0.3.0+","text":"This is an unofficial online version of [[RHAM's Policy Manual|https://www.rhamschools.org/b_o_e/board_of_education_policies]].  It is designed to make it easier to search and to share links to its many chapters, sections, subsections, and even sub-subsections.\n\nNote that the various parts of the charter can be linked to directly.  You can paste URLs like this into documents or emails:\n\n* \u003C\u003Cdisplay-link Policy1520 >>\n* \u003C\u003Cdisplay-link Policy4118.2(s4) >>\n\nYou can find the link to any policy/section/subsection by clicking on the \u003C\u003Cicon $:/core/images/permalink-button>> icon  in its upper right.\n\n!! Credits\n\nThe policy manual was built over many years by the superintendents, policy committee members, and other [[board members of RHAM|https://www.rhamschools.org/b_o_e]], as well as their lawyers and community members.\n\nThis online version was created by [[Scott Sauyet|mailto:scott@sauyet.com]].  It involved a lot of cutting and pasting the results into this document, which likely introduced errors.  If you spot one, please [[email Scott|mailto:scott@sauyet.com]].\n\n!! Technology\n\n{{TiddlyWiki}}\n\n!! Version\n\n{{!!version}}\n\n","bag":"default"}
+{"title":"About","caption":"About","created":"20230326150914405","list-after":"","modified":"20250527122316624","revision":"0","tags":"TableOfContents","type":"text/vnd.tiddlywiki","version":"0.4.0+","text":"This is an unofficial online version of [[RHAM's Policy Manual|https://www.rhamschools.org/b_o_e/board_of_education_policies]].  It is designed to make it easier to search and to share links to its many chapters, sections, subsections, and even sub-subsections.\n\nNote that the various parts of the charter can be linked to directly.  You can paste URLs like this into documents or emails:\n\n* \u003C\u003Cdisplay-link Policy1520 >>\n* \u003C\u003Cdisplay-link Policy4118.2(s4) >>\n\nYou can find the link to any policy/section/subsection by clicking on the \u003C\u003Cicon $:/core/images/permalink-button>> icon  in its upper right.\n\n!! Credits\n\nThe policy manual was built over many years by the superintendents, policy committee members, and other [[board members of RHAM|https://www.rhamschools.org/b_o_e]], as well as their lawyers and community members.\n\nThis online version was created by [[Scott Sauyet|mailto:scott@sauyet.com]].  It involved a lot of cutting and pasting the results into this document, which likely introduced errors.  If you spot one, please [[email Scott|mailto:scott@sauyet.com]].\n\n!! Technology\n\n{{TiddlyWiki}}\n\n!! Version\n\n{{!!version}}\n\n","bag":"default"}
 ,
 {"title":"Legal links demo","created":"20250522143619622","modified":"20250527174558319","revision":"0","tags":"","type":"text/vnd.tiddlywiki","text":"!!! Tests of CGS Macro\n* `\u003C\u003Ccgs 10-222gg>>`: \u003C\u003Ccgs 10-222gg>>\n* `\u003C\u003Ccgs 10-220p>>`: \u003C\u003Ccgs 10-220p>>\n* `\u003C\u003Ccgs 47-36bb>>`: \u003C\u003Ccgs 47-36bb>>\n* `\u003C\u003Ccgs 10-222f \"College informational forums\">>`: \u003C\u003Ccgs 10-222f \"College informational forums\">> @@color:#bbb;# We can override default display text@@\n* `\u003C\u003Ccgs 42a-4A-206>>`: \u003C\u003Ccgs 42a-4A-206>>  @@color:#bbb;# Note that this is an \"article\", not a \"chapter\"@@\n* `\u003C\u003Ccgs 12345a-9876>>`: \u003C\u003Ccgs 12345a-9876>>    @@color:#bbb;# When not found, there is no link, just the original text@@\n\n!!! Tests of USC Procedure\n* `\u003C\u003Cusc 41 8101>>`: \u003C\u003Cusc 41 8101>>\n* `\u003C\u003Cusc 20 7973>>`: \u003C\u003Cusc 20 7973>>\n* `\u003C\u003Cusc 20 7973 \"Nonsmoking policy\">>`: \u003C\u003Cusc 20 7973 \"Nonsmoking policy\">> @@color:#bbb;# We can override default display text@@\n* `\u003C\u003Cusc 47 254(h)(5)(B)(iii) >>`: \u003C\u003Cusc 47 254(h)(5)(B)(iii) >> @@color:#bbb;# We can dig deep into subchapters, subsections, etc, with a common format@@","bag":"default"}
 ,
 {"title":"Notes","created":"20250202202709233","modified":"20250529185600995","revision":"0","tags":"","type":"text/vnd.tiddlywiki","text":"\u003Cdl class=\"notes\">\n\u003C$list filter=\"[has[scotts-note]!has[draft.of]sortan[caption]]\">\n  \u003Cdt>\u003C$transclude $variable=\"full-path\" tid=\u003C\u003CcurrentTiddler>> />\u003C/dt>\n  \u003Cdd>{{!!scotts-note}}\u003C/dd>\n\u003C/$list>\n\u003C/dl>\n","bag":"default"}
 ,
-{"title":"Overview","created":"20250318115542936","modified":"20250529190408834","revision":"0","tags":"TableOfContents","type":"text/vnd.tiddlywiki","text":"This is an attempt to redo [[RHAM's Policy Manual|https://www.rhamschools.org/b_o_e/board_of_education_policies]]^^1^^ as a more flexible, easily cite-able, and easily shared document.\n\nThis is just getting underway, and I'm fiddling with how to make it work.  For a somewhat similar project, see the mostly complete version I did for [[Andover's Town Charter|https://charter2024.andoverct.info]].\n\nThis one has some differences.  The Charter was mostly consistent in its hierarchy.  Here we have policies with many different structures, and some of the breakdowns may seem fairly arbitrary.  In the Charter, one of the main goals was to make it easy to cite sections.  While I will try to emulate that here, it's less critical.  Here, the one-file nature of TW is a major selling point.  I'd love to be able to simply share the entire policy manual in one go.  And in fact, if I cannot find a simple way to break these policies down into linkable sections, I will simply forgo that.  But I'll give it a try first.\n\nI'm building this out a policy at a time, trying to figure out the common patterns.  So far the only ones built are\n\n* [[Policy4118.2]] and its alias [[Policy4218.2]]\n* [[Policy6118]]\n* [[Policy1520]]\n* [[Policy1350]]\n\n\n----------\n\u003Csmall>^^1^^ ''RHAM'' is the ''R''egional school district, covering Middle School and High School for the Connecticut towns of ''H''ebron, ''A''ndover, and ''M''arlborough.\u003C/small>","bag":"default"}
+{"title":"Overview","created":"20250318115542936","modified":"20250531015023732","tags":"TableOfContents","type":"text/vnd.tiddlywiki","text":"This is an attempt to redo [[RHAM's Policy Manual|https://www.rhamschools.org/b_o_e/board_of_education_policies]]^^1^^ as a more flexible, easily cite-able, and easily shared document.\n\nThis is just getting underway, and I'm fiddling with how to make it work.  For a somewhat similar project, see the mostly complete version I did for [[Andover's Town Charter|https://charter2024.andoverct.info]].\n\nThis one has some differences.  The Charter was mostly consistent in its hierarchy.  Here we have policies with many different structures, and some of the breakdowns may seem fairly arbitrary.  In the Charter, one of the main goals was to make it easy to cite sections.  While I will try to emulate that here, it's less critical.  Here, the one-file nature of TW is a major selling point.  I'd love to be able to simply share the entire policy manual in one go.  And in fact, if I cannot find a simple way to break these policies down into linkable sections, I will simply forgo that.  But I'll give it a try first.\n\nI'm building this out a policy at a time, trying to figure out the common patterns.  So far the only ones built are\n\n* [[Policy4118.2]] and its alias [[Policy4218.2]]\n* [[Policy6118]]\n* [[Policy1520]]\n* [[Policy1350]]\n* [[Policy5113(MS)]]\n\n\n----------\n\u003Csmall>^^1^^ ''RHAM'' is the ''R''egional school district, covering Middle School and High School for the Connecticut towns of ''H''ebron, ''A''ndover, and ''M''arlborough.\u003C/small>","revision":"0","bag":"default"}
 ,
 {"title":"Policy1000","caption":"1000 - School District Goals","created":"20250529173756365","description":"School District Goals","modified":"20250529173756365","parent":"Section1000","pdf-url":"https://www.rhamschools.org/common/pages/GetFile.ashx?key=5EG6BaG7","policy-nbr":"1000","revision":"0","tags":"Policy Section1000","type":"text/vnd.tiddlywiki","bag":"default"}
 ,
@@ -1048,6 +1118,72 @@ Error message and password prompt
 {"title":"Policy5112","caption":"5112 - Student Attendance","created":"20250529173756370","description":"Student Attendance","modified":"20250529173756370","parent":"Section5000","pdf-url":"https://www.rhamschools.org/common/pages/GetFile.ashx?key=16DnBc9a","policy-nbr":"5112","revision":"0","tags":"Policy Section5000","type":"text/vnd.tiddlywiki","bag":"default"}
 ,
 {"title":"Policy5113","caption":"5113 - Attendance Policy","created":"20250529173756370","description":"Attendance Policy","modified":"20250529173756370","parent":"Section5000","pdf-url":"https://www.rhamschools.org/common/pages/GetFile.ashx?key=tEm6BfGz","policy-nbr":"5113","revision":"0","tags":"Policy Section5000","type":"text/vnd.tiddlywiki","bag":"default"}
+,
+{"title":"Policy5113(HS)","caption":"5113(HS) - Attendance Policy","created":"20250530134706379","description":"Attendance Policy","modified":"20250530191031693","parent":"Section5000","pdf-url":"https://www.rhamschools.org/common/pages/GetFile.ashx?key=tEm6BfGz","policy-nbr":"5113(HS)","revision":"0","tags":"Policy Section5000","type":"text/vnd.tiddlywiki","bag":"default"}
+,
+{"title":"Policy5113(MS)","caption":"5113(MS) - Attendance Policy","created":"20250529173756370","description":"Attendance Policy","modified":"20250530202601673","parent":"Section5000","pdf-url":"https://www.rhamschools.org/common/pages/GetFile.ashx?key=tEm6BfGz","policy-nbr":"5113(MS)","revision":"0","tags":"Policy Section5000","type":"text/vnd.tiddlywiki","text":"The academic program at Regional School District No. 8 has been established in an atmosphere where student\nfreedom and responsibility are an integral part of the decision making process. The school maintains that\nattendance to assigned classes is essential and, therefore, has established an attendance requirement for all\ncourses offered. There are three assumptions or philosophical bases implied in the attendance requirements:\n\n# That time lost from class is essentially irretrievable in terms of opportunity for instructional exchange.\n# That excessive absences are a drain on the resources of the teacher. These resources can and should be diverted to programs and activities for the educational benefit of students.\n# That a student has an obligation to give as well as receive in the context of the classroom setting.\n\n\u003C\u003Cchildren outline>>\n","bag":"default"}
+,
+{"title":"Policy5113(MS)(I)","caption":"Classification of Absences","created":"20250530135503720","marker":"I","modified":"20250530202447943","parent":"Policy5113(MS)","revision":"0","tags":"Policy5113(MS)","type":"text/vnd.tiddlywiki","text":"Absences will be classified as excused or unauthorized.\n\n\u003C\u003Cchildren outline>>\n","bag":"default"}
+,
+{"title":"Policy5113(MS)(I)(A)","caption":"Excused Absences","created":"20250530190917575","marker":"A","modified":"20250530191644703","parent":"Policy5113(MS)(I)","revision":"0","tags":"Policy5113(MS)(I)","type":"text/vnd.tiddlywiki","text":"The following absences from school are considered to be excused:\n\n# School scheduled absences (including but not limited to science labs, practicums, in school appointments, interscholastic tournament events, field trips)\n# Homebound instruction (in any prolonged illness in which homebound instruction has occurred, the absence will be excused from the beginning date of disability through the duration of the homebound instruction.)\n# Suspension (in-school and out-of-school)\n\nThe following absences from school are considered to be excused upon receipt of a written explanation of the\nreason for the absence from the student's parent/guardian.\n\n@@.list-start-4\n# Illness (including medical, dental, orthodontic appointments)\n# Religious Observance (required by the tenets of the professed faith)\n# Unforeseeable family emergency\n# Other education experience*\n@@\n\n\u003C\u003C\u003C\n(*) Other Education Experiences\n\nThe Board of Education believes that regular attendance in class is essential to excellence in education. It recognizes also the validity of other educational experiences outside of the regular classroom. The Board encourages these experiences to be scheduled during the regular school vacations. However, when circumstances prevent such scheduling, the parent must write a statement two weeks prior to the educational  experience describing the following:\n\n@@padding-left:2em;a. the nature of the proposed educational experience.@@\n\n@@padding-left:2em;b. the need to schedule this type of experience outside of regular vacation time.@@\n\nThis statement will be kept on file. During the midterm and/or final examination schedule, in addition to the parent's statement, approval of the principal is required before this (these) absence(s) may be considered excused.\n\nWhen a student must be absent from school, parents are asked to call the school no later than the day of the absence and provide notification of the reason and expected duration of the absence. Failure by the parent to notify the school of such absences may result in loss of make up privileges. In all cases, a  written parental note must accompany the student's return to school.\n\nWork missed for an excused absence must be made up in the time prescribed by the teacher. Failure to make up the work missed within this time will result in the assignment of a zero (0) grade for the work missed.\n\nFailure to comply with the above procedure will result in unauthorized absence status.\n\u003C\u003C\u003C","bag":"default"}
+,
+{"title":"Policy5113(MS)(I)(B)","caption":"Unauthorized Absences","created":"20250530191017030","marker":"B","modified":"20250530201209336","parent":"Policy5113(MS)(I)","revision":"0","tags":"Policy5113(MS)(I)","type":"text/vnd.tiddlywiki","text":"Unauthorized absences are those which occur for reasons other than those designated as excused or\nauthorized. A grade of zero (0) will be entered for whatever work was done by the class or was due in\nclass on the day of an authorized absence.\n\nThree unauthorized tardies to class are equal to one unauthorized absence from class. A grade of zero\n(0) will be entered for daily work on the day of the third tardy to class. A student whose schedule makes\ngetting to class on time difficult may appeal the allowed passing time through the administration.\n\nA student will receive in-school suspension for each unauthorized absence from school","bag":"default"}
+,
+{"title":"Policy5113(MS)(II)","caption":"Review Procedures","created":"20250530203618380","marker":"II","modified":"20250530204457298","parent":"Policy5113(MS)","revision":"0","tags":"Policy5113(MS)","type":"text/vnd.tiddlywiki","text":"\u003C\u003Cchildren outline-block>>\n\n","bag":"default"}
+,
+{"title":"Policy5113(MS)(II)(A)","caption":"3 Absences","created":"20250530204058979","marker":"A","modified":"20250530204312222","parent":"Policy5113(MS)(II)","revision":"0","tags":"Policy5113(MS)(II)","type":"text/vnd.tiddlywiki","text":"If a student is absent from school for more than three (3) unauthorized absences, an Academic\nReview Board will be convened to determine what action may be taken to help the student improve\nhis/her attendance.\n\nThe Academic Review Board will consist of an administrator, a teacher and the student's counselor.\nThe student will be present during the review. The parent/guardian will be invited and encouraged to\nattend this meeting. The Academic Review Board will consider the pattern of absences and reasons\nfor them.  It will evaluate also the student's effort to make up work missed because of the absences.","bag":"default"}
+,
+{"title":"Policy5113(MS)(II)(B)","caption":"20 Absences","created":"20250530204138435","marker":"B","modified":"20250530204353657","parent":"Policy5113(MS)(II)","revision":"0","tags":"Policy5113(MS)(II)","type":"text/vnd.tiddlywiki","text":"Any student who is absent from school twenty or more times (excused or unexcused) will be\nconsidered for retention. Parents will be notified in writing should this occur. An Academic Review\nBoard will review each case to determine whether a student has sufficient academic skills to be\npromoted to the next grade.\n","bag":"default"}
+,
+{"title":"Policy5113(MS)(III)","caption":"Accuracy of the Record","created":"20250530204806158","marker":"III","modified":"20250530204831353","parent":"Policy5113(MS)","revision":"0","tags":"Policy5113(MS)","type":"text/vnd.tiddlywiki","text":"The administration will release each day an electronic attendance roster which shows the names of\nstudents who are absent and who are participating in an excused activity. Every teacher shall take\nattendance in each class and record/report any discrepancies noted from the list. Upon returning to\nschool, the student will be informed whether his/her absence has been classified as excused or\nunauthorized. Notification to the student of any unauthorized absence shall be made in writing. The\nstudent shall have five days to appeal this classification if he/she believes that is unfair or incorrect.\n\n","bag":"default"}
+,
+{"title":"Policy5113(MS)(IV)","caption":"Student Responsibilities","created":"20250530204918989","marker":"IV","modified":"20250530205622740","parent":"Policy5113(MS)","revision":"0","tags":"Policy5113(MS)","type":"text/vnd.tiddlywiki","text":"The student is responsible for the following:\n\n\u003C\u003Cchildren outline-block>>\n\n","bag":"default"}
+,
+{"title":"Policy5113(MS)(IV)(A)","caption":"Attending classes","created":"20250530205104839","marker":"A","modified":"20250530205235138","parent":"Policy5113(MS)(IV)","revision":"0","tags":"Policy5113(MS)(IV)","type":"text/vnd.tiddlywiki","text":"Attending all classes regularly in order to benefit from continuity of instruction, sequential presentation\nof material, and class interaction.","bag":"default"}
+,
+{"title":"Policy5113(MS)(IV)(B)","caption":"Having absences classified","created":"20250530205120314","marker":"B","modified":"20250530205329694","parent":"Policy5113(MS)(IV)","revision":"0","tags":"Policy5113(MS)(IV)","type":"text/vnd.tiddlywiki","text":"Having absences classified by school personnel upon return to school from an absence.","bag":"default"}
+,
+{"title":"Policy5113(MS)(IV)(C)","caption":"Presenting verification","created":"20250530205133490","marker":"C","modified":"20250530205410493","parent":"Policy5113(MS)(IV)","revision":"0","tags":"Policy5113(MS)(IV)","type":"text/vnd.tiddlywiki","text":"Presenting verification on the appropriate form to the teacher of the excused or unauthorized absence\nstatus upon return to class.","bag":"default"}
+,
+{"title":"Policy5113(MS)(IV)(D)","caption":"Completing all work","created":"20250530205148695","marker":"D","modified":"20250530205446079","parent":"Policy5113(MS)(IV)","revision":"0","tags":"Policy5113(MS)(IV)","type":"text/vnd.tiddlywiki","text":"D. Completing all work assigned for excused absences and submitting it to teachers in the prescribed time\nperiod","bag":"default"}
+,
+{"title":"Policy5113(MS)(V)","caption":"Teacher Responsibilities","created":"20250530205625167","marker":"V","modified":"20250530212114409","parent":"Policy5113(MS)","revision":"0","tags":"Policy5113(MS)","type":"text/vnd.tiddlywiki","text":"The teacher is responsible for the following:\n\n\u003C\u003Cchildren outline-block>>\n","bag":"default"}
+,
+{"title":"Policy5113(MS)(V)(A)","caption":"Keep accurate records","created":"20250530205906049","marker":"A","modified":"20250530211339794","parent":"Policy5113(MS)(V)","revision":"0","tags":"Policy5113(MS)(V)","type":"text/vnd.tiddlywiki","text":"Keeping accurate attendance records for administration use in tracking attendance and state reporting.","bag":"default"}
+,
+{"title":"Policy5113(MS)(V)(B)","caption":"Recording electronically","created":"20250530205933713","marker":"B","modified":"20250530211318280","parent":"Policy5113(MS)(V)","revision":"0","tags":"Policy5113(MS)(V)","type":"text/vnd.tiddlywiki","text":"Recording all absences in the teacher's electronic record book as excused or unauthorized.","bag":"default"}
+,
+{"title":"Policy5113(MS)(V)(C)","caption":"Providing make-ups","created":"20250530205957369","marker":"C","modified":"20250530211556997","parent":"Policy5113(MS)(V)","revision":"0","tags":"Policy5113(MS)(V)","type":"text/vnd.tiddlywiki","text":"Providing assignment and scheduling make up for excused absences.","bag":"default"}
+,
+{"title":"Policy5113(MS)(V)(D)","caption":"Notifying student of zeroes","created":"20250530210026677","marker":"D","modified":"20250530211721960","parent":"Policy5113(MS)(V)","revision":"0","tags":"Policy5113(MS)(V)","type":"text/vnd.tiddlywiki","text":"Notifying the student at the first unauthorized absence, or for failure to make up work of an excused\nabsence, that a grade of zero (0) will be given and that a grade of zero (0) will be given for each\nsubsequent occurrence.","bag":"default"}
+,
+{"title":"Policy5113(MS)(V)(E)","caption":"Notifying administration/guidance","created":"20250530210045206","marker":"E","modified":"20250530211855484","parent":"Policy5113(MS)(V)","revision":"0","tags":"Policy5113(MS)(V)","type":"text/vnd.tiddlywiki","text":"Notifying, on the designated form, the administration and the guidance counselor involved of any action\ntaken.","bag":"default"}
+,
+{"title":"Policy5113(MS)(V)(F)","caption":"Participating in conference","created":"20250530210108172","marker":"F","modified":"20250530211950450","parent":"Policy5113(MS)(V)","revision":"0","tags":"Policy5113(MS)(V)","type":"text/vnd.tiddlywiki","text":"Participating in the conference arranged by the counselor with the student and the parent if requested by\nthe parent.","bag":"default"}
+,
+{"title":"Policy5113(MS)(V)(G)","caption":"Noting three tardies","created":"20250530210123867","marker":"G","modified":"20250530212048641","parent":"Policy5113(MS)(V)","revision":"0","tags":"Policy5113(MS)(V)","type":"text/vnd.tiddlywiki","text":"Notifying, on the designated form, that the student has three tardies in a course, for processing an\nunauthorized absence.","bag":"default"}
+,
+{"title":"Policy5113(MS)(VI)","caption":"Parent/Guardian Responsibilities","created":"20250530212223311","marker":"VI","modified":"20250531014931927","parent":"Policy5113(MS)","tags":"Policy5113(MS)","type":"text/vnd.tiddlywiki","text":"The parents/guardians are responsible for the following:\n\n\u003C\u003Cchildren outline-block>>\n\n\n","revision":"0","bag":"default"}
+,
+{"title":"Policy5113(MS)(VI)(A)","caption":"Stressing Attendance","created":"20250531014317749","marker":"A","modified":"20250531014526232","parent":"Policy5113(MS)(VI)","tags":"Policy5113(MS)(VI)","type":"text/vnd.tiddlywiki","text":"Stressing the importance of regular school attendance and having children in attendance every day\nschool is in session.","revision":"0","bag":"default"}
+,
+{"title":"Policy5113(MS)(VI)(B)","caption":"Notifying the attendance office","created":"20250531014355182","marker":"B","modified":"20250531014718199","parent":"Policy5113(MS)(VI)","tags":"Policy5113(MS)(VI)","type":"text/vnd.tiddlywiki","text":"Notifying the attendance office when his/her son/daughter will be absent from school.","revision":"0","bag":"default"}
+,
+{"title":"Policy5113(MS)(VI)(C)","caption":"Scheduling appointments appropriately","created":"20250531014405331","marker":"C","modified":"20250531014948716","parent":"Policy5113(MS)(VI)","tags":"Policy5113(MS)(VI)","type":"text/vnd.tiddlywiki","text":"Scheduling appointments for the student outside of school hours.","revision":"0","bag":"default"}
+,
+{"title":"Policy5113(MS)(VII)(A)","caption":"Maintaining accurate records","created":"20250531015138324","marker":"A","modified":"20250531022053437","parent":"Policy5113(MS)(VII)","tags":"Policy5113(MS)(VIII)","type":"text/vnd.tiddlywiki","text":"Maintaining accurate attendance records and documentation of notification and/or actions taken.","revision":"0","bag":"default"}
+,
+{"title":"Policy5113(MS)(VII)(B)","caption":"Notifying parents/guardians","created":"20250531015151129","marker":"B","modified":"20250531021851075","parent":"Policy5113(MS)(VII)","tags":"Policy5113(MS)(VIII)","type":"text/vnd.tiddlywiki","text":"Notifying the parent or legal guardian in writing of each unauthorized absence.","revision":"0","bag":"default"}
+,
+{"title":"Policy5113(MS)(VII)(C)","caption":"Assisting in correcting absenteeism","created":"20250531015203154","marker":"C","modified":"20250531021851075","parent":"Policy5113(MS)(VII)","tags":"Policy5113(MS)(VIII)","type":"text/vnd.tiddlywiki","text":"Assisting the student in correcting any absenteeism problems by seeking appropriate and positive\nresolutions to them.","revision":"0","bag":"default"}
+,
+{"title":"Policy5113(MS)(VII)(D)","caption":"Notifying parents/guardians","created":"20250531015214383","marker":"D","modified":"20250531021851075","parent":"Policy5113(MS)(VII)","tags":"Policy5113(MS)(VIII)","type":"text/vnd.tiddlywiki","text":"Notifying the parent or legal guardian of any meetings to be held by the Academic Review Board.","revision":"0","bag":"default"}
+,
+{"title":"Policy5113(MS)(VII)(E)","caption":"Sharing results","created":"20250531015225366","marker":"E","modified":"20250531021851075","parent":"Policy5113(MS)(VII)","tags":"Policy5113(MS)(VIII)","type":"text/vnd.tiddlywiki","text":"Notifying parents or legal guardian of the results of the Academic Review Board Hearing in writing.","revision":"0","bag":"default"}
+,
+{"title":"Policy5113(MS)(VII)(F)","caption":"Recognizing perfect attendance","created":"20250531015249634","marker":"F","modified":"20250531021851075","parent":"Policy5113(MS)(VII)","tags":"Policy5113(MS)(VIII)","type":"text/vnd.tiddlywiki","text":"Recognizing those students with perfect attendance in a manner that emphasizes the importance of\nattendance at school.\n","revision":"0","bag":"default"}
+,
+{"title":"Policy5113(MS)(VIII)","caption":"History","created":"20250531020808840","modified":"20250531022007948","parent":"Policy5113(MS)","section-type":"history","tags":"History Policy5113(MS)","type":"text/vnd.tiddlywiki","text":"\u003C\u003CADOPTED March 1985>>\n\u003C\u003CREVISED December 1985>>\n\u003C\u003CREVISED August 1986>>\n\u003C\u003CREVISED November 2002>>\n\u003C\u003CREVISED November 2007>>\n\u003C\u003CREVISED December 2009>>\n\u003C\u003CREVISED June 21, 2010>>\n\u003C\u003CREVISED May, 2013>>","revision":"0","bag":"default"}
 ,
 {"title":"Policy5114","caption":"5114 - Discipline (Students)","created":"20250529173756370","description":"Discipline (Students)","modified":"20250529173756370","parent":"Section5000","pdf-url":"https://www.rhamschools.org/common/pages/GetFile.ashx?key=yl1QBmWk","policy-nbr":"5114","revision":"0","tags":"Policy Section5000","type":"text/vnd.tiddlywiki","bag":"default"}
 ,

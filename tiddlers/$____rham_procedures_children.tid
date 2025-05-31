@@ -1,9 +1,9 @@
 code-body: yes
 created: 20250528181300967
-modified: 20250529181738032
-revision: 6
+modified: 20250531021421546
 tags: $:/tags/Global
 title: $:/_/rham/procedures/children
+type: text/vnd.tiddlywiki
 
 \procedure children()
 
@@ -20,6 +20,20 @@ title: $:/_/rham/procedures/children
       <$transclude $mode="block"/>
     </div>
   \end definition
+
+  \procedure outline()
+    <div class="level">
+      <div class="heading"><$link><% if [<currentTiddler>has[marker]] %>{{!!marker}}. <% endif %>{{!!caption}}</$link></div>
+      <$transclude $mode="block"/>
+    </div>
+  \end outline
+
+  \procedure outline-block()
+    <div class="level">
+      <div class="term"><$link>{{!!marker}}. </$link></div>
+      <$transclude $mode="block"/>
+    </div>
+  \end outline-block
 
   \procedure list()
     <div class="list-item">

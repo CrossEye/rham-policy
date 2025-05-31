@@ -1,3 +1,19 @@
+.level {
+  padding-left: 0;
+  .heading {font-size: 1.5em; font-weight: 500; margin-bottom: 1em;}
+  .level {
+    padding-left: 1.5em;
+    .heading {font-size: 1.35em;}
+    .level {
+      padding-left: 1.5em;
+      .heading {font-size: 1.25em;}
+      .level {
+        padding-left: 1.5em;
+        .heading {font-size: 1.1em;}
+      }
+    }
+  }
+}
 div.policy-header {
     display: none;
 }
@@ -43,4 +59,7 @@ nav.breadcrumbs {
 }
 dl.notes nav.breadcrumbs {
   opacity: 100%;
+}
+ol.continued { 
+  counter-reset: none;
 }
