@@ -1,5 +1,5 @@
 created: 20250318115542936
-modified: 20250531015023732
+modified: 20250531133634675
 tags: TableOfContents
 title: Overview
 type: text/vnd.tiddlywiki
@@ -8,7 +8,7 @@ This is an attempt to redo [[RHAM's Policy Manual|https://www.rhamschools.org/b_
 
 This is just getting underway, and I'm fiddling with how to make it work.  For a somewhat similar project, see the mostly complete version I did for [[Andover's Town Charter|https://charter2024.andoverct.info]].
 
-This one has some differences.  The Charter was mostly consistent in its hierarchy.  Here we have policies with many different structures, and some of the breakdowns may seem fairly arbitrary.  In the Charter, one of the main goals was to make it easy to cite sections.  While I will try to emulate that here, it's less critical.  Here, the one-file nature of TW is a major selling point.  I'd love to be able to simply share the entire policy manual in one go.  And in fact, if I cannot find a simple way to break these policies down into linkable sections, I will simply forgo that.  But I'll give it a try first.
+This one has some differences.  The Charter was mostly consistent in its hierarchy.  Here we have policies with many different structures, and some of the breakdowns may seem fairly arbitrary.  In the Charter, one of the main goals was to make it easy to cite sections.  While I will try to emulate that here, it's less critical.  Here, the one-file nature of TW is a major selling point.  ~~I'd love to be able to simply share the entire policy manual in one go.  And in fact, if I cannot find a simple way to break these policies down into linkable sections, I will simply forgo that.  But I'll give it a try first.~~ ''Update'': That seems to be working, but I will probably need some additional tools to make it easier for me and future users to create policies and their subdivisions.
 
 I'm building this out a policy at a time, trying to figure out the common patterns.  So far the only ones built are
 
