@@ -1,8 +1,7 @@
 caption: About
 created: 20230326150914405
 list-after: 
-modified: 20250527122316624
-revision: 0
+modified: 20250531182533752
 tags: TableOfContents
 title: About
 type: text/vnd.tiddlywiki
@@ -15,7 +14,7 @@ Note that the various parts of the charter can be linked to directly.  You can p
 * <<display-link Policy1520 >>
 * <<display-link Policy4118.2(s4) >>
 
-You can find the link to any policy/section/subsection by clicking on the <<icon $:/core/images/permalink-button>> icon  in its upper right.
+You can find a direct link to any policy/section/subsection by clicking on the <<icon $:/core/images/permalink-button>> icon  in its upper right.
 
 !! Credits
 

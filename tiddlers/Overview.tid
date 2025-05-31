@@ -1,5 +1,5 @@
 created: 20250318115542936
-modified: 20250531133634675
+modified: 20250531180653678
 tags: TableOfContents
 title: Overview
 type: text/vnd.tiddlywiki
@@ -16,7 +16,9 @@ I'm building this out a policy at a time, trying to figure out the common patter
 * [[Policy6118]]
 * [[Policy1520]]
 * [[Policy1350]]
-* [[Policy5113(MS)]]
+* [[Policy5113]], which is a compound policy consisting of:
+** [[Policy5113(MS)]]
+** [[Policy5113(HS)]]
 
 
 ----------

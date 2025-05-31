@@ -1,0 +1,10 @@
+created: 20250531182002956
+list-before: $:/core/ui/ViewTemplate/body
+modified: 20250531182039104
+tags: $:/tags/ViewTemplate
+title: $:/_/rham/viewtemplates/section
+type: text/vnd.tiddlywiki
+
+<% if [<currentTiddler>tag[Section]]%>
+<<list-links filter:"[parent<currentTiddler>!tag[Compound]sortan[]]">>
+<% endif %>

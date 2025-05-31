@@ -1,11 +1,11 @@
 created: 20250517171147906
 list-before: $:/core/ui/ViewTemplate/body
-modified: 20250531173221483
+modified: 20250531174925827
 tags: $:/tags/ViewTemplate
 title: $:/_/rham/viewtemplates/policy
 type: text/vnd.tiddlywiki
 
-<% if [<currentTiddler>tag[Policy]] %>
+<% if [<currentTiddler>tag[Policy]!tag[Compound]] [<currentTiddler>tag[High School Policy]] [<currentTiddler>tag[Middle School Policy]]%>
 <div class="policy-header">
 <h2 class="intro">Board Policy</h2>
 <h3 class="pol-number">No. <$text text={{{ [{!!policy-nbr}] [tag[PolicyAlias]!has[draft.of]alias-of{!!title}get[policy-nbr]] +[join[, ]] }}} /></h3>

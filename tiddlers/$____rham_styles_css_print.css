@@ -67,4 +67,5 @@
         }
     }
     div.pdf-link {display: none;}
+    page-break {border: none; margin: none; break-before: page}
 };
