@@ -1,14 +1,21 @@
 code-body: yes
 created: 20250528192314441
-modified: 20250528193840582
-revision: 0
+modified: 20250606180833302
+revision: 3
 tags: $:/tags/Global
 title: $:/_/rham/procedures/history
 
 \whitespace trim
+
 \procedure ADOPTED()
   <$parameters $params="params" ><$let text={{{ [<params>jsonindexes[]] :map[<params>jsonget<currentTiddler>] +[join[ ]] }}}>
     <div class="event"><div class="event-name">ADOPTED: </div><div class="event-date"><<text>></div></div>
+  </$let></$parameters>
+\end
+
+\procedure APPROVED()
+  <$parameters $params="params" ><$let text={{{ [<params>jsonindexes[]] :map[<params>jsonget<currentTiddler>] +[join[ ]] }}}>
+    <div class="event"><div class="event-name">APPROVED: </div><div class="event-date"><<text>></div></div>
   </$let></$parameters>
 \end
 

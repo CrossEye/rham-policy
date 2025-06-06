@@ -1,0 +1,39 @@
+code-body: yes
+created: 20250606225512166
+modified: 20250606231530873
+tags: $:/tags/Global
+title: $:/_/rham/procedures/quotedef
+type: text/vnd.tiddlywiki
+
+\whitespace trim
+
+\define linkstart = [[
+\define linkend = ]]
+
+\procedure quotedef(text)
+    <$wikifiy name="output" type="text/html" text=<<text>> >
+      <<output>>
+    </$wikify>
+\end
+
+<!--
+\procedure quotedef(text)
+  <$let 
+    leader={{{ [{!!caption}addprefix["]addsuffic["]] }}}
+    link={{{ [!caption}addprefix<linkstart>addprefix["]addsuffix[|]addsuffix{!!title}addsuffix<linkend>] }}}
+    body={{{ [<text>search-replace::<leader>,<link>] }}}
+  >
+    <$wikifiy name="output" type="text/html" text=<<body>> >
+
+* ''text'': "<<text>>"
+* ''leader'': "<<leader>>"
+* ''link'': "<<link>>"
+* ''body'': "<<body>"
+* ''output'': "<<output>>"
+
+      <<output>>
+    </$wikify>
+  </$let>
+\end
+
+-->

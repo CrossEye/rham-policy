@@ -1,6 +1,6 @@
 code-body: yes
 created: 20250528181300967
-modified: 20250606011254248
+modified: 20250606234025926
 tags: $:/tags/Global
 title: $:/_/rham/procedures/children
 type: text/vnd.tiddlywiki
@@ -14,12 +14,26 @@ type: text/vnd.tiddlywiki
     </div>
   \end heading2
 
+  \procedure heading3-upper()
+    <div class={{!!section-type}}>
+      <h3 class="upper"><$link>{{!!caption}}</$link></h3>
+      <$transclude $mode="block"/>
+    </div>
+  \end heading3-upper
+
   \procedure definition()
-    <div class="definition">
-      <div class="term"><$link>{{!!marker}}. {{!!caption}}</$link>: </div>
+    <div class="definition level">
+      <div class="term"><$link><% if [<currentTiddler>has[marker]] %>{{!!marker}}. <% endif %>{{!!caption}}</$link>: </div>
       <$transclude $mode="block"/>
     </div>
   \end definition
+
+  \procedure definition-quoted()
+    <div class="definition level">
+      <div class="term"><$link><% if [<currentTiddler>has[marker]] %>{{!!marker}}. <% endif %>{{!!caption}}</$link> </div>
+      <$transclude $mode="block"/>
+    </div>
+  \end definition-quoted
 
   \procedure outline()
     <div class="level">

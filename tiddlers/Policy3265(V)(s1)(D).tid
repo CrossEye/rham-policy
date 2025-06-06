@@ -1,0 +1,28 @@
+caption: Capital Asset Addition Overview
+created: 20250606152949329
+marker: D
+modified: 20250606153230332
+parent: Policy3265(V)(s1)
+revision: 0
+tags: Policy3265(V)(s1)
+title: Policy3265(V)(s1)(D)
+type: text/vnd.tiddlywiki
+
+Depending upon the information available and the category of the asset, fixed asset records should
+include all or part of the following: 
+
+@@.two-column
+* Asset Tag Number
+* Description
+* Asset Class
+* Serial Number
+* Cost
+* Location or Functional Area
+* Acquisition Date 
+* Estimated Useful Life
+* Depreciation Method
+* Salvage Value
+* Accumulated Depreciation
+* Depreciation Expense
+* Replacement Cost
+@@
