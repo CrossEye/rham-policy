@@ -1,11 +1,11 @@
 code-body: yes
 created: 20250528181300967
-modified: 20250531021421546
+modified: 20250606011254248
 tags: $:/tags/Global
 title: $:/_/rham/procedures/children
 type: text/vnd.tiddlywiki
 
-\procedure children()
+\procedure children(type)
 
   \procedure heading2()
     <div class={{!!section-type}}>
@@ -49,13 +49,13 @@ type: text/vnd.tiddlywiki
       <% endif %>
       <% if [<currentTiddler>section-type[history]] %>
         <h2><$link>{{!!caption}}</$link></h2>
-      <% endif %>      <$transclude $mode="block"/>
+      <% endif %>
+      <$transclude $mode="block"/>
     </div>
   \end plain
 
-  <$parameters type $params="params" >
-    <$list filter="[parent<currentTiddler>!has[draft.of]sortan[]]" >
-      <$transclude $variable=<<type>> $mode="block" />
-    </$list>
-  </$parameters>
+  <$list filter="[parent<currentTiddler>!has[draft.of]sortan[]]" >
+    <$transclude $variable=<<type>> $mode="block" />
+  </$list>
+
 \end
