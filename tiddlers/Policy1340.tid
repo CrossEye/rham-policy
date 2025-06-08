@@ -1,11 +1,12 @@
 caption: 1340 - Advertising and Promotion in the School System
 created: 20250529173756364
 description: Advertising and Promotion in the School System
-modified: 20250606171316268
+modified: 20250608141749987
 parent: Section1000
 pdf-url: https://www.rhamschools.org/common/pages/GetFile.ashx?key=ErFSBr9I
 policy-nbr: 1340
-revision: 0
 tags: Policy Section1000
 title: Policy1340
 type: text/vnd.tiddlywiki
+
+<<children outline>>
