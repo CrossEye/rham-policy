@@ -1,6 +1,7 @@
 code-body: yes
 created: 20250528181300967
-modified: 20250606234025926
+modified: 20250609172359543
+revision: 8
 tags: $:/tags/Global
 title: $:/_/rham/procedures/children
 type: text/vnd.tiddlywiki
@@ -23,14 +24,22 @@ type: text/vnd.tiddlywiki
 
   \procedure definition()
     <div class="definition level">
-      <div class="term"><$link><% if [<currentTiddler>has[marker]] %>{{!!marker}}. <% endif %>{{!!caption}}</$link>: </div>
+      <div class="term"><$link>{{!!marker}}. {{!!caption}}</$link>: </div>
       <$transclude $mode="block"/>
     </div>
   \end definition
 
+  <!-- TODO: consolidate this with above.  One difference is existence of a colon. -->
+  \procedure definition-inline()
+    <div class="definition level">
+      <div class="term"><$link>{{!!marker}}. {{!!caption}}</$link></div>
+      <$transclude $mode="block"/>
+    </div>
+  \end definition-inline
+
   \procedure definition-quoted()
     <div class="definition level">
-      <div class="term"><$link><% if [<currentTiddler>has[marker]] %>{{!!marker}}. <% endif %>{{!!caption}}</$link> </div>
+      <div class="term">"<$link>{{!!marker}}. {{!!caption}}</$link>": </div>
       <$transclude $mode="block"/>
     </div>
   \end definition-quoted

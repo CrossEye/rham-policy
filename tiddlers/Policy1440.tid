@@ -1,11 +1,13 @@
 caption: 1440 - Sexual Offenders on School Property
 created: 20250529173756366
 description: Sexual Offenders on School Property
-modified: 20250529173756366
+modified: 20250609184616951
 parent: Section1000
 pdf-url: https://www.rhamschools.org/common/pages/GetFile.ashx?key=uEG6Bf27
 policy-nbr: 1440
-revision: 0
+revision: 2
 tags: Policy Section1000
 title: Policy1440
 type: text/vnd.tiddlywiki
+
+<<children plain>>

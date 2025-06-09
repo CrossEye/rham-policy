@@ -1,11 +1,11 @@
 created: 20250522230903857
 list-before: $:/core/ui/ViewTemplate/body
-modified: 20250601182023620
-revision: 0
+modified: 20250609194535525
+revision: 6
 tags: $:/tags/ViewTemplate
 title: $:/_/rham/viewtemplates/policy/pdf-link
 type: text/vnd.tiddlywiki
 
 <% if [<currentTiddler>tag[Policy]] [<currentTiddler>tag[High School Policy]] [<currentTiddler>tag[Middle School Policy]] %>
-<div class="pdf-link"><a href={{!!pdf-url}} target="_blank">{{$:/images/svg-icon/doc-pdf}}<br/>Download</a></div>
+<div class="pdf-link"><a href={{!!pdf-url}} target="_blank">{{$:/images/icomoon-free/480-file-pdf}}<br/>PDF</a></div>
 <% endif %>
