@@ -1,0 +1,48 @@
+code-body: yes
+created: 20250827225425972
+modified: 20250827225558841
+tags: $:/tags/Global
+title: $:/_/rham/procedures/toc
+type: text/vnd.tiddlywiki
+
+\whitespace trim
+
+\procedure rham-toc-node-body(filter)
+  <$qualify name="toc-state" title={{{ [[$:/state/toc]addsuffix<__path__>addsuffix[-]addsuffix<currentTiddler>] }}}>
+    <li class="toc-item">
+      <$link to={{{ [<currentTiddler>] }}}>
+        <$list filter="[function[children],<currentTiddler>]" variable="ignore" emptyMessage="""<$button class="tc-btn-invisible">{{$:/core/images/blank}}</$button>""">
+          <$reveal type="nomatch" stateTitle=<<toc-state>> text="open">
+             <$button setTitle=<<toc-state>> setTo="open" class="tc-btn-invisible tc-popup-keep">
+               <$transclude tiddler=<<toc-closed-icon>> />
+             </$button>
+          </$reveal>
+          <$reveal type="match" stateTitle=<<toc-state>> text="open">
+            <$button setTitle=<<toc-state>> setTo="close" class="tc-btn-invisible tc-popup-keep">
+              <$transclude tiddler=<<toc-open-icon>> />
+            </$button>
+          </$reveal>
+        </$list>
+        <<toc-caption>>
+     </$link>
+     <$reveal type="match" stateTitle=<<toc-state>> text="open">
+       <$transclude $variable="rham-toc-node" filter={{{ [function[children],<currentTiddler>] }}} />
+     </$reveal>
+    </li>
+  </$qualify>
+\end rham-toc-node-body
+
+\procedure rham-toc-node(filter)
+<ol class="tc-toc toc-selective-expandable">
+  <$list filter=<<filter>> >
+    <$transclude $variable="rham-toc-node-body" filter=<<filter>> />
+  </$list>
+</ol>
+
+\end rham-toc-node
+
+\procedure rham-toc(filter)
+<div class="tc-table-of-contents">
+<$transclude $variable="rham-toc-node"  filter=<<filter>> />
+</div>
+\end rham-toc
