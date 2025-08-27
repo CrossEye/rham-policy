@@ -1,14 +1,53 @@
 caption: Contents
-created: 20250528142414781
-list: Admin Welcome [[2023 Slate]] [[Democratic Town Committee]] [[Candidate Bios]] [[Print Brochure]] [[Elected Positions]] Voting Meeting Campaign Person [[Lawn Sign]] Data Legal Miscellaneous [[Search Voters]]
-modified: 20250528142422750
+created: 20250826191020812
+list-before: 
+modified: 20250827202240935
 revision: 0
 tags: $:/tags/SideBar
 title: TableOfContents
 type: text/vnd.tiddlywiki
 
+\whitespace trim
+
+\procedure rham-toc-node-body(filter)
+  <$qualify name="toc-state" title={{{ [[$:/state/toc]addsuffix<__path__>addsuffix[-]addsuffix<currentTiddler>] }}}>
+    <li class="toc-item">
+      <$link to={{{ [<currentTiddler>] }}}>
+        <$list filter="[function[children],<currentTiddler>]" variable="ignore" emptyMessage="""<$button class="tc-btn-invisible">{{$:/core/images/blank}}</$button>""">
+          <$reveal type="nomatch" stateTitle=<<toc-state>> text="open">
+             <$button setTitle=<<toc-state>> setTo="open" class="tc-btn-invisible tc-popup-keep">
+               <$transclude tiddler=<<toc-closed-icon>> />
+             </$button>
+          </$reveal>
+          <$reveal type="match" stateTitle=<<toc-state>> text="open">
+            <$button setTitle=<<toc-state>> setTo="close" class="tc-btn-invisible tc-popup-keep">
+              <$transclude tiddler=<<toc-open-icon>> />
+            </$button>
+          </$reveal>
+        </$list>
+        <<toc-caption>>
+     </$link>
+     <$reveal type="match" stateTitle=<<toc-state>> text="open">
+       <$transclude $variable="rham-toc-node" filter={{{ [function[children],<currentTiddler>] }}} />
+     </$reveal>
+    </li>
+  </$qualify>
+\end rham-toc-node-body
+
+\procedure rham-toc-node(filter)
+<ol class="tc-toc toc-selective-expandable">
+  <$list filter=<<filter>> >
+    <$transclude $variable="rham-toc-node-body" filter=<<filter>> />
+  </$list>
+</ol>
+
+\end rham-toc-node
+
+\procedure rham-toc()
 <div class="tc-table-of-contents">
-
-<<toc-selective-expandable "TableOfContents" "sortan[]" exclude:"[has[excludeTOC]]" >>
-
+<<rham-toc-node "Overview [tag[Section]] About to-do" >>
 </div>
+\end rham-toc
+
+
+<<rham-toc>>

@@ -1,11 +1,11 @@
 caption: 1510 - School Visitors
-created: 20250529173756366
+created: 20250826180929501
 description: School Visitors
-modified: 20250609201413041
-parent: Section1000
+modified: 20250827190815122
 pdf-url: https://www.rhamschools.org/common/pages/GetFile.ashx?key=84SEBoh9
 policy-nbr: 1510
-revision: 1
-tags: Policy Section1000
+structure: plain
+tags: Policy
 title: Policy1510
-type: text/vnd.tiddlywiki
+
+<<sections>>

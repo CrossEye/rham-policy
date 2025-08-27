@@ -1,11 +1,7 @@
-created: 20250606121506300
-marker: B
-modified: 20250606121640494
-parent: Policy3265(V)(s3)
-revision: 0
-tags: Policy3265(V)(s3)
+caption: Exhaustible items
+created: 20250827031233986
+modified: 20250827031233986
 title: Policy3265(V)(s3)(B)
-type: text/vnd.tiddlywiki
 
 Capitalized collections or individual items that are exhaustible should be depreciated over their
 useful lives. Depreciation is not required for collections or individual items that are inexhaustible. 

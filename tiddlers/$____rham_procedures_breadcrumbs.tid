@@ -1,22 +1,56 @@
-code-body: yes
-created: 20250529144751399
-modified: 20250529185920171
+created: 20250824194632501
+modified: 20250827182246885
 revision: 0
 tags: $:/tags/Global
 title: $:/_/rham/procedures/breadcrumbs
+type: text/vnd.tiddlywiki
+
+\define marker() (.*?)(\([^\(\)]+\)$)
+
+\function get.parent(tid)
+  [<tid>!prefix[Policy]then[]] 
+  [<tid>regexp<marker>then<tid>search-replace::regexp<marker>,[$1]]
+  [<tid>removeprefix[Policy]split[]first[]addsuffix[000]addprefix[Section]]
+  +[first[]] 
+\end get.parent
 
 \procedure ancestry(tid)
-  <$list filter="[<tid>get[parent]]">
-    <$transclude $variable="ancestry" tid=<<currentTiddler>> />
+  <$list filter= "[get.parent<tid>]" variable="parent" >
+    <% if [<parent>!match[]] %>
+      <$transclude $variable="ancestry" tid=<<parent>> />
+  <% endif %>
   </$list>
-  <% if [<tid>has[parent]] %><div class="sep">&gt;</div><% endif %>
-  <div class="crumb"><$link to=<<tid>> ><$view tiddler=<<tid>> field="caption"/></$link></div>
+  <% if [get.parent<tid>!match[]] %><div class="sep">&gt;</div><% endif %>
+  <div class="crumb"><$link to=<<tid>> ><$view tiddler=<<tid>> field="caption"><$view tiddler=<<tid>> field="title"/></$view></$link></div>
 \end ancestry
 
+
 \procedure breadcrumbs(tid)
-  <nav class="breadcrumbs"><$transclude $variable="ancestry" tid={{{ [<tid>get[parent]] }}}> /></nav>
-\end
+  <nav class="breadcrumbs"><$transclude $variable="ancestry" tid={{{ [get.parent<tid>] }}}  /></nav>  
+\end breadcrumbs
 
 \procedure full-path(tid)
   <nav class="breadcrumbs"><$transclude $variable="ancestry" tid=<<tid>> > /></nav>
 \end
+
+-----------
+
+* ''`<<get.parent Section1000>>`'': "<<get.parent Section1000>>"
+* ''`<<get.parent Policy1234>>`'': "<<get.parent Policy1234>>"
+* ''`<<get.parent Policy1234(II)>>`'': "<<get.parent Policy1234(I)>>"
+* ''`<<get.parent Policy1234(II)(A)>>`'': "<<get.parent Policy1234(II)(A)>>"
+* ''`<<get.parent Policy1234(II)(A)(7)>>`'': "<<get.parent Policy1234(II)(A)(7)>>"
+
+-----------
+
+* ''`<<breadcrumbs Policy1234(II)(A)>>`'': <<breadcrumbs Policy1234(II)(A)>> 
+
+----------
+
+* ''`<<breadcrumbs Policy1000(s1) >>`'':  <<breadcrumbs Policy1000(s1) >>
+
+----------
+
+* ''`<<full-path Policy1000(s1) >>`'':  <<full-path Policy1000(s1) >>
+
+----------

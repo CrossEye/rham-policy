@@ -1,13 +1,9 @@
 caption: Guidelines
-created: 20250529175139234
-inline-display-title: Outside Funded Athletic Teams
-modified: 20250529184359851
-parent: Policy1520
-revision: 0
+created: 20250826184804919
+modified: 20250826184804919
 scotts-note: The header here should probably read "Guidelines" and not repeat the policy title.
-tags: Policy1520
+structure: list
 title: Policy1520(s2)
-type: text/vnd.tiddlywiki
 
 !!! Outside Funded Athletic Teams
 
@@ -15,4 +11,4 @@ Any athletic team which is funded in whole or in part by any Booster club or oth
 benefit of Region 8 students must adhere to the following guidelines in order for the program to be considered a
 Region 8 athletic program.
 
-<<children list>>
+<<sections>>

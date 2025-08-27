@@ -1,0 +1,14 @@
+caption: @@TODO@@
+created: 20250826163606426
+modified: 20250827191108327
+tags: 
+title: to-do
+
+!! From the recent refactoring
+* ~~Figure out why print stylesheet is not working properly~~.  ''Fixed'':  was just missing a template
+* ~~Remove remaining `Section####` tags, and fix print markup to no longer  use it.~~ ''Done''
+* extract custom toc stuff into system tiddlers, and leave the main one with just a call using a filter.
+
+!! General
+* Remove markers in various outline styles if tiddler has section-type of history or legal. (perhaps if it has !!section-type at all.)  For example, [[Policy1410]].
+* (Perhaps) remove all `created` and `modified` fields

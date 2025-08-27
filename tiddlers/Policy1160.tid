@@ -1,12 +1,12 @@
 caption: 1160 - Community Relations
 created: 20250529134707657
 description: Community Relations
-modified: 20250608032712577
-parent: Section1000
+modified: 20250827190318059
 pdf-url: https://www.rhamschools.org/common/pages/GetFile.ashx?key=iZxSBiRl
 policy-nbr: 1160
-revision: 2
-tags: Policy Section1000
+revision: 0
+structure: plain
+tags: Policy
 title: Policy1160
 type: text/vnd.tiddlywiki
 
@@ -25,4 +25,4 @@ of students and their families. Among these are the following goals:
 
 The Superintendent will ensure the implementation of this policy.
 
-<<children plain>>
+<<sections>>

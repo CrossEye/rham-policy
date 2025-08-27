@@ -1,11 +1,11 @@
 created: 20250531182002956
 list-before: $:/core/ui/ViewTemplate/body
-modified: 20250531182039104
+modified: 20250827163710103
 revision: 0
 tags: $:/tags/ViewTemplate
 title: $:/_/rham/viewtemplates/section
 type: text/vnd.tiddlywiki
 
 <% if [<currentTiddler>tag[Section]]%>
-<<list-links filter:"[parent<currentTiddler>!tag[Compound]sortan[]]">>
+<<list-links filter:"[function[children],<currentTiddler>enlist-input[]!tag[Compound]sortan[]sortan[]]">>
 <% endif %>

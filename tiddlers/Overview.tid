@@ -1,7 +1,7 @@
 created: 20250318115542936
-modified: 20250609210210445
-revision: 10
-tags: TableOfContents
+modified: 20250827191327875
+revision: 0
+tags: 
 title: Overview
 type: text/vnd.tiddlywiki
 
@@ -9,7 +9,7 @@ This is an attempt to redo [[RHAM's Policy Manual|https://www.rhamschools.org/b_
 
 This is just getting underway, and I'm fiddling with how to make it work.  For a somewhat similar project, see the mostly complete version I did for [[Andover's Town Charter|https://charter2024.andoverct.info]].
 
-This one has some differences.  The Charter was mostly consistent in its hierarchy.  Here we have policies with many different structures, and some of the breakdowns may seem fairly arbitrary.  In the Charter, one of the main goals was to make it easy to cite sections.  While I will try to emulate that here, it's less critical.  Here, the one-file nature of TW is a major selling point.  I'd love to be able to simply share the entire policy manual in one go.  ~~And in fact, if I cannot find a simple way to break these policies down into linkable sections, I will simply forgo that.  But I'll give it a try first.~~ ''Update'': That seems to be working, but I will probably need some additional tools to make it easier for me and future users to create policies and their subdivisions.
+This one has some differences.  The Charter was mostly consistent in its hierarchy.  Here we have policies with many different structures, and some of the breakdowns may seem fairly arbitrary.  In the Charter, one of the main goals was to make it easy to cite sections.  While I will try to emulate that here, it's less critical.  Here, the one-file nature of TW is a major selling point.  I'd love to be able to simply share the entire policy manual in one go.    I will probably need some additional tools to make it easier for me and future users to create policies and their subdivisions.
 
 I'm building this out a policy at a time, trying to figure out the common patterns.  So far the <$text text={{{ [tag[Policy]] :filter[get[text]split[]count[]!match[0]] +[count[]] }}}/> policies converted (or partially converted) are
 
@@ -19,5 +19,10 @@ The remaining <$text text={{{ [tag[Policy]] :filter[get[text]split[]count[]match
 
 As I go, I will add miscellaneous [[Notes]] I find about oddities in the various policies.
 
+
+!! Refactoring
+
+This has recently undergone a significant refactoring.  Policy tiddlers no longer need a `parent` field, no longer need a `marker` field, and no longer have a TOC-only tag of their parent.  The call to get their subsections has changed from `<<children outline-block>>` to  `<<sections>>` with `outline-block` moved to the `structure` field.  The point is that the titles contain enough information to derive the hierarchy.  It was significant work, even with only 18 policies completed to upgrade to this.  But I think it is a substantial simplification, especially important as I'm hoping that maintenance can be handed over to a TW novice.
+
 ----------
-<small>^^1^^ ''RHAM'' is the ''R''egional school district, covering Middle School and High School for the Connecticut towns of ''H''ebron, ''A''ndover, and ''M''arlborough.</small>
+<small>^^1^^ ''RHAM'' is the ''R''egional school district, covering Middle School and High School for the Connecticut (USA) towns of ''H''ebron, ''A''ndover, and ''M''arlborough.</small>

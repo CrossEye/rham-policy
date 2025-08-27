@@ -1,11 +1,5 @@
 caption: Guidelines
-created: 20250606120239172
-marker: V
-modified: 20250606125008491
-parent: Policy3265
-revision: 1
-tags: Policy3265
+structure: heading3-upper
 title: Policy3265(V)
-type: text/vnd.tiddlywiki
 
-<<children heading3-upper>>
+<<sections>>

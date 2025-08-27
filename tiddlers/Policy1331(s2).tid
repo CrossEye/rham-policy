@@ -1,12 +1,12 @@
 caption: Definitions
 created: 20250606182306119
-modified: 20250606234459387
-parent: Policy1331
-revision: 11
-tags: Policy1331
+modified: 20250827162143352
+revision: 0
+structure: definition-prequoted
+tags: 
 title: Policy1331(s2)
 type: text/vnd.tiddlywiki
 
 The following definitions shall apply to this policy:
 
-<<children definition-quoted>>
+<<sections>>

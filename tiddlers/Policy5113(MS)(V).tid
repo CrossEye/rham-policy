@@ -1,13 +1,7 @@
 caption: Teacher Responsibilities
-created: 20250530205625167
-marker: V
-modified: 20250530212114409
-parent: Policy5113(MS)
-revision: 0
-tags: Policy5113(MS)
+structure: outline-block
 title: Policy5113(MS)(V)
-type: text/vnd.tiddlywiki
 
 The teacher is responsible for the following:
 
-<<children outline-block>>
+<<sections>>

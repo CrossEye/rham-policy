@@ -1,0 +1,41 @@
+created: 20250826195008477
+modified: 20250827190112456
+tags: $:/tags/Global
+title: $:/_/rham/functions/children
+
+\function sec.children(pol)
+  [<pol>removeprefix[Section]removesuffix[000]addprefix[Policy]] :map[all[tiddlers]prefix<currentTiddler>!regexp[\(]enlist-input[]join[ ]]
+\end sec.children
+
+<!-- todo: simplify and combine regexes -->
+\function pol.children(pol)
+  [prefix<pol>] -[<pol>] :filter[trim:prefix<pol>regexp[^\(]!regexp[.*\(.*\(]] +[enlist-input[]join[ ]]
+\end pol.children
+
+\function children(pol)
+  [function[sec.children],<pol>]
+  [function[pol.children],<pol>]
+  :filter[!is[empty]first[]]
+\end children
+
+----------
+
+* ''`<<sec.children Section1000>>`'': "<<sec.children Section1000>>"
+* ''`<<sec.children Section8000>>`'': "<<sec.children Section8000>>"
+
+----------
+
+* ''`<<pol.children Policy1331>>`'': "<<pol.children Policy1331>>"
+* ''`<<pol.children Policy1331(s2)>>`'': "<<pol.children Policy1331(s2)>>"
+* ''`<<pol.children Policy1234>>`'': "<<pol.children Policy1234>>"
+* ''`<<pol.children Policy6146>>`'': "<<pol.children Policy6146>>"
+----------
+
+* ''`<<children Section1000>>`'': "<<children Section1000>>"
+* ''`<<children Section8000>>`'': "<<children Section8000>>"
+* ''`<<children Policy1331>>`'': "<<children Policy1331>>"
+* ''`<<children Policy1331(s2)>>`'': "<<children Policy1331(s2)>>"
+* ''`<<children Policy1234>>`'': "<<children Policy1234>>"
+* ''`<<children Policy6146>>`'': "<<children Policy6146>>" <!-- Doesn't capture `Policy6146a` -->
+
+----------

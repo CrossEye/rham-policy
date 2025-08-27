@@ -1,10 +1,5 @@
 caption: Definitions
-created: 20250609171528605
-marker: I
-modified: 20250609172419562
-parent: Policy1435
-revision: 5
-tags: Policy1435
+structure: definition-inline
 title: Policy1435(I)
 
-<<children definition-inline>>
+<<sections>>

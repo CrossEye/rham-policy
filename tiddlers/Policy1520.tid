@@ -1,13 +1,10 @@
 caption: 1520 - Outside Funded Athletic Teams
-created: 20250522191728140
 description: Outside Funded Athletic Teams
-modified: 20250606175846067
-parent: Section1000
+modified: 20250827190815122
 pdf-url: https://www.rhamschools.org/common/pages/GetFile.ashx?key=vEG6Bfm7
 policy-nbr: 1520
-revision: 2
-tags: Policy Section1000
+structure: plain
+tags: Policy
 title: Policy1520
-type: text/vnd.tiddlywiki
 
-<<children plain>>
+<<sections>>

@@ -1,12 +1,12 @@
 caption: Definitions
 created: 20250528141806071
-modified: 20250606184956090
-parent: Policy1350
-revision: 2
-tags: Policy1350
+modified: 20250826014939856
+revision: 0
+structure: definition
+tags: 
 title: Policy1350(s5)
 type: text/vnd.tiddlywiki
 
 The following definitions apply for purposes of this policy:
 
-<<children definition>>
+<<sections>>

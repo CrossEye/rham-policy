@@ -1,0 +1,11 @@
+created: 20250827203455105
+list-before: $:/core/ui/ViewTemplate/subtitle
+modified: 20250827203644838
+revision: 0
+tags: $:/tags/ViewTemplate
+title: $:/_/rham/viewtemplates/aliases-of
+type: text/vnd.tiddlywiki
+
+<% if [aliases.of<currentTiddler>] %>
+<div class="aliases">Aliases: <$list filter="[aliases.of<currentTiddler>]" join=", "><$link/></$list></div>
+<% endif %>

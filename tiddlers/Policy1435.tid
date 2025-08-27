@@ -1,13 +1,11 @@
 caption: 1435 - Possession and Use of Deadly Weapons or Firearms
-created: 20250529173756366
+created: 20250826142542032
 description: Possession and Use of Deadly Weapons or Firearms
-modified: 20250609172543186
-parent: Section1000
+modified: 20250827190815122
 pdf-url: https://www.rhamschools.org/common/pages/GetFile.ashx?key=%2fXEKBgiI
 policy-nbr: 1435
-revision: 2
-tags: Policy Section1000
+structure: outline
+tags: Policy
 title: Policy1435
-type: text/vnd.tiddlywiki
 
-<<children outline>>
+<<sections>>

@@ -1,14 +1,9 @@
 caption: Infrastructure
-created: 20250606153546265
-modified: 20250606153729760
-parent: Policy3265(V)
-revision: 1
-tags: Policy3265(V)
+structure: outline-block
 title: Policy3265(V)(s4)
-type: text/vnd.tiddlywiki
 
 Definition: Infrastructure (fixed) assets are long lived capital assets that normally are stationary in nature
 and can normally be preserved for a significantly greater number of years that most capital assets.
 Infrastructure includes roads, electrical distribution systems, street lighting, water wells, etc.
 
-<<children outline-block>>
+<<sections>>

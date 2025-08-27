@@ -1,14 +1,8 @@
 caption: Student Responsibilities
-created: 20250530204918989
-marker: IV
-modified: 20250530205622740
-parent: Policy5113(MS)
-revision: 0
-tags: Policy5113(MS)
+structure: outline-block
 title: Policy5113(MS)(IV)
-type: text/vnd.tiddlywiki
 
 The student is responsible for the following:
 
-<<children outline-block>>
+<<sections>>
 

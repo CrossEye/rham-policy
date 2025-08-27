@@ -1,15 +1,9 @@
 caption: Administrative Responsibilities
-created: 20250531165447462
-marker: VIII
-modified: 20250531171727139
-parent: Policy5113(HS)
-revision: 0
-tags: Policy5113(HS)
+structure: outline-block
 title: Policy5113(HS)(VIII)
-type: text/vnd.tiddlywiki
 
 The administration is responsible for the following:
 
-<<children outline-block>>
+<<sections>>
 
 

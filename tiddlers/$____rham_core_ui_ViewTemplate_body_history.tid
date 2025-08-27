@@ -1,10 +1,10 @@
 created: 20250521032541190
-modified: 20250521033150660
+modified: 20250617185845740
 revision: 0
 tags: 
 title: $:/_/rham/core/ui/ViewTemplate/body/history
 type: text/vnd.tiddlywiki
 
 <div class="history">
-<$transclude $tiddler="$:/config/ViewTemplateBodyFilters/default" />
+{{||$:/core/ui/ViewTemplate/body/default}}
 </div>

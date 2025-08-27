@@ -1,14 +1,13 @@
 caption: Regulations
 created: 20250608141418293
-marker: VI
-modified: 20250608143233018
-parent: Policy1340
-revision: 2
-tags: Policy1340
+modified: 20250825210103729
+revision: 0
+structure: outline-block
+tags: 
 title: Policy1340(VI)
 type: text/vnd.tiddlywiki
 
 The Superintendent of Schools shall develop regulations governing advertising and promotion in
 the schools in accordance with this Policy and consistent with the following guidelines: 
 
-<<children outline-block>>
+<<sections>>

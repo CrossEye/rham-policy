@@ -1,12 +1,12 @@
 caption: 1000 - School District Goals
 created: 20250529173756365
 description: School District Goals
-modified: 20250606175909564
-parent: Section1000
+modified: 20250827190155069
 pdf-url: https://www.rhamschools.org/common/pages/GetFile.ashx?key=5EG6BaG7
 policy-nbr: 1000
-revision: 2
-tags: Policy Section1000
+revision: 0
+structure: plain
+tags: Policy
 title: Policy1000
 type: text/vnd.tiddlywiki
 
@@ -16,4 +16,4 @@ toward implementing the Strategic Plan. Should the Board determine that goals of
 addressed or should unforeseen issues emerge, the Long Range Strategic Plan will be revised. The plan should
 be reviewed annually. Annually the Board shall review the goals of the Long Range Strategic Plan. 
 
-<<children plain>>
+<<sections>>

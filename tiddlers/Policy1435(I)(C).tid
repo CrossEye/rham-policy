@@ -1,10 +1,6 @@
 caption: Peace Officer
-created: 20250609172724845
-marker: C
-modified: 20250609173255283
-parent: Policy1435(I)
-revision: 3
-tags: Policy1435(I)
+created: 20250826142559612
+modified: 20250826142607011
 title: Policy1435(I)(C)
 
 means “a member of the Division of State Police within the
@@ -13,7 +9,7 @@ police department, a chief inspector or inspector in the Division of Criminal
 Justice, a state marshal while exercising authority granted under any provision of
 the general statutes, a judicial marshal in the performance of the duties of a
 judicial marshal, a conservation officer or special conservation officer, as defined
-in section 26-5, a constable who performs criminal law enforcement duties, a
+in section <<cgs 26-5>>, a constable who performs criminal law enforcement duties, a
 special policeman appointed under section <<cgs 29-18>>, <<cgs 29-18a>> or <<cgs 29-19>>, an adult
 probation officer, an official of the Department of Correction authorized by the
 Commissioner of Correction to make arrests in a correctional institution or

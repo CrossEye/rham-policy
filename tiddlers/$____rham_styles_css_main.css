@@ -66,3 +66,4 @@ ol.continued {
 .upper {text-transform: uppercase;}
 .two-column {column-count: 2; list-style: none;}
 definition {padding-left: 1.5em}
+.aliases {float: right; padding-top: .25em;}

@@ -1,14 +1,14 @@
 caption: 1350 - Non-discrimination (Community)
 created: 20250528014352354
 description: Non-discrimination (Community)
-modified: 20250606124128828
-parent: Section1000
+modified: 20250827190815122
 pdf-url: https://www.rhamschools.org/common/pages/GetFile.ashx?key=db0NBodE
 policy-nbr: 1350
-revision: 1
-tags: Policy Section1000
+revision: 0
+structure: heading2
+tags: Policy
 title: Policy1350
 type: text/vnd.tiddlywiki
 
-<<children heading2>>
+<<sections>>
 
