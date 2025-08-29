@@ -1,6 +1,5 @@
 created: 20250318115542936
-modified: 20250828192746104
-revision: 0
+modified: 20250829001812317
 tags: 
 title: Overview
 type: text/vnd.tiddlywiki
@@ -19,11 +18,19 @@ This is just getting underway, and I'm fiddling with how to make it work.  For a
 
 This one has some differences.  The Charter was mostly consistent in its hierarchy.  Here we have policies with many different structures, and some of the breakdowns may seem fairly arbitrary.  In the Charter, one of the main goals was to make it easy to cite sections.  While I will try to emulate that here, it's less critical.  Here, the one-file nature of TW is a major selling point.  I'd love to be able to simply share the entire policy manual in one go.    I will probably need some additional tools to make it easier for me and future users to create policies and their subdivisions.
 
-I'm building this out a policy at a time, trying to figure out the common patterns.  So far the <$text text={{{ [tag[Policy]] :filter[get[text]split[]count[]!match[0]] +[count[]] }}}/> policies converted (or partially converted) are
+!!! Work in Progress
 
-<$list filter="[tag[Policy]] :filter[get[text]!match[]]" join=", " ><$link>{{!!caption}}</$link></$list>
+I'm building this out a policy at a time, trying to figure out the common patterns.  
 
-The remaining <$text text={{{ [tag[Policy]] :filter[get[text]split[]count[]match[0]] +[count[]] }}}/> still need to be started
+<details>
+<summary>The <$text text={{{ [tag[Policy]] :filter[get[text]split[]count[]!match[0]] +[count[]] }}}/> policies already converted (or at least started)</summary>
+<<list-links filter:"[tag[Policy]] :filter[get[text]!match[]]" >>
+</details>
+
+<details>
+<summary>The <$text text={{{ [tag[Policy]] :filter[get[text]split[]count[]match[0]] +[count[]] }}}/> policies not yet started</summary>
+<<list-links filter:"[tag[Policy]] :filter[get[text]match[]]" >>
+</details>
 
 As I go, I will add miscellaneous [[Notes]] I find about oddities in the various policies.
 
