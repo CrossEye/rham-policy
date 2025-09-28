@@ -1,5 +1,5 @@
 created: 20250318115542936
-modified: 20250829001812317
+modified: 20250928135454866
 tags: 
 title: Overview
 type: text/vnd.tiddlywiki
@@ -23,13 +23,13 @@ This one has some differences.  The Charter was mostly consistent in its hierarc
 I'm building this out a policy at a time, trying to figure out the common patterns.  
 
 <details>
-<summary>The <$text text={{{ [tag[Policy]] :filter[get[text]split[]count[]!match[0]] +[count[]] }}}/> policies already converted (or at least started)</summary>
-<<list-links filter:"[tag[Policy]] :filter[get[text]!match[]]" >>
+<summary>The <$text text={{{ [tag[Policy]] :filter[has[text]] +[count[]] }}}/> policies already converted (or at least started)</summary>
+<<list-links filter:"[tag[Policy]] :filter[has[text]]" >>
 </details>
 
 <details>
-<summary>The <$text text={{{ [tag[Policy]] :filter[get[text]split[]count[]match[0]] +[count[]] }}}/> policies not yet started</summary>
-<<list-links filter:"[tag[Policy]] :filter[get[text]match[]]" >>
+<summary>The <$text text={{{ [tag[Policy]] :filter[!has[text]] +[count[]] }}}/> policies not yet started</summary>
+<<list-links filter:"[tag[Policy]] :filter[!has[text]]" >>
 </details>
 
 As I go, I will add miscellaneous [[Notes]] I find about oddities in the various policies.
