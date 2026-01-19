@@ -1,6 +1,6 @@
 {
   "name": "RHAM_Policies",
-  "version": "0.5.3",
+  "version": "0.6.0",
   "description": "Online version of RHAM's Policy Manual",
   "main": "index.js",
   "scripts": {
@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/CrossEye/rham-policy/#readme",
   "dependencies": {
-    "tiddlywiki": "^5.3.6"
+    "tiddlywiki": "^5.3.8"
   },
   "devDependencies": {
     "cross-var": "^1.1.0",

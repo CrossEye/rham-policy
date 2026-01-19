@@ -1,9 +1,9 @@
 caption: @@TODO@@
 created: 20250826163606426
-modified: 20250827191108327
-revision: 0
+modified: 20260119015204606
 tags: 
 title: to-do
+type: text/vnd.tiddlywiki
 
 !! From the recent refactoring
 * ~~Figure out why print stylesheet is not working properly~~.  ''Fixed'':  was just missing a template
@@ -11,5 +11,5 @@ title: to-do
 * extract custom toc stuff into system tiddlers, and leave the main one with just a call using a filter.
 
 !! General
-* Remove markers in various outline styles if tiddler has section-type of history or legal. (perhaps if it has !!section-type at all.)  For example, [[Policy1410]].
+* Remove markers in various outline styles if tiddler has section-type of history or legal. (perhaps if it has !!section-type at all.)  For example, [[Policy1410]] or [[Policy3265]].
 * (Perhaps) remove all `created` and `modified` fields

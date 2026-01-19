@@ -1,26 +1,25 @@
 code-body: yes
 created: 20250528201630795
-modified: 20250826160511538
-revision: 0
+modified: 20260118215754569
 tags: $:/tags/Global
 title: $:/_/rham/procedures/sections
 type: text/vnd.tiddlywiki
 
 \define markerRegex() .*\(([^\(\)]+)\)$
 
-  \procedure heading2()
-    <div class={{!!section-type}}>
-      <h2><$link>{{!!caption}}</$link></h2>
-      <$transclude $mode="block"/>
-    </div>
-  \end heading2
+\procedure heading2()
+  <div class={{!!section-type}}>
+    <h2><$link>{{!!caption}}</$link></h2>
+    <$transclude $mode="block"/>
+  </div>
+\end heading2
 
-  \procedure heading3-upper()
-    <div class={{!!section-type}}>
-      <h3 class="upper"><$link>{{!!caption}}</$link></h3>
-      <$transclude $mode="block"/>
-    </div>
-  \end heading3-upper
+\procedure heading3-upper()
+  <div class={{!!section-type}}>
+    <h3 class="upper"><$link>{{!!caption}}</$link></h3>
+    <$transclude $mode="block"/>
+  </div>
+\end heading3-upper
 
 \procedure outline()
   <div class="level">
@@ -36,53 +35,53 @@ type: text/vnd.tiddlywiki
   </div>
 \end old-plain
 
-  \procedure plain()
-    <div class={{!!section-type}}>
-      <% if [<currentTiddler>section-type[legal]] %>
-        <h2><$link>{{!!caption}}</$link></h2>
-      <% endif %>
-      <% if [<currentTiddler>section-type[history]] %>
-        <h2><$link>{{!!caption}}</$link></h2>
-      <% endif %>
-      <$transclude $mode="block"/>
-    </div>
-  \end plain
+\procedure plain()
+  <div class={{!!section-type}}>
+    <% if [<currentTiddler>section-type[legal]] %>
+      <h2><$link>{{!!caption}}</$link></h2>
+    <% endif %>
+    <% if [<currentTiddler>section-type[history]] %>
+      <h2><$link>{{!!caption}}</$link></h2>
+    <% endif %>
+    <$transclude $mode="block"/>
+  </div>
+\end plain
 
-  \procedure definition()
-    <div class="definition level">
-      <div class="term"><$link><<marker>>. {{!!caption}}</$link>: </div>
-      <$transclude $mode="block"/>
-    </div>
-  \end definition
+\procedure definition()
+  <div class="definition level">
+    <div class="term"><$link><<marker>>. {{!!caption}}</$link>: </div>
+    <$transclude $mode="block"/>
+  </div>
+\end definition
 
-  <!-- TODO: consolidate this with above.  One difference is existence of a colon. -->
-  \procedure definition-inline()
-    <div class="definition level">
-      <div class="term"><$link><<marker>>. {{!!caption}}</$link></div>
-      <$transclude $mode="block"/>
-    </div>
-  \end definition-inline
+<!-- TODO: consolidate this with above.  One difference is existence of a colon. -->
+\procedure definition-inline()
+  <div class="definition level">
+    <div class="term"><$link><<marker>>. {{!!caption}}</$link></div>
+    <$transclude $mode="block"/>
+  </div>
+\end definition-inline
 
-  \procedure outline()
-    <div class="level">
-      <div class="heading"><$link><% if [<marker>] %><<marker>>. <% endif %>{{!!caption}}</$link></div>
-      <$transclude $mode="block"/>
-    </div>
-  \end outline
+\procedure outline()
+  <div class="level">
+    <div class="heading"><$link><% if [<marker>] %><<marker>>. <% endif %>{{!!caption}}</$link></div>
+    <$transclude $mode="block"/>
+  </div>
+\end outline
 
-  \procedure outline-block()
-    <div class="level">
-      <div class="term"><$link><<marker>> </$link></div>
-      <$transclude $mode="block"/>
-    </div>
-  \end outline-block
+\procedure outline-block()
+  <div class="level">
+    <div class="term"><$link><<marker>> </$link></div>
+    <$transclude $mode="block"/>
+  </div>
+\end outline-block
 
-  \procedure list()
-    <div class="list-item">
-      <div class="marker"><$link><<marker>></$link>. </div>
-      <$transclude $mode="block"/>
-    </div>
-  \end list
+\procedure list()
+  <div class="list-item">
+    <div class="marker"><$link><<marker>></$link>. </div>
+    <$transclude $mode="block"/>
+  </div>
+\end list
 
 \procedure definition-prequoted()
   <div class="definition level">
@@ -91,12 +90,12 @@ type: text/vnd.tiddlywiki
   </div>
 \end
 
-  \procedure definition-quoted()
-    <div class="definition level">
-      <div class="term"><$link><<marker>>.  "{{!!caption}}"</$link>: </div>
-      <$transclude $mode="block"/>
-    </div>
-  \end definition-quoted
+\procedure definition-quoted()
+  <div class="definition level">
+    <div class="term"><$link><<marker>>.  "{{!!caption}}"</$link>: </div>
+    <$transclude $mode="block"/>
+  </div>
+\end definition-quoted
 
 \procedure outline-block()
   <div class="level">
@@ -108,7 +107,7 @@ type: text/vnd.tiddlywiki
 
 \procedure sections()
 <$let outline-structure={{{ [{!!structure}] }}}>
-  <$list filter="[all[tiddlers]prefix<currentTiddler>]  :filter[removeprefix<..currentTiddler>split[(]count[]match[2]] +[sortan[]]">
+  <$list filter="[all[tiddlers]prefix<currentTiddler>]  :filter[removeprefix<..currentTiddler>split[(]count[]match[2]] +[sortsub:string<byPolNbr>] ">
     <$let 
       tid=<<currentTiddler>>
       marker={{{  [<tid>search-replace::regexp<markerRegex>,[$1]] }}}

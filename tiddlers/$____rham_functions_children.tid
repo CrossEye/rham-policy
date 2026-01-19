@@ -1,8 +1,8 @@
 created: 20250826195008477
-modified: 20250827190112456
-revision: 0
+modified: 20260118215731765
 tags: $:/tags/Global
 title: $:/_/rham/functions/children
+type: text/vnd.tiddlywiki
 
 \function sec.children(pol)
   [<pol>removeprefix[Section]removesuffix[000]addprefix[Policy]] :map[all[tiddlers]prefix<currentTiddler>!regexp[\(]enlist-input[]join[ ]]
@@ -10,7 +10,7 @@ title: $:/_/rham/functions/children
 
 <!-- todo: simplify and combine regexes -->
 \function pol.children(pol)
-  [prefix<pol>] -[<pol>] :filter[trim:prefix<pol>regexp[^\(]!regexp[.*\(.*\(]] +[enlist-input[]join[ ]]
+  [prefix<pol>] -[<pol>] :filter[trim:prefix<pol>regexp[^\(]!regexp[.*\(.*\(]] +[sortsub:string<byPolNbr>] +[enlist-input[]join[ ]] 
 \end pol.children
 
 \function children(pol)
