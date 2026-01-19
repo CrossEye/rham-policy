@@ -1,6 +1,6 @@
 code-body: yes
 created: 20241111011429987
-modified: 20260118215655926
+modified: 20260119161757711
 tags: $:/tags/Global
 title: $:/_/rham/procedures/general
 type: text/vnd.tiddlywiki
@@ -9,6 +9,6 @@ type: text/vnd.tiddlywiki
 
 \procedure display-link(section) <$link to=<<section>> ><$text text={{{ [{$:/info/url/full}addsuffix[#]addsuffix<section>] }}} /> </$link>
 
-\define byPolNbr() [{!!title}search:title:regexp[\(ref\)$]then[ZZZZY]] [{!!title}search:title:regexp[\(hist\)$]then[ZZZZZ]] [{!!title}] +[first[]]
+\define byPolNbr() [{!!title}search:title:regexp[\(legal\)$]then[YYYYYY]] [{!!title}search:title:regexp[\(history\)$]then[ZZZZZZ]] [{!!title}] +[first[]]
 
 

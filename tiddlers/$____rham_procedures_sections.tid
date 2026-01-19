@@ -1,6 +1,6 @@
 code-body: yes
 created: 20250528201630795
-modified: 20260118215754569
+modified: 20260119164549834
 tags: $:/tags/Global
 title: $:/_/rham/procedures/sections
 type: text/vnd.tiddlywiki
@@ -20,6 +20,13 @@ type: text/vnd.tiddlywiki
     <$transclude $mode="block"/>
   </div>
 \end heading3-upper
+
+\procedure heading3-underline()
+  <div class={{!!section-type}}>
+    <h3 class="underline"><$link>{{!!caption}}</$link></h3>
+    <$transclude $mode="block"/>
+  </div>
+\end heading3-underline
 
 \procedure outline()
   <div class="level">
