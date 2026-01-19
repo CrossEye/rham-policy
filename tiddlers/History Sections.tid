@@ -1,0 +1,9 @@
+created: 20260119202618414
+modified: 20260119202637763
+tags: 
+title: History Sections
+type: text/vnd.tiddlywiki
+
+<$list filter=[section-type[history]sortan[]]>
+  <$transclude $variable="translink" title=<<currentTiddler>> />
+</$list>

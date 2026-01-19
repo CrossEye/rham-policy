@@ -1,0 +1,9 @@
+created: 20260119184759240
+modified: 20260119202613134
+tags: 
+title: Legal Sections
+type: text/vnd.tiddlywiki
+
+<$list filter=[section-type[legal]sortan[]]>
+  <$transclude $variable="translink" title=<<currentTiddler>> />
+</$list>

@@ -1,6 +1,6 @@
 caption: @@TODO@@
 created: 20250826163606426
-modified: 20260119015204606
+modified: 20260119202730234
 tags: 
 title: to-do
 type: text/vnd.tiddlywiki
@@ -13,3 +13,4 @@ type: text/vnd.tiddlywiki
 !! General
 * Remove markers in various outline styles if tiddler has section-type of history or legal. (perhaps if it has !!section-type at all.)  For example, [[Policy1410]] or [[Policy3265]].
 * (Perhaps) remove all `created` and `modified` fields
+* Consider settling on a consistent format for [[Legal Sections]].
