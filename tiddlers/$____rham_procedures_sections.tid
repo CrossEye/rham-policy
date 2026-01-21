@@ -1,6 +1,6 @@
 code-body: yes
 created: 20250528201630795
-modified: 20260121021938338
+modified: 20260121023643875
 tags: $:/tags/Global
 title: $:/_/rham/procedures/sections
 type: text/vnd.tiddlywiki
@@ -84,10 +84,10 @@ type: text/vnd.tiddlywiki
 
 \procedure plain()
   <div class=<<section-type>> >
-    <% if [<currentTiddler>section-type[legal]] %>
+    <% if [<section-type>match[legal]] %>
       <h2><$link>{{!!caption}}</$link></h2>
     <% endif %>
-    <% if [<currentTiddler>section-type[history]] %>
+    <% if [<section-type>match[history]] %>
       <h2><$link>{{!!caption}}</$link></h2>
     <% endif %>
     <$transclude $mode="block"/>
