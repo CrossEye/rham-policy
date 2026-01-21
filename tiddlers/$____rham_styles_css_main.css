@@ -39,9 +39,8 @@ div.term, div.marker {float: left; padding-right: .5em;}
 div.event {
   display: flex;
   flex-direction: row;
-  /*margin: 0 0 0 2em;*/
   margin: 0;
-  padding: 0;
+  padding: 0 0 0 3em;
   div {margin: 0}
   .event-name {flex: 0 0 7em;}
   .event-date {flex: 1 0 auto;}
@@ -70,5 +69,11 @@ definition {padding-left: 1.5em}
 .aliases {float: right; padding-top: .25em;}
 table.indented {
   margin-left: 4em;
+}
+table.invisible {
+  border: none;
+  tr, td, th {border: none;}
+}
+table.grouped-col {
   td, th {padding: .25em 2em .25em 1em; vertical-align: top;}
 }

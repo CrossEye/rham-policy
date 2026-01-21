@@ -1,6 +1,6 @@
 caption: Monitoring the Administration of the Budget:
 created: 20260119165940105
-modified: 20260119170322642
+modified: 20260121011711995
 title: Policy3110(6)
 type: text/vnd.tiddlywiki
 
@@ -17,7 +17,7 @@ Such budget report shall be presented to the Board of Education at the regularly
 meeting in the month following the period for which such report is prepared, in accordance with
 the following schedule:
 
-@@.indented
+@@.indented.grouped-col
 |!Period Covered |!Submitted |
 |July, August, September |October |
 |October, November, December |January |
