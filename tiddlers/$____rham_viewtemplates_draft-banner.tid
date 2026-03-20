@@ -1,0 +1,16 @@
+created: 20260319120000000
+list-before: $:/_/rham/viewtemplates/policy
+modified: 20260319120000000
+tags: $:/tags/ViewTemplate
+title: $:/_/rham/viewtemplates/draft-banner
+type: text/vnd.tiddlywiki
+
+\whitespace trim
+
+<% if [<currentTiddler>tag[Policy]] %>
+  <$list filter="[all[tiddlers]has[draft-of-policy]draft-of-policy<currentTiddler>]" variable="draft">
+    <div class="dashboard-draft-banner">
+      Revision in progress: <$text text={{{ [<draft>get[draft-note]] }}}/>
+    </div>
+  </$list>
+<% endif %>

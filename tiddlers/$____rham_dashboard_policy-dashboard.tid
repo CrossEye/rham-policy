@@ -233,6 +233,8 @@ type: text/vnd.tiddlywiki
     </$button>
   </h2>
 
+  <$transclude $variable="dashboard-draft-note-editor" pol=<<pol>>/>
+
   <$reveal type="match" stateTitle={{{ [[$:/state/rham/dashboard/header/]addsuffix<pol>] }}} text="open" animate="yes">
     <$transclude $variable="dashboard-header-panel" pol=<<pol>>/>
   </$reveal>
@@ -250,6 +252,12 @@ type: text/vnd.tiddlywiki
       <$action-setfield $tiddler={{{ [[$:/state/rham/dashboard/adding/]addsuffix<pol>] }}} text=<<pol>>/>
       + Add Section
     </$button>
+    <% if [<pol>!has[draft-of-policy]] %>
+      <$transclude $variable="dashboard-start-revision" pol=<<pol>>/>
+    <% endif %>
+    <% if [<pol>has[draft-of-policy]] %>
+      <$transclude $variable="dashboard-promote-draft" pol=<<pol>>/>
+    <% endif %>
     <$button class="tc-btn-invisible dashboard-btn" message="tm-navigate" param=<<pol>>>
       Back to Policy
     </$button>

@@ -165,6 +165,28 @@
   background: #a00;
 }
 
+.dashboard-draft-banner {
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 4px;
+  padding: 0.5em 0.75em;
+  margin-bottom: 1em;
+  font-size: 0.9em;
+}
+
+.dashboard-draft-info {
+  background: #e8f4fd;
+  border: 1px solid #bee5eb;
+  border-radius: 4px;
+  padding: 0.75em;
+  margin-bottom: 1em;
+}
+
+.dashboard-revision-panel {
+  border-color: #6c757d;
+  background: #f8f9fa;
+}
+
 .dashboard-add-panel {
   border-color: #4a9eda;
   background: #f0f7ff;

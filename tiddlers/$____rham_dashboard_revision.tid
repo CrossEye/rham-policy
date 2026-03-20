@@ -1,0 +1,157 @@
+code-body: yes
+created: 20260319120000000
+modified: 20260319120000000
+tags: $:/tags/Global
+title: $:/_/rham/dashboard/revision
+type: text/vnd.tiddlywiki
+
+\whitespace trim
+
+\procedure dashboard-start-revision(pol)
+  <$let
+    draftPrefix={{{ [<pol>addsuffix[~draft]] }}}
+    confirmState={{{ [[$:/state/rham/dashboard/revision-confirm/]addsuffix<pol>] }}}
+  >
+    <$reveal type="nomatch" stateTitle=<<confirmState>> text="open">
+      <$button class="tc-btn-invisible dashboard-btn">
+        <$action-setfield $tiddler=<<confirmState>> text="open"/>
+        Start Revision
+      </$button>
+    </$reveal>
+    <$reveal type="match" stateTitle=<<confirmState>> text="open" animate="yes">
+      <div class="dashboard-edit-panel dashboard-revision-panel">
+        <p>This will create a draft copy of the entire policy. The current version will remain visible to readers while you edit the draft.</p>
+        <div class="dashboard-edit-field">
+          <label>Draft note (e.g. "Committee review", "After 1st reading"):</label>
+          <$edit-text tiddler="$:/temp/rham/revision/note" field="text" tag="input" class="dashboard-edit-input" placeholder="Draft note"/>
+        </div>
+        <div class="dashboard-edit-buttons">
+          <$button class="dashboard-btn dashboard-btn-save">
+            <$list filter="[all[tiddlers]prefix<pol>] -[prefix<pol>suffix[~draft]] -[prefix<pol>search:title[~archived]]" variable="src">
+              <$let
+                newTitle={{{ [<src>removeprefix<pol>addprefix<draftPrefix>] }}}
+                newTags={{{ [<src>get[tags]search-replace<pol>,<draftPrefix>] }}}
+              >
+                <$action-createtiddler
+                  $basetitle=<<newTitle>>
+                  caption={{{ [<src>get[caption]] }}}
+                  description={{{ [<src>get[description]] }}}
+                  policy-nbr={{{ [<src>get[policy-nbr]] }}}
+                  structure={{{ [<src>get[structure]] }}}
+                  tags=<<newTags>>
+                  type="text/vnd.tiddlywiki"
+                  text={{{ [<src>get[text]] }}}
+                />
+              </$let>
+            </$list>
+            <$action-setfield $tiddler=<<draftPrefix>>
+              draft-of-policy=<<pol>>
+              draft-note={{{ [{$:/temp/rham/revision/note}!is[blank]] :else[[Draft]] +[first[]] }}}
+            />
+            <$action-listops $tiddler=<<draftPrefix>> $tags="[<draftPrefix>get[tags]] PolicyDraft -Policy"/>
+            <$action-setfield $tiddler=<<confirmState>> text=""/>
+            <$action-setfield $tiddler="$:/temp/rham/revision/note" text=""/>
+            <$action-setfield $tiddler="$:/state/rham/dashboard/policy" text=<<draftPrefix>>/>
+            <$action-navigate $to="$:/_/rham/dashboard/view"/>
+            Create Draft
+          </$button>
+          <$button class="dashboard-btn">
+            <$action-setfield $tiddler=<<confirmState>> text=""/>
+            <$action-setfield $tiddler="$:/temp/rham/revision/note" text=""/>
+            Cancel
+          </$button>
+        </div>
+      </div>
+    </$reveal>
+  </$let>
+\end dashboard-start-revision
+
+\procedure dashboard-promote-draft(pol)
+  <$let
+    originalPol={{{ [<pol>get[draft-of-policy]] }}}
+    confirmState={{{ [[$:/state/rham/dashboard/promote-confirm/]addsuffix<pol>] }}}
+  >
+    <% if [<originalPol>!is[blank]] %>
+      <$reveal type="nomatch" stateTitle=<<confirmState>> text="open">
+        <$button class="tc-btn-invisible dashboard-btn dashboard-btn-save">
+          <$action-setfield $tiddler=<<confirmState>> text="open"/>
+          Promote Draft
+        </$button>
+      </$reveal>
+      <$reveal type="match" stateTitle=<<confirmState>> text="open" animate="yes">
+        <div class="dashboard-edit-panel dashboard-revision-panel">
+          <p>This will archive the current version of "<$text text={{{ [<originalPol>get[caption]] }}}/>" and replace it with this draft.</p>
+          <div class="dashboard-edit-buttons">
+            <$button class="dashboard-btn dashboard-btn-save">
+              <$let archivePrefix={{{ [<originalPol>addsuffix[~archived-]] :map[addsuffix{!!modified}] +[first[]] }}}>
+                <$list filter="[all[tiddlers]prefix<originalPol>] -[prefix<originalPol>suffix[~draft]] -[prefix<originalPol>search:title[~archived]]" variable="src">
+                  <$let
+                    archiveTitle={{{ [<src>removeprefix<originalPol>addprefix<archivePrefix>] }}}
+                    archiveTags={{{ [<src>get[tags]search-replace<originalPol>,<archivePrefix>] }}}
+                  >
+                    <$action-createtiddler
+                      $basetitle=<<archiveTitle>>
+                      caption={{{ [<src>get[caption]] }}}
+                      description={{{ [<src>get[description]] }}}
+                      policy-nbr={{{ [<src>get[policy-nbr]] }}}
+                      structure={{{ [<src>get[structure]] }}}
+                      tags=<<archiveTags>>
+                      type="text/vnd.tiddlywiki"
+                      text={{{ [<src>get[text]] }}}
+                    />
+                  </$let>
+                </$list>
+                <$list filter="[all[tiddlers]prefix<originalPol>] -[prefix<originalPol>suffix[~draft]] -[prefix<originalPol>search:title[~archived]]" variable="src">
+                  <$action-deletetiddler $tiddler=<<src>>/>
+                </$list>
+                <$list filter="[all[tiddlers]prefix<pol>]" variable="src">
+                  <$let
+                    newTitle={{{ [<src>removeprefix<pol>addprefix<originalPol>] }}}
+                    newTags={{{ [<src>get[tags]search-replace<pol>,<originalPol>] }}}
+                  >
+                    <$action-createtiddler
+                      $basetitle=<<newTitle>>
+                      caption={{{ [<src>get[caption]] }}}
+                      description={{{ [<src>get[description]] }}}
+                      policy-nbr={{{ [<src>get[policy-nbr]] }}}
+                      structure={{{ [<src>get[structure]] }}}
+                      tags=<<newTags>>
+                      type="text/vnd.tiddlywiki"
+                      text={{{ [<src>get[text]] }}}
+                    />
+                  </$let>
+                </$list>
+                <$action-setfield $tiddler=<<originalPol>> tags="Policy"/>
+                <$action-setfield $tiddler=<<originalPol>> draft-of-policy=""/>
+                <$action-setfield $tiddler=<<originalPol>> draft-note=""/>
+                <$list filter="[all[tiddlers]prefix<pol>]" variable="src">
+                  <$action-deletetiddler $tiddler=<<src>>/>
+                </$list>
+              </$let>
+              <$action-setfield $tiddler=<<confirmState>> text=""/>
+              <$action-setfield $tiddler="$:/state/rham/dashboard/policy" text=<<originalPol>>/>
+              <$action-navigate $to="$:/_/rham/dashboard/view"/>
+              Promote
+            </$button>
+            <$button class="dashboard-btn">
+              <$action-setfield $tiddler=<<confirmState>> text=""/>
+              Cancel
+            </$button>
+          </div>
+        </div>
+      </$reveal>
+    <% endif %>
+  </$let>
+\end dashboard-promote-draft
+
+\procedure dashboard-draft-note-editor(pol)
+  <% if [<pol>has[draft-of-policy]] %>
+    <div class="dashboard-draft-info">
+      <strong>Draft of:</strong> <$link to={{{ [<pol>get[draft-of-policy]] }}}><$text text={{{ [<pol>get[draft-of-policy]get[caption]] }}}/></$link>
+      <div class="dashboard-edit-field" style="margin-top: 0.5em;">
+        <label>Draft note:</label>
+        <$edit-text tiddler=<<pol>> field="draft-note" tag="input" class="dashboard-edit-input"/>
+      </div>
+    </div>
+  <% endif %>
+\end dashboard-draft-note-editor
