@@ -8,6 +8,12 @@
   border-bottom: 2px solid #ccc;
 }
 
+.dashboard-header-btn {
+  font-size: 0.6em;
+  vertical-align: middle;
+  margin-left: 0.5em;
+}
+
 .dashboard-tree {
   margin: 1em 0;
 }

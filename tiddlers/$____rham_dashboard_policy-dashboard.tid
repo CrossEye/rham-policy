@@ -187,11 +187,55 @@ type: text/vnd.tiddlywiki
   </$let>
 \end dashboard-node
 
+\procedure dashboard-header-panel(pol)
+  <div class="dashboard-edit-panel">
+    <div class="dashboard-edit-field">
+      <label>Policy number:</label>
+      <$edit-text tiddler=<<pol>> field="policy-nbr" tag="input" class="dashboard-edit-input"/>
+    </div>
+    <div class="dashboard-edit-field">
+      <label>Title:</label>
+      <$edit-text tiddler=<<pol>> field="description" tag="input" class="dashboard-edit-input"/>
+    </div>
+    <div class="dashboard-edit-field">
+      <label>Caption (number + title):</label>
+      <$edit-text tiddler=<<pol>> field="caption" tag="input" class="dashboard-edit-input"/>
+    </div>
+    <div class="dashboard-edit-field">
+      <label>Display style:</label>
+      <$select tiddler=<<pol>> field="structure" class="dashboard-edit-select">
+        <option value="heading2">Heading 2</option>
+        <option value="heading3-upper">Heading 3 (uppercase)</option>
+        <option value="heading3-underline">Heading 3 (underline)</option>
+        <option value="list">Numbered list</option>
+        <option value="outline">Outline</option>
+        <option value="outline-block">Outline block</option>
+        <option value="definition">Definition</option>
+        <option value="plain">Plain</option>
+      </$select>
+    </div>
+    <div class="dashboard-edit-buttons">
+      <$button class="dashboard-btn dashboard-btn-save">
+        <$action-setfield $tiddler={{{ [[$:/state/rham/dashboard/header/]addsuffix<pol>] }}} text=""/>
+        Done
+      </$button>
+    </div>
+  </div>
+\end dashboard-header-panel
+
 \procedure policy-dashboard(pol)
 <div class="policy-dashboard">
   <h2 class="dashboard-title">
     Edit Policy: <$text text={{{ [<pol>get[caption]] }}}/>
+    <$button class="tc-btn-invisible dashboard-btn dashboard-header-btn">
+      <$action-setfield $tiddler={{{ [[$:/state/rham/dashboard/header/]addsuffix<pol>] }}} text="open"/>
+      Edit Header
+    </$button>
   </h2>
+
+  <$reveal type="match" stateTitle={{{ [[$:/state/rham/dashboard/header/]addsuffix<pol>] }}} text="open" animate="yes">
+    <$transclude $variable="dashboard-header-panel" pol=<<pol>>/>
+  </$reveal>
 
   <div class="dashboard-tree">
     <$transclude $variable="dashboard-node" pol=<<pol>> rootPol=<<pol>>/>
