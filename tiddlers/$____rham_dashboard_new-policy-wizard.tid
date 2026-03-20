@@ -1,0 +1,86 @@
+caption: New Policy
+created: 20260319120000000
+modified: 20260319120000000
+title: $:/_/rham/dashboard/new-policy-wizard
+type: text/vnd.tiddlywiki
+
+\whitespace trim
+
+<div class="policy-dashboard">
+  <h2 class="dashboard-title">Create New Policy</h2>
+
+  <div class="dashboard-edit-panel">
+    <div class="dashboard-edit-field">
+      <label>Policy number (4 digits, e.g. 3330):</label>
+      <$edit-text tiddler="$:/temp/rham/new-policy/number" field="text" tag="input" class="dashboard-edit-input" placeholder="e.g. 3330"/>
+    </div>
+    <div class="dashboard-edit-field">
+      <label>Policy title:</label>
+      <$edit-text tiddler="$:/temp/rham/new-policy/title" field="text" tag="input" class="dashboard-edit-input" placeholder="e.g. Purchasing"/>
+    </div>
+    <div class="dashboard-edit-field">
+      <label>Display style:</label>
+      <$select tiddler="$:/temp/rham/new-policy/structure" field="text" class="dashboard-edit-select" default="outline">
+        <option value="heading2">Heading 2</option>
+        <option value="heading3-upper">Heading 3 (uppercase)</option>
+        <option value="heading3-underline">Heading 3 (underline)</option>
+        <option value="list">Numbered list</option>
+        <option value="outline">Outline</option>
+        <option value="outline-block">Outline block</option>
+        <option value="definition">Definition</option>
+        <option value="plain">Plain</option>
+      </$select>
+    </div>
+    <div class="dashboard-edit-field">
+      <label>
+        <$checkbox tiddler="$:/temp/rham/new-policy/legal" field="text" checked="yes" unchecked="no" default="yes"/>
+        Include Legal References section
+      </label>
+    </div>
+
+    <div class="dashboard-edit-buttons">
+      <$let
+        polNbr={{{ [{$:/temp/rham/new-policy/number}] }}}
+        polTitle={{{ [{$:/temp/rham/new-policy/title}] }}}
+        polStructure={{{ [{$:/temp/rham/new-policy/structure}!is[blank]] :else[[outline]] +[first[]] }}}
+        polTiddler={{{ [<polNbr>addprefix[Policy]] }}}
+        polCaption={{{ [<polNbr>addsuffix[ - ]addsuffix<polTitle>] }}}
+        includeLegal={{{ [{$:/temp/rham/new-policy/legal}!is[blank]] :else[[yes]] +[first[]] }}}
+      >
+        <$button class="dashboard-btn dashboard-btn-save">
+          <$action-createtiddler
+            $basetitle=<<polTiddler>>
+            caption=<<polCaption>>
+            description=<<polTitle>>
+            policy-nbr=<<polNbr>>
+            structure=<<polStructure>>
+            tags="Policy"
+            type="text/vnd.tiddlywiki"
+            text="<<sections>>"
+          />
+          <$action-createtiddler
+            $basetitle={{{ [<polTiddler>addsuffix[(history)]] }}}
+            caption="History"
+            tags=<<polTiddler>>
+            type="text/vnd.tiddlywiki"
+          />
+          <% if [<includeLegal>match[yes]] %>
+            <$action-createtiddler
+              $basetitle={{{ [<polTiddler>addsuffix[(legal)]] }}}
+              caption="Legal References"
+              tags=<<polTiddler>>
+              type="text/vnd.tiddlywiki"
+            />
+          <% endif %>
+          <$action-setfield $tiddler="$:/state/rham/dashboard/policy" text=<<polTiddler>>/>
+          <$action-navigate $to="$:/_/rham/dashboard/view"/>
+          <$action-setfield $tiddler="$:/temp/rham/new-policy/number" text=""/>
+          <$action-setfield $tiddler="$:/temp/rham/new-policy/title" text=""/>
+          <$action-setfield $tiddler="$:/temp/rham/new-policy/structure" text=""/>
+          <$action-setfield $tiddler="$:/temp/rham/new-policy/legal" text=""/>
+          Create Policy
+        </$button>
+      </$let>
+    </div>
+  </div>
+</div>
