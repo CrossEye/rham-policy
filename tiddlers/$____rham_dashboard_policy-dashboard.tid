@@ -7,12 +7,60 @@ type: text/vnd.tiddlywiki
 
 \whitespace trim
 
-\procedure dashboard-node(pol)
+\define markerRegex() .*\(([^\(\)]+)\)$
+
+\procedure dashboard-edit-panel(child, rootPol)
+  <div class="dashboard-edit-panel">
+    <div class="dashboard-edit-field">
+      <label>Caption:</label>
+      <$edit-text tiddler=<<child>> field="caption" tag="input" class="dashboard-edit-input"/>
+    </div>
+    <$list filter="[all[tiddlers]prefix<child>] :filter[removeprefix<..child>split[(]count[]match[2]] +[first[]]" variable="ignore">
+      <div class="dashboard-edit-field">
+        <label>Display style:</label>
+        <$select tiddler=<<child>> field="structure" class="dashboard-edit-select">
+          <option value="heading2">Heading 2</option>
+          <option value="heading3-upper">Heading 3 (uppercase)</option>
+          <option value="heading3-underline">Heading 3 (underline)</option>
+          <option value="list">Numbered list</option>
+          <option value="outline">Outline</option>
+          <option value="outline-block">Outline block</option>
+          <option value="definition">Definition</option>
+          <option value="definition-inline">Definition (inline)</option>
+          <option value="definition-quoted">Definition (quoted)</option>
+          <option value="definition-prequoted">Definition (pre-quoted)</option>
+          <option value="plain">Plain</option>
+        </$select>
+      </div>
+    </$list>
+    <div class="dashboard-edit-field">
+      <label>Content:</label>
+      <$edit-text tiddler=<<child>> field="text" tag="textarea" type="text/vnd.tiddlywiki" class="dashboard-edit-textarea"/>
+    </div>
+    <div class="dashboard-edit-buttons">
+      <$button class="dashboard-btn dashboard-btn-save">
+        <$action-setfield $tiddler={{{ [[$:/state/rham/dashboard/editing/]addsuffix<rootPol>] }}} text=""/>
+        Save
+      </$button>
+      <$button class="dashboard-btn">
+        <$action-setfield $tiddler=<<child>> caption={{{ [{$:/temp/rham/edit/caption}] }}}/>
+        <$action-setfield $tiddler=<<child>> text={{{ [{$:/temp/rham/edit/text}] }}}/>
+        <$action-setfield $tiddler=<<child>> structure={{{ [{$:/temp/rham/edit/structure}] }}}/>
+        <$action-setfield $tiddler={{{ [[$:/state/rham/dashboard/editing/]addsuffix<rootPol>] }}} text=""/>
+        Cancel
+      </$button>
+    </div>
+  </div>
+\end dashboard-edit-panel
+
+\procedure dashboard-node(pol, rootPol)
   <$list filter="[all[tiddlers]prefix<pol>] :filter[removeprefix<..pol>split[(]count[]match[2]] +[sortsub:string<byPolNbr>]" variable="child">
     <$let
       marker={{{ [<child>search-replace::regexp<markerRegex>,[$1]] }}}
       stype={{{ [<child>suffix[(history)]then[history]] :else[<child>suffix[(legal)]then[legal]] }}}
       hasChildren={{{ [all[tiddlers]prefix<child>] :filter[removeprefix<..child>split[(]count[]match[2]] +[count[]] }}}
+      editingState={{{ [[$:/state/rham/dashboard/editing/]addsuffix<rootPol>] }}}
+      isEditing={{{ [<editingState>get[text]match<child>then[yes]else[no]] }}}
     >
       <div class={{{ [<stype>!is[blank]addprefix[dashboard-node dashboard-node-]] :else[[dashboard-node]] }}}>
         <div class="dashboard-node-header">
@@ -27,36 +75,37 @@ type: text/vnd.tiddlywiki
           </span>
           <span class="dashboard-node-caption"><$text text={{{ [<child>get[caption]] }}}/></span>
           <span class="dashboard-node-actions">
-            <$button class="tc-btn-invisible dashboard-btn" message="tm-edit-tiddler" param=<<child>>>
-              edit
-            </$button>
-            <% if [<stype>is[blank]] %>
-              <$button class="tc-btn-invisible dashboard-btn" set={{{ [[$:/state/rham/dashboard/adding/]addsuffix<pol>] }}} setTo=<<child>>>
-                + child
+            <% if [<isEditing>!match[yes]] %>
+              <$button class="tc-btn-invisible dashboard-btn">
+                <$action-setfield $tiddler="$:/temp/rham/edit/caption" text={{{ [<child>get[caption]] }}}/>
+                <$action-setfield $tiddler="$:/temp/rham/edit/text" text={{{ [<child>get[text]] }}}/>
+                <$action-setfield $tiddler="$:/temp/rham/edit/structure" text={{{ [<child>get[structure]] }}}/>
+                <$action-setfield $tiddler=<<editingState>> text=<<child>>/>
+                edit
               </$button>
-              <% if [<hasChildren>!match[0]] %>
-                <$button class="tc-btn-invisible dashboard-btn dashboard-btn-danger" set={{{ [[$:/state/rham/dashboard/deleting/]addsuffix<pol>] }}} setTo=<<child>>>
-                  delete
+              <% if [<stype>is[blank]] %>
+                <$button class="tc-btn-invisible dashboard-btn" set={{{ [[$:/state/rham/dashboard/adding/]addsuffix<rootPol>] }}} setTo=<<child>>>
+                  + child
                 </$button>
-              <% else %>
-                <$button class="tc-btn-invisible dashboard-btn dashboard-btn-danger" set={{{ [[$:/state/rham/dashboard/deleting/]addsuffix<pol>] }}} setTo=<<child>>>
+                <$button class="tc-btn-invisible dashboard-btn dashboard-btn-danger" set={{{ [[$:/state/rham/dashboard/deleting/]addsuffix<rootPol>] }}} setTo=<<child>>>
                   delete
                 </$button>
               <% endif %>
             <% endif %>
           </span>
         </div>
+        <$reveal type="match" stateTitle=<<editingState>> text=<<child>> animate="yes">
+          <$transclude $variable="dashboard-edit-panel" child=<<child>> rootPol=<<rootPol>>/>
+        </$reveal>
         <% if [<hasChildren>compare:integer:gt[0]] %>
           <div class="dashboard-children">
-            <$transclude $variable="dashboard-node" pol=<<child>>/>
+            <$transclude $variable="dashboard-node" pol=<<child>> rootPol=<<rootPol>>/>
           </div>
         <% endif %>
       </div>
     </$let>
   </$list>
 \end dashboard-node
-
-\define markerRegex() .*\(([^\(\)]+)\)$
 
 \procedure policy-dashboard(pol)
 <div class="policy-dashboard">
@@ -65,7 +114,7 @@ type: text/vnd.tiddlywiki
   </h2>
 
   <div class="dashboard-tree">
-    <$transclude $variable="dashboard-node" pol=<<pol>>/>
+    <$transclude $variable="dashboard-node" pol=<<pol>> rootPol=<<pol>>/>
   </div>
 
   <div class="dashboard-footer">
