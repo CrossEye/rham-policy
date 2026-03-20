@@ -1,8 +1,9 @@
+caption: Edit Policy
 created: 20260319120000000
+description: Edit this policy in the dashboard editor
 modified: 20260319120000000
 tags: $:/tags/ViewToolbar
 title: $:/_/rham/ui/Buttons/edit-policy
-description: Edit this policy in the dashboard editor
 type: text/vnd.tiddlywiki
 
 \whitespace trim
@@ -11,6 +12,6 @@ type: text/vnd.tiddlywiki
   <$button class="tc-btn-invisible">
     <$action-setfield $tiddler="$:/state/rham/dashboard/policy" text=<<currentTiddler>>/>
     <$action-navigate $to="$:/_/rham/dashboard/view"/>
-    {{$:/core/images/edit-button}} Edit Policy
+    {{$:/core/images/edit-button}} <span class="tc-btn-text">Edit Policy</span>
   </$button>
 <% endif %>
