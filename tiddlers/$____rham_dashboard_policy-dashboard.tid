@@ -53,58 +53,108 @@ type: text/vnd.tiddlywiki
   </div>
 \end dashboard-edit-panel
 
-\procedure dashboard-node(pol, rootPol)
-  <$list filter="[all[tiddlers]prefix<pol>] :filter[removeprefix<..pol>split[(]count[]match[2]] +[sortsub:string<byPolNbr>]" variable="child">
-    <$let
-      marker={{{ [<child>search-replace::regexp<markerRegex>,[$1]] }}}
-      stype={{{ [<child>suffix[(history)]then[history]] :else[<child>suffix[(legal)]then[legal]] }}}
-      hasChildren={{{ [all[tiddlers]prefix<child>] :filter[removeprefix<..child>split[(]count[]match[2]] +[count[]] }}}
-      editingState={{{ [[$:/state/rham/dashboard/editing/]addsuffix<rootPol>] }}}
-      isEditing={{{ [<editingState>get[text]match<child>then[yes]else[no]] }}}
-    >
-      <div class={{{ [<stype>!is[blank]addprefix[dashboard-node dashboard-node-]] :else[[dashboard-node]] }}}>
-        <div class="dashboard-node-header">
-          <span class="dashboard-node-marker">
-            <% if [<stype>match[history]] %>
-              History
-            <% elseif [<stype>match[legal]] %>
-              Legal References
-            <% elseif [<marker>!is[blank]] %>
-              (<$text text=<<marker>>/>)
-            <% endif %>
-          </span>
-          <span class="dashboard-node-caption"><$text text={{{ [<child>get[caption]] }}}/></span>
-          <span class="dashboard-node-actions">
-            <% if [<isEditing>!match[yes]] %>
-              <$button class="tc-btn-invisible dashboard-btn">
-                <$action-setfield $tiddler="$:/temp/rham/edit/caption" text={{{ [<child>get[caption]] }}}/>
-                <$action-setfield $tiddler="$:/temp/rham/edit/text" text={{{ [<child>get[text]] }}}/>
-                <$action-setfield $tiddler="$:/temp/rham/edit/structure" text={{{ [<child>get[structure]] }}}/>
-                <$action-setfield $tiddler=<<editingState>> text=<<child>>/>
-                edit
-              </$button>
-              <% if [<stype>is[blank]] %>
-                <$button class="tc-btn-invisible dashboard-btn" set={{{ [[$:/state/rham/dashboard/adding/]addsuffix<rootPol>] }}} setTo=<<child>>>
-                  + child
-                </$button>
-                <$button class="tc-btn-invisible dashboard-btn dashboard-btn-danger" set={{{ [[$:/state/rham/dashboard/deleting/]addsuffix<rootPol>] }}} setTo=<<child>>>
-                  delete
-                </$button>
-              <% endif %>
-            <% endif %>
-          </span>
-        </div>
-        <$reveal type="match" stateTitle=<<editingState>> text=<<child>> animate="yes">
-          <$transclude $variable="dashboard-edit-panel" child=<<child>> rootPol=<<rootPol>>/>
-        </$reveal>
-        <% if [<hasChildren>compare:integer:gt[0]] %>
-          <div class="dashboard-children">
-            <$transclude $variable="dashboard-node" pol=<<child>> rootPol=<<rootPol>>/>
-          </div>
-        <% endif %>
+\procedure dashboard-add-form(parent, rootPol)
+  <$let
+    addingState={{{ [[$:/state/rham/dashboard/adding/]addsuffix<rootPol>] }}}
+    lastChild={{{ [all[tiddlers]prefix<parent>] :filter[removeprefix<..parent>split[(]count[]match[2]] :filter[!suffix[(history)]!suffix[(legal)]] +[sortsub:string<byPolNbr>last[]] }}}
+    lastMarker={{{ [<lastChild>search-replace::regexp<markerRegex>,[$1]] }}}
+    suggestedMarker={{{ [<lastMarker>regexp[^s\d+$]search-replace::regexp[^s(\d+)$],[$1]add[1]addprefix[s]] :else[<lastMarker>regexp[^\d+$]add[1]] :else[[1]] +[first[]] }}}
+  >
+    <div class="dashboard-edit-panel dashboard-add-panel">
+      <div class="dashboard-edit-field">
+        <label>Marker (e.g. s1, 1, a, A, I):</label>
+        <$edit-text tiddler="$:/temp/rham/add/marker" field="text" tag="input" class="dashboard-edit-input" default=<<suggestedMarker>>/>
       </div>
-    </$let>
-  </$list>
+      <div class="dashboard-edit-field">
+        <label>Caption:</label>
+        <$edit-text tiddler="$:/temp/rham/add/caption" field="text" tag="input" class="dashboard-edit-input" placeholder="Section title"/>
+      </div>
+      <div class="dashboard-edit-buttons">
+        <$button class="dashboard-btn dashboard-btn-save">
+          <$let
+            newMarker={{{ [{$:/temp/rham/add/marker}!is[blank]] :else[<suggestedMarker>] +[first[]] }}}
+            newTitle={{{ [<parent>addsuffix[(]addsuffix<newMarker>addsuffix[)]] }}}
+            newCaption={{{ [{$:/temp/rham/add/caption}!is[blank]] :else[[New Section]] +[first[]] }}}
+          >
+            <$action-createtiddler $basetitle=<<newTitle>> caption=<<newCaption>> tags=<<parent>> type="text/vnd.tiddlywiki"/>
+            <$action-setfield $tiddler=<<addingState>> text=""/>
+            <$action-setfield $tiddler="$:/temp/rham/add/marker" text=""/>
+            <$action-setfield $tiddler="$:/temp/rham/add/caption" text=""/>
+          </$let>
+          Create
+        </$button>
+        <$button class="dashboard-btn">
+          <$action-setfield $tiddler=<<addingState>> text=""/>
+          <$action-setfield $tiddler="$:/temp/rham/add/marker" text=""/>
+          <$action-setfield $tiddler="$:/temp/rham/add/caption" text=""/>
+          Cancel
+        </$button>
+      </div>
+    </div>
+  </$let>
+\end dashboard-add-form
+
+\procedure dashboard-node(pol, rootPol)
+  <$let addingState={{{ [[$:/state/rham/dashboard/adding/]addsuffix<rootPol>] }}}>
+    <$list filter="[all[tiddlers]prefix<pol>] :filter[removeprefix<..pol>split[(]count[]match[2]] +[sortsub:string<byPolNbr>]" variable="child">
+      <$let
+        marker={{{ [<child>search-replace::regexp<markerRegex>,[$1]] }}}
+        stype={{{ [<child>suffix[(history)]then[history]] :else[<child>suffix[(legal)]then[legal]] }}}
+        hasChildren={{{ [all[tiddlers]prefix<child>] :filter[removeprefix<..child>split[(]count[]match[2]] +[count[]] }}}
+        editingState={{{ [[$:/state/rham/dashboard/editing/]addsuffix<rootPol>] }}}
+        isEditing={{{ [<editingState>get[text]match<child>then[yes]else[no]] }}}
+      >
+        <div class={{{ [<stype>!is[blank]addprefix[dashboard-node dashboard-node-]] :else[[dashboard-node]] }}}>
+          <div class="dashboard-node-header">
+            <span class="dashboard-node-marker">
+              <% if [<stype>match[history]] %>
+                History
+              <% elseif [<stype>match[legal]] %>
+                Legal References
+              <% elseif [<marker>!is[blank]] %>
+                (<$text text=<<marker>>/>)
+              <% endif %>
+            </span>
+            <span class="dashboard-node-caption"><$text text={{{ [<child>get[caption]] }}}/></span>
+            <span class="dashboard-node-actions">
+              <% if [<isEditing>!match[yes]] %>
+                <$button class="tc-btn-invisible dashboard-btn">
+                  <$action-setfield $tiddler="$:/temp/rham/edit/caption" text={{{ [<child>get[caption]] }}}/>
+                  <$action-setfield $tiddler="$:/temp/rham/edit/text" text={{{ [<child>get[text]] }}}/>
+                  <$action-setfield $tiddler="$:/temp/rham/edit/structure" text={{{ [<child>get[structure]] }}}/>
+                  <$action-setfield $tiddler=<<editingState>> text=<<child>>/>
+                  edit
+                </$button>
+                <% if [<stype>is[blank]] %>
+                  <$button class="tc-btn-invisible dashboard-btn">
+                    <$action-setfield $tiddler=<<addingState>> text=<<child>>/>
+                    + child
+                  </$button>
+                  <% if [<stype>!match[history]] %>
+                    <$button class="tc-btn-invisible dashboard-btn dashboard-btn-danger">
+                      <$action-setfield $tiddler={{{ [[$:/state/rham/dashboard/deleting/]addsuffix<rootPol>] }}} text=<<child>>/>
+                      delete
+                    </$button>
+                  <% endif %>
+                <% endif %>
+              <% endif %>
+            </span>
+          </div>
+          <$reveal type="match" stateTitle=<<editingState>> text=<<child>> animate="yes">
+            <$transclude $variable="dashboard-edit-panel" child=<<child>> rootPol=<<rootPol>>/>
+          </$reveal>
+          <% if [<hasChildren>compare:integer:gt[0]] %>
+            <div class="dashboard-children">
+              <$transclude $variable="dashboard-node" pol=<<child>> rootPol=<<rootPol>>/>
+            </div>
+          <% endif %>
+          <$reveal type="match" stateTitle=<<addingState>> text=<<child>> animate="yes">
+            <$transclude $variable="dashboard-add-form" parent=<<child>> rootPol=<<rootPol>>/>
+          </$reveal>
+        </div>
+      </$let>
+    </$list>
+  </$let>
 \end dashboard-node
 
 \procedure policy-dashboard(pol)
@@ -117,8 +167,13 @@ type: text/vnd.tiddlywiki
     <$transclude $variable="dashboard-node" pol=<<pol>> rootPol=<<pol>>/>
   </div>
 
+  <$reveal type="match" stateTitle={{{ [[$:/state/rham/dashboard/adding/]addsuffix<pol>] }}} text=<<pol>> animate="yes">
+    <$transclude $variable="dashboard-add-form" parent=<<pol>> rootPol=<<pol>>/>
+  </$reveal>
+
   <div class="dashboard-footer">
-    <$button class="tc-btn-invisible dashboard-btn" set={{{ [[$:/state/rham/dashboard/adding/]addsuffix<pol>] }}} setTo=<<pol>>>
+    <$button class="tc-btn-invisible dashboard-btn">
+      <$action-setfield $tiddler={{{ [[$:/state/rham/dashboard/adding/]addsuffix<pol>] }}} text=<<pol>>/>
       + Add Section
     </$button>
     <$button class="tc-btn-invisible dashboard-btn" message="tm-navigate" param=<<pol>>>

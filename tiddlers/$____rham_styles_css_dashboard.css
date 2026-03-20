@@ -139,6 +139,15 @@
   background: #3a8eca;
 }
 
+.dashboard-add-panel {
+  border-color: #4a9eda;
+  background: #f0f7ff;
+}
+
+.dashboard-add-panel .dashboard-edit-input {
+  max-width: 300px;
+}
+
 .dashboard-footer {
   margin-top: 1.5em;
   padding-top: 1em;
