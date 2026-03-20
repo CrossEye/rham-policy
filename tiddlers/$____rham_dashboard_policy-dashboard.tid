@@ -94,6 +94,33 @@ type: text/vnd.tiddlywiki
   </$let>
 \end dashboard-add-form
 
+\procedure dashboard-delete-confirm(child, rootPol)
+  <$let
+    deletingState={{{ [[$:/state/rham/dashboard/deleting/]addsuffix<rootPol>] }}}
+    descendantCount={{{ [all[tiddlers]prefix<child>] -[<child>] +[count[]] }}}
+    caption={{{ [<child>get[caption]] }}}
+  >
+    <div class="dashboard-edit-panel dashboard-delete-panel">
+      <p>
+        Delete "<$text text=<<caption>>/>"<% if [<descendantCount>compare:integer:gt[0]] %> and its <$text text=<<descendantCount>>/> subsection(s)<% endif %>?
+      </p>
+      <div class="dashboard-edit-buttons">
+        <$button class="dashboard-btn dashboard-btn-danger-confirm">
+          <$list filter="[all[tiddlers]prefix<child>]" variable="toDelete">
+            <$action-deletetiddler $tiddler=<<toDelete>>/>
+          </$list>
+          <$action-setfield $tiddler=<<deletingState>> text=""/>
+          Delete
+        </$button>
+        <$button class="dashboard-btn">
+          <$action-setfield $tiddler=<<deletingState>> text=""/>
+          Cancel
+        </$button>
+      </div>
+    </div>
+  </$let>
+\end dashboard-delete-confirm
+
 \procedure dashboard-node(pol, rootPol)
   <$let addingState={{{ [[$:/state/rham/dashboard/adding/]addsuffix<rootPol>] }}}>
     <$list filter="[all[tiddlers]prefix<pol>] :filter[removeprefix<..pol>split[(]count[]match[2]] +[sortsub:string<byPolNbr>]" variable="child">
@@ -130,18 +157,21 @@ type: text/vnd.tiddlywiki
                     <$action-setfield $tiddler=<<addingState>> text=<<child>>/>
                     + child
                   </$button>
-                  <% if [<stype>!match[history]] %>
-                    <$button class="tc-btn-invisible dashboard-btn dashboard-btn-danger">
-                      <$action-setfield $tiddler={{{ [[$:/state/rham/dashboard/deleting/]addsuffix<rootPol>] }}} text=<<child>>/>
-                      delete
-                    </$button>
-                  <% endif %>
+                <% endif %>
+                <% if [<stype>!match[history]] %>
+                  <$button class="tc-btn-invisible dashboard-btn dashboard-btn-danger">
+                    <$action-setfield $tiddler={{{ [[$:/state/rham/dashboard/deleting/]addsuffix<rootPol>] }}} text=<<child>>/>
+                    delete
+                  </$button>
                 <% endif %>
               <% endif %>
             </span>
           </div>
           <$reveal type="match" stateTitle=<<editingState>> text=<<child>> animate="yes">
             <$transclude $variable="dashboard-edit-panel" child=<<child>> rootPol=<<rootPol>>/>
+          </$reveal>
+          <$reveal type="match" stateTitle={{{ [[$:/state/rham/dashboard/deleting/]addsuffix<rootPol>] }}} text=<<child>> animate="yes">
+            <$transclude $variable="dashboard-delete-confirm" child=<<child>> rootPol=<<rootPol>>/>
           </$reveal>
           <% if [<hasChildren>compare:integer:gt[0]] %>
             <div class="dashboard-children">

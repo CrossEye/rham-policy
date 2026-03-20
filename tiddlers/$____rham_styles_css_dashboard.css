@@ -139,6 +139,26 @@
   background: #3a8eca;
 }
 
+.dashboard-delete-panel {
+  border-color: #c00;
+  background: #fff5f5;
+}
+
+.dashboard-delete-panel p {
+  margin: 0 0 0.75em 0;
+  font-weight: bold;
+}
+
+.dashboard-btn-danger-confirm {
+  background: #c00;
+  color: white;
+  border-color: #a00;
+}
+
+.dashboard-btn-danger-confirm:hover {
+  background: #a00;
+}
+
 .dashboard-add-panel {
   border-color: #4a9eda;
   background: #f0f7ff;
