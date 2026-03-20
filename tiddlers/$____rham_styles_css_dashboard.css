@@ -1,0 +1,89 @@
+.policy-dashboard {
+  max-width: 800px;
+}
+
+.dashboard-title {
+  margin-bottom: 1em;
+  padding-bottom: 0.5em;
+  border-bottom: 2px solid #ccc;
+}
+
+.dashboard-tree {
+  margin: 1em 0;
+}
+
+.dashboard-node {
+  margin: 0.25em 0;
+  padding: 0.25em 0.5em;
+  border-left: 2px solid #ddd;
+}
+
+.dashboard-node:hover {
+  background: #f8f8f8;
+}
+
+.dashboard-node-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  min-height: 1.8em;
+}
+
+.dashboard-node-marker {
+  font-weight: bold;
+  min-width: 2em;
+  color: #666;
+}
+
+.dashboard-node-caption {
+  flex: 1;
+}
+
+.dashboard-node-actions {
+  display: flex;
+  gap: 0.25em;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.dashboard-node-header:hover .dashboard-node-actions {
+  opacity: 1;
+}
+
+.dashboard-btn {
+  font-size: 0.85em;
+  padding: 0.15em 0.5em;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background: #f5f5f5;
+  cursor: pointer;
+}
+
+.dashboard-btn:hover {
+  background: #e8e8e8;
+}
+
+.dashboard-btn-danger:hover {
+  background: #fee;
+  border-color: #c99;
+  color: #c00;
+}
+
+.dashboard-children {
+  margin-left: 1.5em;
+}
+
+.dashboard-node-history,
+.dashboard-node-legal {
+  margin-top: 1em;
+  border-left-color: #bbb;
+  opacity: 0.8;
+}
+
+.dashboard-footer {
+  margin-top: 1.5em;
+  padding-top: 1em;
+  border-top: 1px solid #ddd;
+  display: flex;
+  gap: 0.5em;
+}

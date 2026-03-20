@@ -1,0 +1,80 @@
+code-body: yes
+created: 20260319120000000
+modified: 20260319120000000
+tags: $:/tags/Global
+title: $:/_/rham/dashboard/policy-dashboard
+type: text/vnd.tiddlywiki
+
+\whitespace trim
+
+\procedure dashboard-node(pol)
+  <$list filter="[all[tiddlers]prefix<pol>] :filter[removeprefix<..pol>split[(]count[]match[2]] +[sortsub:string<byPolNbr>]" variable="child">
+    <$let
+      marker={{{ [<child>search-replace::regexp<markerRegex>,[$1]] }}}
+      stype={{{ [<child>suffix[(history)]then[history]] :else[<child>suffix[(legal)]then[legal]] }}}
+      hasChildren={{{ [all[tiddlers]prefix<child>] :filter[removeprefix<..child>split[(]count[]match[2]] +[count[]] }}}
+    >
+      <div class={{{ [<stype>!is[blank]addprefix[dashboard-node dashboard-node-]] :else[[dashboard-node]] }}}>
+        <div class="dashboard-node-header">
+          <span class="dashboard-node-marker">
+            <% if [<stype>match[history]] %>
+              History
+            <% elseif [<stype>match[legal]] %>
+              Legal References
+            <% elseif [<marker>!is[blank]] %>
+              (<$text text=<<marker>>/>)
+            <% endif %>
+          </span>
+          <span class="dashboard-node-caption"><$text text={{{ [<child>get[caption]] }}}/></span>
+          <span class="dashboard-node-actions">
+            <$button class="tc-btn-invisible dashboard-btn" message="tm-edit-tiddler" param=<<child>>>
+              edit
+            </$button>
+            <% if [<stype>is[blank]] %>
+              <$button class="tc-btn-invisible dashboard-btn" set={{{ [[$:/state/rham/dashboard/adding/]addsuffix<pol>] }}} setTo=<<child>>>
+                + child
+              </$button>
+              <% if [<hasChildren>!match[0]] %>
+                <$button class="tc-btn-invisible dashboard-btn dashboard-btn-danger" set={{{ [[$:/state/rham/dashboard/deleting/]addsuffix<pol>] }}} setTo=<<child>>>
+                  delete
+                </$button>
+              <% else %>
+                <$button class="tc-btn-invisible dashboard-btn dashboard-btn-danger" set={{{ [[$:/state/rham/dashboard/deleting/]addsuffix<pol>] }}} setTo=<<child>>>
+                  delete
+                </$button>
+              <% endif %>
+            <% endif %>
+          </span>
+        </div>
+        <% if [<hasChildren>compare:integer:gt[0]] %>
+          <div class="dashboard-children">
+            <$transclude $variable="dashboard-node" pol=<<child>>/>
+          </div>
+        <% endif %>
+      </div>
+    </$let>
+  </$list>
+\end dashboard-node
+
+\define markerRegex() .*\(([^\(\)]+)\)$
+
+\procedure policy-dashboard(pol)
+<div class="policy-dashboard">
+  <h2 class="dashboard-title">
+    Edit Policy: <$text text={{{ [<pol>get[caption]] }}}/>
+  </h2>
+
+  <div class="dashboard-tree">
+    <$transclude $variable="dashboard-node" pol=<<pol>>/>
+  </div>
+
+  <div class="dashboard-footer">
+    <$button class="tc-btn-invisible dashboard-btn" set={{{ [[$:/state/rham/dashboard/adding/]addsuffix<pol>] }}} setTo=<<pol>>>
+      + Add Section
+    </$button>
+    <$button class="tc-btn-invisible dashboard-btn" message="tm-navigate" param=<<pol>>>
+      Back to Policy
+    </$button>
+  </div>
+</div>
+\end policy-dashboard
