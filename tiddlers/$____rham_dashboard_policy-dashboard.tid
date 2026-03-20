@@ -15,7 +15,7 @@ type: text/vnd.tiddlywiki
       <label>Caption:</label>
       <$edit-text tiddler=<<child>> field="caption" tag="input" class="dashboard-edit-input"/>
     </div>
-    <$list filter="[all[tiddlers]prefix<child>] :filter[removeprefix<..child>split[(]count[]match[2]] +[first[]]" variable="ignore">
+    <$list filter="[all[tiddlers]prefix<child>] :filter[removeprefix<child>split[(]count[]match[2]] +[first[]]" variable="ignore">
       <div class="dashboard-edit-field">
         <label>Display style:</label>
         <$select tiddler=<<child>> field="structure" class="dashboard-edit-select">
@@ -56,7 +56,7 @@ type: text/vnd.tiddlywiki
 \procedure dashboard-add-form(parent, rootPol)
   <$let
     addingState={{{ [[$:/state/rham/dashboard/adding/]addsuffix<rootPol>] }}}
-    lastChild={{{ [all[tiddlers]prefix<parent>] :filter[removeprefix<..parent>split[(]count[]match[2]] :filter[!suffix[(history)]!suffix[(legal)]] +[sortsub:string<byPolNbr>last[]] }}}
+    lastChild={{{ [all[tiddlers]prefix<parent>] :filter[removeprefix<parent>split[(]count[]match[2]] :filter[!suffix[(history)]!suffix[(legal)]] +[sortsub:string<byPolNbr>last[]] }}}
     lastMarker={{{ [<lastChild>search-replace::regexp<markerRegex>,[$1]] }}}
     suggestedMarker={{{ [<lastMarker>regexp[^s\d+$]search-replace::regexp[^s(\d+)$],[$1]add[1]addprefix[s]] :else[<lastMarker>regexp[^\d+$]add[1]] :else[[1]] +[first[]] }}}
   >
@@ -123,11 +123,11 @@ type: text/vnd.tiddlywiki
 
 \procedure dashboard-node(pol, rootPol)
   <$let addingState={{{ [[$:/state/rham/dashboard/adding/]addsuffix<rootPol>] }}}>
-    <$list filter="[all[tiddlers]prefix<pol>] :filter[removeprefix<..pol>split[(]count[]match[2]] +[sortsub:string<byPolNbr>]" variable="child">
+    <$list filter="[all[tiddlers]prefix<pol>] :filter[removeprefix<pol>split[(]count[]match[2]] +[sortsub:string<byPolNbr>]" variable="child">
       <$let
         marker={{{ [<child>search-replace::regexp<markerRegex>,[$1]] }}}
         stype={{{ [<child>suffix[(history)]then[history]] :else[<child>suffix[(legal)]then[legal]] }}}
-        hasChildren={{{ [all[tiddlers]prefix<child>] :filter[removeprefix<..child>split[(]count[]match[2]] +[count[]] }}}
+        hasChildren={{{ [all[tiddlers]prefix<child>] :filter[removeprefix<child>split[(]count[]match[2]] +[count[]] }}}
         editingState={{{ [[$:/state/rham/dashboard/editing/]addsuffix<rootPol>] }}}
         isEditing={{{ [<editingState>get[text]match<child>then[yes]else[no]] }}}
       >
