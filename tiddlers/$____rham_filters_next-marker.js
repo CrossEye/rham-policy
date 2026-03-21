@@ -5,7 +5,8 @@ module-type: filteroperator
 
 Increments a policy section marker to the next value.
 Handles: numeric (1→2), s-numbered (s1→s2), lowercase (a→b),
-uppercase (A→B), and roman numerals (I→II, III→IV, etc.)
+uppercase (A→B), roman numerals (I→II, III→IV, etc.),
+and lowercase roman numerals (i→ii, iii→iv, etc.)
 
 Usage: [<marker>next-marker[]]
 \*/
@@ -15,6 +16,9 @@ Usage: [<marker>next-marker[]]
 
 var ROMANS = ["I","II","III","IV","V","VI","VII","VIII","IX","X",
               "XI","XII","XIII","XIV","XV","XVI","XVII","XVIII","XIX","XX"];
+
+var ROMANS_LOWER = ["i","ii","iii","iv","v","vi","vii","viii","ix","x",
+                    "xi","xii","xiii","xiv","xv","xvi","xvii","xviii","xix","xx"];
 
 function nextMarker(marker) {
     if (!marker) return "1";
@@ -30,7 +34,13 @@ function nextMarker(marker) {
         return String(parseInt(marker, 10) + 1);
     }
 
-    // Lowercase letter: a, b, c... z
+    // Lowercase roman numerals: i, ii, iii, iv, v...
+    var lowerRomanIdx = ROMANS_LOWER.indexOf(marker);
+    if (lowerRomanIdx >= 0 && lowerRomanIdx < ROMANS_LOWER.length - 1) {
+        return ROMANS_LOWER[lowerRomanIdx + 1];
+    }
+
+    // Lowercase letter: a, b, c... z (but not 'i' which is caught above as roman)
     if (/^[a-z]$/.test(marker)) {
         if (marker === "z") return "z"; // can't go past z
         return String.fromCharCode(marker.charCodeAt(0) + 1);
