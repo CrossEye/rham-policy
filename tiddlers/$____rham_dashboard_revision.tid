@@ -83,7 +83,7 @@ type: text/vnd.tiddlywiki
           <p>This will archive the current version of "<$text text={{{ [<originalPol>get[caption]] }}}/>" and replace it with this draft.</p>
           <div class="dashboard-edit-buttons">
             <$button class="dashboard-btn dashboard-btn-save">
-              <$let archivePrefix={{{ [[archived-]] :map[addsuffix{!!modified}] :map[addsuffix[-]] :map[addsuffix<originalPol>] +[first[]] }}}>
+              <$let archivePrefix={{{ [[$:/_/rham/archive/]] :map[addsuffix{!!modified}] :map[addsuffix[/]] :map[addsuffix<originalPol>] +[first[]] }}}>
                 <!-- Archive current version -->
                 <$list filter="[all[tiddlers]prefix<originalPol>]" variable="src">
                   <$let
