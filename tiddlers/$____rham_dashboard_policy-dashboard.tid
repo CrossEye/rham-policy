@@ -13,7 +13,7 @@ type: text/vnd.tiddlywiki
   <div class="dashboard-editor-wrapper">
     <$edit tiddler=<<tid>> field=<<field>> class="dashboard-edit-textarea tc-edit-texteditor tc-edit-texteditor-body" type="text/vnd.tiddlywiki">
       <$set name="targetTiddler" value=<<tid>>>
-        <$list filter="[all[shadows+tiddlers]tag[$:/tags/EditorToolbar]!has[draft.of]]" variable="toolbar-button">
+        <$list filter="[enlist[$:/core/ui/EditorToolbar/bold $:/core/ui/EditorToolbar/italic $:/core/ui/EditorToolbar/underline $:/core/ui/EditorToolbar/strikethrough $:/core/ui/EditorToolbar/list-bullet $:/core/ui/EditorToolbar/list-number $:/core/ui/EditorToolbar/quote $:/core/ui/EditorToolbar/superscript $:/core/ui/EditorToolbar/subscript]]" variable="toolbar-button">
           <$reveal type="nomatch" stateTitle={{{ [<toolbar-button>addprefix[$:/config/EditorToolbarButtons/Visibility/]] }}} text="hide" class="tc-text-editor-toolbar-item-wrapper">
             <$set name="currentTiddler" value=<<toolbar-button>>>
               <$transclude tiddler="$:/core/ui/EditTemplate/body/toolbar/button" mode="inline"/>
