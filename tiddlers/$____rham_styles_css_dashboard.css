@@ -24,8 +24,8 @@
   border-left: 2px solid #ddd;
 }
 
-.dashboard-node:hover {
-  background: #f8f8f8;
+.dashboard-node:hover:not(:has(.dashboard-node:hover)) {
+  background: #f0f4f8;
 }
 
 .dashboard-node-header {
