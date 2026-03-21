@@ -3,15 +3,33 @@
 }
 
 .dashboard-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
   margin-bottom: 1em;
-  padding-bottom: 0.5em;
+  padding: 0.25em 0.5em 0.5em;
   border-bottom: 2px solid #ccc;
 }
 
-.dashboard-header-btn {
-  font-size: 0.6em;
-  vertical-align: middle;
-  margin-left: 0.5em;
+.dashboard-title:hover {
+  background: #f0f4f8;
+}
+
+.dashboard-title-text {
+  flex: 1;
+  margin: 0;
+}
+
+.dashboard-title-actions {
+  display: flex;
+  gap: 0.25em;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.dashboard-title:hover .dashboard-title-actions,
+.dashboard-title-actions:has(.dashboard-btn-save) {
+  opacity: 1;
 }
 
 .dashboard-tree {
@@ -156,6 +174,16 @@
   font-weight: bold;
 }
 
+.dashboard-delete-tree {
+  margin: 0 0 0.75em 0.5em;
+  font-size: 0.9em;
+  color: #666;
+}
+
+.dashboard-delete-tree-item {
+  margin: 0.2em 0 0.2em 1.5em;
+}
+
 .dashboard-btn-danger-confirm {
   background: #c00;
   color: white;
@@ -195,6 +223,88 @@
 
 .dashboard-add-panel .dashboard-edit-input {
   max-width: 300px;
+}
+
+.dashboard-mode-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 1em;
+  border-bottom: 2px solid #ccc;
+}
+
+.dashboard-tab {
+  padding: 0.4em 1.2em;
+  border: 1px solid #ccc;
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  background: #f5f5f5;
+  cursor: pointer;
+  font-size: 0.9em;
+  margin-bottom: -2px;
+}
+
+.dashboard-tab:hover {
+  background: #e8e8e8;
+}
+
+.dashboard-tab-active {
+  background: white;
+  border-bottom: 2px solid white;
+  font-weight: bold;
+}
+
+.dashboard-preview-section {
+  margin: 0.25em 0;
+  padding: 0.25em 0.5em;
+  border-left: 2px solid #ddd;
+}
+
+.dashboard-preview-section:hover:not(:has(.dashboard-preview-section:hover)) {
+  background: #f0f4f8;
+}
+
+.dashboard-preview-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  min-height: 1.8em;
+  font-weight: bold;
+}
+
+.dashboard-preview-marker {
+  min-width: 2em;
+  color: #666;
+}
+
+.dashboard-preview-caption {
+  flex: 1;
+}
+
+.dashboard-preview-actions {
+  display: flex;
+  gap: 0.25em;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.dashboard-preview-heading:hover .dashboard-preview-actions,
+.dashboard-preview-actions:has(.dashboard-btn-save) {
+  opacity: 1;
+}
+
+.dashboard-preview-content {
+  margin: 0.25em 0 0.5em 2em;
+}
+
+.dashboard-preview-children {
+  margin-left: 1.5em;
+}
+
+.dashboard-preview-section-history,
+.dashboard-preview-section-legal {
+  margin-top: 1em;
+  border-left-color: #bbb;
+  opacity: 0.8;
 }
 
 .dashboard-footer {
