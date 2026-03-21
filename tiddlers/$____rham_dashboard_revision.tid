@@ -1,6 +1,6 @@
 code-body: yes
 created: 20260319120000000
-modified: 20260319120000000
+modified: 20260321120000000
 tags: $:/tags/Global
 title: $:/_/rham/dashboard/revision
 type: text/vnd.tiddlywiki
@@ -9,7 +9,7 @@ type: text/vnd.tiddlywiki
 
 \procedure dashboard-start-revision(pol)
   <$let
-    draftPrefix={{{ [<pol>addsuffix[~draft]] }}}
+    draftPrefix={{{ [[draft-1-]addsuffix<pol>] }}}
     confirmState={{{ [[$:/state/rham/dashboard/revision-confirm/]addsuffix<pol>] }}}
   >
     <$reveal type="nomatch" stateTitle=<<confirmState>> text="open">
@@ -27,7 +27,7 @@ type: text/vnd.tiddlywiki
         </div>
         <div class="dashboard-edit-buttons">
           <$button class="dashboard-btn dashboard-btn-save">
-            <$list filter="[all[tiddlers]prefix<pol>] -[prefix<pol>suffix[~draft]] -[prefix<pol>search:title[~archived]]" variable="src">
+            <$list filter="[all[tiddlers]prefix<pol>]" variable="src">
               <$let
                 newTitle={{{ [<src>removeprefix<pol>addprefix<draftPrefix>] }}}
                 newTags={{{ [<src>get[tags]search-replace<pol>,<draftPrefix>] }}}
@@ -83,8 +83,9 @@ type: text/vnd.tiddlywiki
           <p>This will archive the current version of "<$text text={{{ [<originalPol>get[caption]] }}}/>" and replace it with this draft.</p>
           <div class="dashboard-edit-buttons">
             <$button class="dashboard-btn dashboard-btn-save">
-              <$let archivePrefix={{{ [<originalPol>addsuffix[~archived-]] :map[addsuffix{!!modified}] +[first[]] }}}>
-                <$list filter="[all[tiddlers]prefix<originalPol>] -[prefix<originalPol>suffix[~draft]] -[prefix<originalPol>search:title[~archived]]" variable="src">
+              <$let archivePrefix={{{ [[archived-]] :map[addsuffix{!!modified}] :map[addsuffix[-]] :map[addsuffix<originalPol>] +[first[]] }}}>
+                <!-- Archive current version -->
+                <$list filter="[all[tiddlers]prefix<originalPol>]" variable="src">
                   <$let
                     archiveTitle={{{ [<src>removeprefix<originalPol>addprefix<archivePrefix>] }}}
                     archiveTags={{{ [<src>get[tags]search-replace<originalPol>,<archivePrefix>] }}}
@@ -101,9 +102,11 @@ type: text/vnd.tiddlywiki
                     />
                   </$let>
                 </$list>
-                <$list filter="[all[tiddlers]prefix<originalPol>] -[prefix<originalPol>suffix[~draft]] -[prefix<originalPol>search:title[~archived]]" variable="src">
+                <!-- Delete current version -->
+                <$list filter="[all[tiddlers]prefix<originalPol>]" variable="src">
                   <$action-deletetiddler $tiddler=<<src>>/>
                 </$list>
+                <!-- Copy draft to become current version -->
                 <$list filter="[all[tiddlers]prefix<pol>]" variable="src">
                   <$let
                     newTitle={{{ [<src>removeprefix<pol>addprefix<originalPol>] }}}
@@ -121,9 +124,11 @@ type: text/vnd.tiddlywiki
                     />
                   </$let>
                 </$list>
+                <!-- Clean up promoted policy -->
                 <$action-setfield $tiddler=<<originalPol>> tags="Policy"/>
                 <$action-setfield $tiddler=<<originalPol>> draft-of-policy=""/>
                 <$action-setfield $tiddler=<<originalPol>> draft-note=""/>
+                <!-- Delete draft tiddlers -->
                 <$list filter="[all[tiddlers]prefix<pol>]" variable="src">
                   <$action-deletetiddler $tiddler=<<src>>/>
                 </$list>
