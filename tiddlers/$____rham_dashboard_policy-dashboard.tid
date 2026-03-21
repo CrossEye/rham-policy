@@ -58,7 +58,7 @@ type: text/vnd.tiddlywiki
     addingState={{{ [[$:/state/rham/dashboard/adding/]addsuffix<rootPol>] }}}
     lastChild={{{ [all[tiddlers]prefix<parent>] :filter[removeprefix<parent>split[(]count[]match[2]] :filter[!suffix[(history)]!suffix[(legal)]] +[sortsub:string<byPolNbr>last[]] }}}
     lastMarker={{{ [<lastChild>search-replace::regexp<markerRegex>,[$1]] }}}
-    suggestedMarker={{{ [<lastMarker>regexp[^s\d+$]search-replace::regexp[^s(\d+)$],[$1]add[1]addprefix[s]] :else[<lastMarker>regexp[^\d+$]add[1]] :else[[1]] +[first[]] }}}
+    suggestedMarker={{{ [<lastMarker>next-marker[]] :else[[1]] +[first[]] }}}
   >
     <div class="dashboard-edit-panel dashboard-add-panel">
       <div class="dashboard-edit-field">
