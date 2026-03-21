@@ -52,7 +52,8 @@
   transition: opacity 0.15s;
 }
 
-.dashboard-node-header:hover .dashboard-node-actions {
+.dashboard-node-header:hover .dashboard-node-actions,
+.dashboard-node-actions:has(.dashboard-btn-save) {
   opacity: 1;
 }
 

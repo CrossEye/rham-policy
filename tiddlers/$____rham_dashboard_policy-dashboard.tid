@@ -141,20 +141,8 @@ type: text/vnd.tiddlywiki
           <$transclude $variable="dashboard-text-editor" tid="$:/temp/rham/add/content"/>
         <% endif %>
       </div>
-      <div class="dashboard-edit-buttons">
-        <% if [<mode>match[edit]] %>
-          <$button class="dashboard-btn dashboard-btn-save">
-            <$action-setfield $tiddler=<<editingState>> text=""/>
-            Save
-          </$button>
-          <$button class="dashboard-btn">
-            <$action-setfield $tiddler=<<child>> caption={{{ [{$:/temp/rham/edit/caption}] }}}/>
-            <$action-setfield $tiddler=<<child>> text={{{ [{$:/temp/rham/edit/text}] }}}/>
-            <$action-setfield $tiddler=<<child>> structure={{{ [{$:/temp/rham/edit/structure}] }}}/>
-            <$action-setfield $tiddler=<<editingState>> text=""/>
-            Cancel
-          </$button>
-        <% else %>
+      <% if [<mode>match[add]] %>
+        <div class="dashboard-edit-buttons">
           <$button class="dashboard-btn dashboard-btn-save">
             <$let
               newMarker={{{ [{$:/temp/rham/add/marker}] }}}
@@ -177,8 +165,8 @@ type: text/vnd.tiddlywiki
             <$action-deletetiddler $tiddler="$:/temp/rham/add/content"/>
             Cancel
           </$button>
-        <% endif %>
-      </div>
+        </div>
+      <% endif %>
     </div>
   </$let>
 \end dashboard-section-editor
@@ -239,7 +227,19 @@ type: text/vnd.tiddlywiki
             </span>
             <span class="dashboard-node-caption"><$text text={{{ [<child>get[caption]] }}}/></span>
             <span class="dashboard-node-actions">
-              <% if [<isEditing>!match[yes]] %>
+              <% if [<isEditing>match[yes]] %>
+                <$button class="dashboard-btn dashboard-btn-save">
+                  <$action-setfield $tiddler=<<editingState>> text=""/>
+                  Save
+                </$button>
+                <$button class="dashboard-btn">
+                  <$action-setfield $tiddler=<<child>> caption={{{ [{$:/temp/rham/edit/caption}] }}}/>
+                  <$action-setfield $tiddler=<<child>> text={{{ [{$:/temp/rham/edit/text}] }}}/>
+                  <$action-setfield $tiddler=<<child>> structure={{{ [{$:/temp/rham/edit/structure}] }}}/>
+                  <$action-setfield $tiddler=<<editingState>> text=""/>
+                  Cancel
+                </$button>
+              <% else %>
                 <$button class="tc-btn-invisible dashboard-btn">
                   <$action-setfield $tiddler="$:/temp/rham/edit/caption" text={{{ [<child>get[caption]] }}}/>
                   <$action-setfield $tiddler="$:/temp/rham/edit/text" text={{{ [<child>get[text]] }}}/>
