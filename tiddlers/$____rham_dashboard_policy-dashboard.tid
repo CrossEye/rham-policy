@@ -141,32 +141,6 @@ type: text/vnd.tiddlywiki
           <$transclude $variable="dashboard-text-editor" tid="$:/temp/rham/add/content"/>
         <% endif %>
       </div>
-      <% if [<mode>match[add]] %>
-        <div class="dashboard-edit-buttons">
-          <$button class="dashboard-btn dashboard-btn-save">
-            <$let
-              newMarker={{{ [{$:/temp/rham/add/marker}] }}}
-              newTitle={{{ [<parent>addsuffix[(]addsuffix<newMarker>addsuffix[)]] }}}
-              newCaption={{{ [{$:/temp/rham/add/caption}!is[blank]] :else[[New Section]] +[first[]] }}}
-              newContent={{{ [{$:/temp/rham/add/content}] }}}
-            >
-              <$action-createtiddler $basetitle=<<newTitle>> caption=<<newCaption>> tags=<<parent>> type="text/vnd.tiddlywiki" text=<<newContent>>/>
-              <$action-setfield $tiddler=<<addingState>> text=""/>
-              <$action-deletetiddler $tiddler="$:/temp/rham/add/marker"/>
-              <$action-deletetiddler $tiddler="$:/temp/rham/add/caption"/>
-              <$action-deletetiddler $tiddler="$:/temp/rham/add/content"/>
-            </$let>
-            Save
-          </$button>
-          <$button class="dashboard-btn">
-            <$action-setfield $tiddler=<<addingState>> text=""/>
-            <$action-deletetiddler $tiddler="$:/temp/rham/add/marker"/>
-            <$action-deletetiddler $tiddler="$:/temp/rham/add/caption"/>
-            <$action-deletetiddler $tiddler="$:/temp/rham/add/content"/>
-            Cancel
-          </$button>
-        </div>
-      <% endif %>
     </div>
   </$let>
 \end dashboard-section-editor
@@ -210,6 +184,7 @@ type: text/vnd.tiddlywiki
         hasChildren={{{ [all[tiddlers]prefix<child>] :filter[removeprefix<child>split[(]count[]match[2]] +[count[]] }}}
         editingState={{{ [[$:/state/rham/dashboard/editing/]addsuffix<rootPol>] }}}
         isEditing={{{ [<editingState>get[text]match<child>then[yes]else[no]] }}}
+        isAdding={{{ [<addingState>get[text]match<child>then[yes]else[no]] }}}
         lastChildOfNode={{{ [all[tiddlers]prefix<child>] :filter[removeprefix<child>split[(]count[]match[2]] :filter[!suffix[(history)]!suffix[(legal)]] +[sortsub:string<byPolNbr>last[]] }}}
         lastChildMarker={{{ [<lastChildOfNode>search-replace::regexp<markerRegex>,[$1]] }}}
         suggestedMarker={{{ [<lastChildMarker>next-marker[]] :else[[1]] +[first[]] }}}
@@ -239,6 +214,29 @@ type: text/vnd.tiddlywiki
                   <$action-setfield $tiddler=<<editingState>> text=""/>
                   Cancel
                 </$button>
+              <% elseif [<isAdding>match[yes]] %>
+                <$let
+                  newMarker={{{ [{$:/temp/rham/add/marker}] }}}
+                  newTitle={{{ [<child>addsuffix[(]addsuffix<newMarker>addsuffix[)]] }}}
+                  newCaption={{{ [{$:/temp/rham/add/caption}!is[blank]] :else[[New Section]] +[first[]] }}}
+                  newContent={{{ [{$:/temp/rham/add/content}] }}}
+                >
+                  <$button class="dashboard-btn dashboard-btn-save">
+                    <$action-createtiddler $basetitle=<<newTitle>> caption=<<newCaption>> tags=<<child>> type="text/vnd.tiddlywiki" text=<<newContent>>/>
+                    <$action-setfield $tiddler=<<addingState>> text=""/>
+                    <$action-deletetiddler $tiddler="$:/temp/rham/add/marker"/>
+                    <$action-deletetiddler $tiddler="$:/temp/rham/add/caption"/>
+                    <$action-deletetiddler $tiddler="$:/temp/rham/add/content"/>
+                    Save
+                  </$button>
+                  <$button class="dashboard-btn">
+                    <$action-setfield $tiddler=<<addingState>> text=""/>
+                    <$action-deletetiddler $tiddler="$:/temp/rham/add/marker"/>
+                    <$action-deletetiddler $tiddler="$:/temp/rham/add/caption"/>
+                    <$action-deletetiddler $tiddler="$:/temp/rham/add/content"/>
+                    Cancel
+                  </$button>
+                </$let>
               <% else %>
                 <$button class="tc-btn-invisible dashboard-btn">
                   <$action-setfield $tiddler="$:/temp/rham/edit/caption" text={{{ [<child>get[caption]] }}}/>
