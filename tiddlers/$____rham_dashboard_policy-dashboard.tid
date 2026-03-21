@@ -69,17 +69,23 @@ type: text/vnd.tiddlywiki
         <label>Caption:</label>
         <$edit-text tiddler="$:/temp/rham/add/caption" field="text" tag="input" class="dashboard-edit-input" placeholder="Section title"/>
       </div>
+      <div class="dashboard-edit-field">
+        <label>Content:</label>
+        <$edit-text tiddler="$:/temp/rham/add/content" field="text" tag="textarea" type="text/vnd.tiddlywiki" class="dashboard-edit-textarea"/>
+      </div>
       <div class="dashboard-edit-buttons">
         <$button class="dashboard-btn dashboard-btn-save">
           <$let
             newMarker={{{ [{$:/temp/rham/add/marker}!is[blank]] :else[<suggestedMarker>] +[first[]] }}}
             newTitle={{{ [<parent>addsuffix[(]addsuffix<newMarker>addsuffix[)]] }}}
             newCaption={{{ [{$:/temp/rham/add/caption}!is[blank]] :else[[New Section]] +[first[]] }}}
+            newContent={{{ [{$:/temp/rham/add/content}] }}}
           >
-            <$action-createtiddler $basetitle=<<newTitle>> caption=<<newCaption>> tags=<<parent>> type="text/vnd.tiddlywiki"/>
+            <$action-createtiddler $basetitle=<<newTitle>> caption=<<newCaption>> tags=<<parent>> type="text/vnd.tiddlywiki" text=<<newContent>>/>
             <$action-setfield $tiddler=<<addingState>> text=""/>
             <$action-deletetiddler $tiddler="$:/temp/rham/add/marker"/>
             <$action-deletetiddler $tiddler="$:/temp/rham/add/caption"/>
+            <$action-deletetiddler $tiddler="$:/temp/rham/add/content"/>
           </$let>
           Create
         </$button>
@@ -87,6 +93,7 @@ type: text/vnd.tiddlywiki
           <$action-setfield $tiddler=<<addingState>> text=""/>
           <$action-deletetiddler $tiddler="$:/temp/rham/add/marker"/>
           <$action-deletetiddler $tiddler="$:/temp/rham/add/caption"/>
+          <$action-deletetiddler $tiddler="$:/temp/rham/add/content"/>
           Cancel
         </$button>
       </div>
