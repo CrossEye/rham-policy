@@ -1,6 +1,6 @@
 caption: Policy Dashboard
 created: 20260319120000000
-modified: 20260319120000000
+modified: 20260320013831513
 title: $:/_/rham/dashboard/view
 type: text/vnd.tiddlywiki
 
@@ -8,7 +8,7 @@ type: text/vnd.tiddlywiki
 
 <$let pol={{{ [{$:/state/rham/dashboard/policy}] }}}>
   <% if [<pol>!is[blank]] %>
-    <<policy-dashboard pol:pol>>
+    <$transclude $variable="policy-dashboard" pol=<<pol>> />
   <% else %>
     No policy selected.
   <% endif %>
