@@ -78,15 +78,15 @@ type: text/vnd.tiddlywiki
           >
             <$action-createtiddler $basetitle=<<newTitle>> caption=<<newCaption>> tags=<<parent>> type="text/vnd.tiddlywiki"/>
             <$action-setfield $tiddler=<<addingState>> text=""/>
-            <$action-setfield $tiddler="$:/temp/rham/add/marker" text=""/>
-            <$action-setfield $tiddler="$:/temp/rham/add/caption" text=""/>
+            <$action-deletetiddler $tiddler="$:/temp/rham/add/marker"/>
+            <$action-deletetiddler $tiddler="$:/temp/rham/add/caption"/>
           </$let>
           Create
         </$button>
         <$button class="dashboard-btn">
           <$action-setfield $tiddler=<<addingState>> text=""/>
-          <$action-setfield $tiddler="$:/temp/rham/add/marker" text=""/>
-          <$action-setfield $tiddler="$:/temp/rham/add/caption" text=""/>
+          <$action-deletetiddler $tiddler="$:/temp/rham/add/marker"/>
+          <$action-deletetiddler $tiddler="$:/temp/rham/add/caption"/>
           Cancel
         </$button>
       </div>
