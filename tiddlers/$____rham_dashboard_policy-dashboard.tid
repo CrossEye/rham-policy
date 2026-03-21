@@ -10,13 +10,13 @@ type: text/vnd.tiddlywiki
 \define markerRegex() .*\(([^\(\)]+)\)$
 
 \procedure dashboard-text-editor(tid, field:"text")
-  <$set name="editorMode" value="text">
+  <$set name="targetTiddler" value=<<tid>>>
     <div class="dashboard-editor-wrapper">
       <div class="tc-editor-toolbar">
         <$list filter="[all[shadows+tiddlers]tag[$:/tags/EditorToolbar]!has[draft.of]]" variable="toolbar-button">
           <$reveal type="nomatch" stateTitle={{{ [<toolbar-button>addprefix[$:/config/EditorToolbarButtons/Visibility/]] }}} text="hide">
-            <$set name="currentTiddler" value=<<tid>>>
-              <$transclude tiddler=<<toolbar-button>>/>
+            <$set name="currentTiddler" value=<<toolbar-button>>>
+              <$transclude tiddler="$:/core/ui/EditTemplate/body/toolbar/button" mode="inline"/>
             </$set>
           </$reveal>
         </$list>
