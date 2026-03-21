@@ -93,7 +93,7 @@ type: text/vnd.tiddlywiki
         <$list filter="[all[tiddlers]prefix<child>] :filter[removeprefix<child>split[(]count[]match[2]] +[first[]]" variable="ignore">
           <div class="dashboard-edit-field">
             <label>Display style:</label>
-            <$select tiddler=<<child>> field="structure" class="dashboard-edit-select">
+            <$select tiddler=<<child>> field="display-style" class="dashboard-edit-select">
               <option value="heading2">Heading 2</option>
               <option value="heading3-upper">Heading 3 (uppercase)</option>
               <option value="heading3-underline">Heading 3 (underline)</option>
@@ -355,7 +355,7 @@ type: text/vnd.tiddlywiki
                 <$button class="dashboard-btn">
                   <$action-setfield $tiddler=<<child>> caption={{{ [{$:/temp/rham/edit/caption}] }}}/>
                   <$action-setfield $tiddler=<<child>> text={{{ [{$:/temp/rham/edit/text}] }}}/>
-                  <$action-setfield $tiddler=<<child>> structure={{{ [{$:/temp/rham/edit/structure}] }}}/>
+                  <$action-setfield $tiddler=<<child>> display-style={{{ [{$:/temp/rham/edit/display-style}] }}}/>
                   <$action-setfield $tiddler=<<editingState>> text=""/>
                   Cancel
                 </$button>
@@ -384,7 +384,7 @@ type: text/vnd.tiddlywiki
                 </$let>
               <% elseif [<isSettingUp>match[yes]] %>
                 <$button class="dashboard-btn dashboard-btn-save">
-                  <$action-setfield $tiddler=<<child>> structure={{{ [{$:/temp/rham/setup/display-style}!is[blank]] :else[[outline]] +[first[]] }}}/>
+                  <$action-setfield $tiddler=<<child>> display-style={{{ [{$:/temp/rham/setup/display-style}!is[blank]] :else[[outline]] +[first[]] }}}/>
                   <$list filter="[<child>get[text]!search[<<sections>>]]" variable="ignore">
                     <$let newText=`${ [<child>get[text]] }$
 
@@ -409,7 +409,7 @@ type: text/vnd.tiddlywiki
                 <$button class="tc-btn-invisible dashboard-btn">
                   <$action-setfield $tiddler="$:/temp/rham/edit/caption" text={{{ [<child>get[caption]] }}}/>
                   <$action-setfield $tiddler="$:/temp/rham/edit/text" text={{{ [<child>get[text]] }}}/>
-                  <$action-setfield $tiddler="$:/temp/rham/edit/structure" text={{{ [<child>get[structure]] }}}/>
+                  <$action-setfield $tiddler="$:/temp/rham/edit/display-style" text={{{ [<child>get[display-style]] }}}/>
                   <$action-setfield $tiddler=<<editingState>> text=<<child>>/>
                   edit
                 </$button>
@@ -511,7 +511,7 @@ type: text/vnd.tiddlywiki
     </div>
     <div class="dashboard-edit-field">
       <label>Display style:</label>
-      <$select tiddler=<<pol>> field="structure" class="dashboard-edit-select">
+      <$select tiddler=<<pol>> field="display-style" class="dashboard-edit-select">
         <option value="heading2">Heading 2</option>
         <option value="heading3-upper">Heading 3 (uppercase)</option>
         <option value="heading3-underline">Heading 3 (underline)</option>
@@ -563,7 +563,7 @@ type: text/vnd.tiddlywiki
                 <$button class="dashboard-btn">
                   <$action-setfield $tiddler=<<child>> caption={{{ [{$:/temp/rham/edit/caption}] }}}/>
                   <$action-setfield $tiddler=<<child>> text={{{ [{$:/temp/rham/edit/text}] }}}/>
-                  <$action-setfield $tiddler=<<child>> structure={{{ [{$:/temp/rham/edit/structure}] }}}/>
+                  <$action-setfield $tiddler=<<child>> display-style={{{ [{$:/temp/rham/edit/display-style}] }}}/>
                   <$action-setfield $tiddler=<<editingState>> text=""/>
                   Cancel
                 </$button>
@@ -571,7 +571,7 @@ type: text/vnd.tiddlywiki
                 <$button class="tc-btn-invisible dashboard-btn">
                   <$action-setfield $tiddler="$:/temp/rham/edit/caption" text={{{ [<child>get[caption]] }}}/>
                   <$action-setfield $tiddler="$:/temp/rham/edit/text" text={{{ [<child>get[text]] }}}/>
-                  <$action-setfield $tiddler="$:/temp/rham/edit/structure" text={{{ [<child>get[structure]] }}}/>
+                  <$action-setfield $tiddler="$:/temp/rham/edit/display-style" text={{{ [<child>get[display-style]] }}}/>
                   <$action-setfield $tiddler=<<editingState>> text=<<child>>/>
                   edit
                 </$button>
@@ -620,7 +620,7 @@ type: text/vnd.tiddlywiki
           <$action-setfield $tiddler=<<pol>> policy-nbr={{{ [{$:/temp/rham/edit/header/policy-nbr}] }}}/>
           <$action-setfield $tiddler=<<pol>> description={{{ [{$:/temp/rham/edit/header/description}] }}}/>
           <$action-setfield $tiddler=<<pol>> caption={{{ [{$:/temp/rham/edit/header/caption}] }}}/>
-          <$action-setfield $tiddler=<<pol>> structure={{{ [{$:/temp/rham/edit/header/structure}] }}}/>
+          <$action-setfield $tiddler=<<pol>> display-style={{{ [{$:/temp/rham/edit/header/display-style}] }}}/>
           <$action-setfield $tiddler=<<headerState>> text=""/>
           Cancel
         </$button>
@@ -630,7 +630,7 @@ type: text/vnd.tiddlywiki
           <$action-setfield $tiddler="$:/temp/rham/edit/header/policy-nbr" text={{{ [<pol>get[policy-nbr]] }}}/>
           <$action-setfield $tiddler="$:/temp/rham/edit/header/description" text={{{ [<pol>get[description]] }}}/>
           <$action-setfield $tiddler="$:/temp/rham/edit/header/caption" text={{{ [<pol>get[caption]] }}}/>
-          <$action-setfield $tiddler="$:/temp/rham/edit/header/structure" text={{{ [<pol>get[structure]] }}}/>
+          <$action-setfield $tiddler="$:/temp/rham/edit/header/display-style" text={{{ [<pol>get[display-style]] }}}/>
           <$action-setfield $tiddler=<<headerState>> text="open"/>
           edit
         </$button>
@@ -712,7 +712,7 @@ type: text/vnd.tiddlywiki
         <span class="dashboard-node-caption">Configure subsections</span>
         <span class="dashboard-node-actions">
           <$button class="dashboard-btn dashboard-btn-save">
-            <$action-setfield $tiddler=<<pol>> structure={{{ [{$:/temp/rham/setup/display-style}!is[blank]] :else[[outline]] +[first[]] }}}/>
+            <$action-setfield $tiddler=<<pol>> display-style={{{ [{$:/temp/rham/setup/display-style}!is[blank]] :else[[outline]] +[first[]] }}}/>
             <$list filter="[<pol>get[text]!search[<<sections>>]]" variable="ignore">
               <$let newText=`${ [<pol>get[text]] }$
 

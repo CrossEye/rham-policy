@@ -4,7 +4,7 @@ description: Purchase Orders
 modified: 20260318120000000
 pdf-url: https://www.rhamschools.org/common/pages/GetFile.ashx?key=9Uy6BbC2
 policy-nbr: 3320
-structure: plain
+display-style: plain
 tags: Policy
 title: Policy3320
 type: text/vnd.tiddlywiki

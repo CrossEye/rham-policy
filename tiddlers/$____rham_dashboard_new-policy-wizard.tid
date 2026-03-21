@@ -20,7 +20,7 @@ type: text/vnd.tiddlywiki
     </div>
     <div class="dashboard-edit-field">
       <label>Display style:</label>
-      <$select tiddler="$:/temp/rham/new-policy/structure" field="text" class="dashboard-edit-select" default="outline">
+      <$select tiddler="$:/temp/rham/new-policy/display-style" field="text" class="dashboard-edit-select" default="outline">
         <option value="heading2">Heading 2</option>
         <option value="heading3-upper">Heading 3 (uppercase)</option>
         <option value="heading3-underline">Heading 3 (underline)</option>
@@ -42,7 +42,7 @@ type: text/vnd.tiddlywiki
       <$let
         polNbr={{{ [{$:/temp/rham/new-policy/number}] }}}
         polTitle={{{ [{$:/temp/rham/new-policy/title}] }}}
-        polStructure={{{ [{$:/temp/rham/new-policy/structure}!is[blank]] :else[[outline]] +[first[]] }}}
+        polStructure={{{ [{$:/temp/rham/new-policy/display-style}!is[blank]] :else[[outline]] +[first[]] }}}
         polTiddler={{{ [<polNbr>addprefix[Policy]] }}}
         polCaption={{{ [<polNbr>addsuffix[ - ]addsuffix<polTitle>] }}}
         includeLegal={{{ [{$:/temp/rham/new-policy/legal}!is[blank]] :else[[yes]] +[first[]] }}}
@@ -53,7 +53,7 @@ type: text/vnd.tiddlywiki
             caption=<<polCaption>>
             description=<<polTitle>>
             policy-nbr=<<polNbr>>
-            structure=<<polStructure>>
+            display-style=<<polStructure>>
             tags="Policy"
             type="text/vnd.tiddlywiki"
             text="<<sections>>"
@@ -76,7 +76,7 @@ type: text/vnd.tiddlywiki
           <$action-navigate $to="$:/_/rham/dashboard/view"/>
           <$action-setfield $tiddler="$:/temp/rham/new-policy/number" text=""/>
           <$action-setfield $tiddler="$:/temp/rham/new-policy/title" text=""/>
-          <$action-setfield $tiddler="$:/temp/rham/new-policy/structure" text=""/>
+          <$action-setfield $tiddler="$:/temp/rham/new-policy/display-style" text=""/>
           <$action-setfield $tiddler="$:/temp/rham/new-policy/legal" text=""/>
           Create Policy
         </$button>

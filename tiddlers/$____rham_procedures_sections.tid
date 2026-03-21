@@ -96,9 +96,9 @@ type: text/vnd.tiddlywiki
 
 
 \procedure sections()
-<$let outline-structure={{{ [{!!structure}] }}}>
+<$let outline-structure={{{ [{!!display-style}] }}}>
   <$list filter="[all[tiddlers]prefix<currentTiddler>]  :filter[removeprefix<..currentTiddler>split[(]count[]match[2]] +[sortsub:string<byPolNbr>] ">
-    <$let 
+    <$let
       tid=<<currentTiddler>>
       marker={{{  [<tid>search-replace::regexp<markerRegex>,[$1]search-replace::[history],[]search-replace::[legal],[]] }}}
     >

@@ -37,7 +37,7 @@ type: text/vnd.tiddlywiki
           caption={{{ [<src>get[caption]] }}}
           description={{{ [<src>get[description]] }}}
           policy-nbr={{{ [<src>get[policy-nbr]] }}}
-          structure={{{ [<src>get[structure]] }}}
+          display-style={{{ [<src>get[display-style]] }}}
           tags=<<newTags>>
           type="text/vnd.tiddlywiki"
           text={{{ [<src>get[text]] }}}
@@ -85,7 +85,7 @@ type: text/vnd.tiddlywiki
                   caption={{{ [<src>get[caption]] }}}
                   description={{{ [<src>get[description]] }}}
                   policy-nbr={{{ [<src>get[policy-nbr]] }}}
-                  structure={{{ [<src>get[structure]] }}}
+                  display-style={{{ [<src>get[display-style]] }}}
                   tags=<<newTags>>
                   type="text/vnd.tiddlywiki"
                   text={{{ [<src>get[text]] }}}
@@ -161,7 +161,7 @@ type: text/vnd.tiddlywiki
                       caption={{{ [<src>get[caption]] }}}
                       description={{{ [<src>get[description]] }}}
                       policy-nbr={{{ [<src>get[policy-nbr]] }}}
-                      structure={{{ [<src>get[structure]] }}}
+                      display-style={{{ [<src>get[display-style]] }}}
                       tags=<<newTags>>
                       type="text/vnd.tiddlywiki"
                       text={{{ [<src>get[text]] }}}
