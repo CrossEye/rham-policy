@@ -9,6 +9,21 @@ type: text/vnd.tiddlywiki
 
 \define markerRegex() .*\(([^\(\)]+)\)$
 
+\procedure dashboard-text-editor(tid, field:"text")
+  <div class="dashboard-editor-wrapper">
+    <div class="tc-editor-toolbar">
+      <$list filter="[all[shadows+tiddlers]tag[$:/tags/EditorToolbar]!has[draft.of]]" variable="toolbar-button">
+        <$reveal type="nomatch" stateTitle={{{ [<toolbar-button>addprefix[$:/config/EditorToolbarButtons/Visibility/]] }}} text="hide">
+          <$set name="currentTiddler" value=<<tid>>>
+            <$transclude tiddler=<<toolbar-button>>/>
+          </$set>
+        </$reveal>
+      </$list>
+    </div>
+    <$edit-text tiddler=<<tid>> field=<<field>> tag="textarea" type="text/vnd.tiddlywiki" class="dashboard-edit-textarea tc-edit-texteditor"/>
+  </div>
+\end dashboard-text-editor
+
 \procedure dashboard-edit-panel(child, rootPol)
   <div class="dashboard-edit-panel">
     <div class="dashboard-edit-field">
@@ -35,7 +50,7 @@ type: text/vnd.tiddlywiki
     </$list>
     <div class="dashboard-edit-field">
       <label>Content:</label>
-      <$edit-text tiddler=<<child>> field="text" tag="textarea" type="text/vnd.tiddlywiki" class="dashboard-edit-textarea"/>
+      <$transclude $variable="dashboard-text-editor" tid=<<child>>/>
     </div>
     <div class="dashboard-edit-buttons">
       <$button class="dashboard-btn dashboard-btn-save">
@@ -71,7 +86,7 @@ type: text/vnd.tiddlywiki
       </div>
       <div class="dashboard-edit-field">
         <label>Content:</label>
-        <$edit-text tiddler="$:/temp/rham/add/content" field="text" tag="textarea" type="text/vnd.tiddlywiki" class="dashboard-edit-textarea"/>
+        <$transclude $variable="dashboard-text-editor" tid="$:/temp/rham/add/content"/>
       </div>
       <div class="dashboard-edit-buttons">
         <$button class="dashboard-btn dashboard-btn-save">
