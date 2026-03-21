@@ -10,18 +10,20 @@ type: text/vnd.tiddlywiki
 \define markerRegex() .*\(([^\(\)]+)\)$
 
 \procedure dashboard-text-editor(tid, field:"text")
-  <div class="dashboard-editor-wrapper">
-    <div class="tc-editor-toolbar">
-      <$list filter="[all[shadows+tiddlers]tag[$:/tags/EditorToolbar]!has[draft.of]]" variable="toolbar-button">
-        <$reveal type="nomatch" stateTitle={{{ [<toolbar-button>addprefix[$:/config/EditorToolbarButtons/Visibility/]] }}} text="hide">
-          <$set name="currentTiddler" value=<<tid>>>
-            <$transclude tiddler=<<toolbar-button>>/>
-          </$set>
-        </$reveal>
-      </$list>
+  <$set name="editorMode" value="text">
+    <div class="dashboard-editor-wrapper">
+      <div class="tc-editor-toolbar">
+        <$list filter="[all[shadows+tiddlers]tag[$:/tags/EditorToolbar]!has[draft.of]]" variable="toolbar-button">
+          <$reveal type="nomatch" stateTitle={{{ [<toolbar-button>addprefix[$:/config/EditorToolbarButtons/Visibility/]] }}} text="hide">
+            <$set name="currentTiddler" value=<<tid>>>
+              <$transclude tiddler=<<toolbar-button>>/>
+            </$set>
+          </$reveal>
+        </$list>
+      </div>
+      <$edit-text tiddler=<<tid>> field=<<field>> tag="textarea" type="text/vnd.tiddlywiki" class="dashboard-edit-textarea tc-edit-texteditor"/>
     </div>
-    <$edit-text tiddler=<<tid>> field=<<field>> tag="textarea" type="text/vnd.tiddlywiki" class="dashboard-edit-textarea tc-edit-texteditor"/>
-  </div>
+  </$set>
 \end dashboard-text-editor
 
 \procedure dashboard-edit-panel(child, rootPol)
