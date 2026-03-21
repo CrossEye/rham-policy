@@ -1,7 +1,7 @@
 caption: edit policy
 created: 20260319120000000
 description: Edit this policy in the dashboard editor
-modified: 20260319120000000
+modified: 20260321120000000
 tags: $:/tags/ViewToolbar
 title: $:/_/rham/ui/Buttons/edit-policy
 type: text/vnd.tiddlywiki
@@ -10,9 +10,8 @@ type: text/vnd.tiddlywiki
 
 <% if [<currentTiddler>tag[Policy]] [<currentTiddler>tag[PolicyDraft]] %>
   <$button class="tc-btn-invisible">
-    <$action-setfield $tiddler="$:/state/rham/dashboard/policy" text=<<currentTiddler>>/>
-    <$action-navigate $to="$:/_/rham/dashboard/view"/>
     <$action-sendmessage $message="tm-close-tiddler" $param=<<currentTiddler>>/>
-    {{$:/core/images/edit-button}} <span class="tc-btn-text">edit policy</span>
+    <$action-sendmessage $message="tm-modal" $param="$:/_/rham/ui/edit-policy-modal" policyTiddler=<<currentTiddler>>/>
+    {{$:/core/images/edit-button}}&nbsp;<span class="tc-btn-text">edit policy</span>
   </$button>
 <% endif %>

@@ -10,7 +10,12 @@ type: text/vnd.tiddlywiki
 <% if [<currentTiddler>tag[Policy]] %>
   <$list filter="[all[tiddlers]has[draft-of-policy]draft-of-policy<currentTiddler>]" variable="draft">
     <div class="dashboard-draft-banner">
-      Revision in progress: <$text text={{{ [<draft>get[draft-note]] }}}/>
+      Revision in progress:&nbsp;<$button class="tc-btn-invisible dashboard-draft-banner-link">
+        <$action-setfield $tiddler="$:/state/rham/dashboard/policy" text=<<draft>>/>
+        <$action-navigate $to="$:/_/rham/dashboard/view"/>
+        <$action-sendmessage $message="tm-close-tiddler" $param=<<currentTiddler>>/>
+        <$text text={{{ [<draft>get[draft-note]] }}}/>
+      </$button>
     </div>
   </$list>
 <% endif %>

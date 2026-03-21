@@ -7,6 +7,54 @@ type: text/vnd.tiddlywiki
 
 \whitespace trim
 
+\function next-draft-number(pol)
+  [all[tiddlers]has[draft-of-policy]draft-of-policy<pol>get[title]]
+  :map[removeprefix[draft-]split[-]first[]]
+  +[sort[]]
+  +[last[]]
+  :else[[0]]
+  :map[add[1]]
+  +[first[]]
+\end next-draft-number
+
+\function draft-latest-modified()
+  [all[tiddlers]prefix<currentTiddler>] +[sort[modified]last[]get[modified]]
+\end draft-latest-modified
+
+\procedure popup-create-draft-actions(pol, source:"")
+  <$let
+    effectiveSource={{{ [<source>!is[blank]] :else[<pol>] +[first[]] }}}
+    draftNum={{{ [function[next-draft-number],<pol>] }}}
+    draftPrefix={{{ [[draft-]addsuffix<draftNum>addsuffix[-]addsuffix<pol>] }}}
+  >
+    <$list filter="[all[tiddlers]prefix<effectiveSource>]" variable="src">
+      <$let
+        newTitle={{{ [<src>removeprefix<effectiveSource>addprefix<draftPrefix>] }}}
+        newTags={{{ [<src>get[tags]search-replace<effectiveSource>,<draftPrefix>] }}}
+      >
+        <$action-createtiddler
+          $basetitle=<<newTitle>>
+          caption={{{ [<src>get[caption]] }}}
+          description={{{ [<src>get[description]] }}}
+          policy-nbr={{{ [<src>get[policy-nbr]] }}}
+          structure={{{ [<src>get[structure]] }}}
+          tags=<<newTags>>
+          type="text/vnd.tiddlywiki"
+          text={{{ [<src>get[text]] }}}
+        />
+      </$let>
+    </$list>
+    <$action-setfield $tiddler=<<draftPrefix>>
+      draft-of-policy=<<pol>>
+      draft-note={{{ [{$:/temp/rham/popup/draft-note}!is[blank]] :else[[Draft]] +[first[]] }}}
+    />
+    <$action-listops $tiddler=<<draftPrefix>> $tags="[<draftPrefix>get[tags]] PolicyDraft -Policy"/>
+    <$action-deletetiddler $tiddler="$:/temp/rham/popup/draft-note"/>
+    <$action-setfield $tiddler="$:/state/rham/dashboard/policy" text=<<draftPrefix>>/>
+    <$action-navigate $to="$:/_/rham/dashboard/view"/>
+  </$let>
+\end popup-create-draft-actions
+
 \procedure dashboard-start-revision(pol)
   <$let
     draftPrefix={{{ [[draft-1-]addsuffix<pol>] }}}
@@ -81,31 +129,27 @@ type: text/vnd.tiddlywiki
       <$reveal type="match" stateTitle=<<confirmState>> text="open" animate="yes">
         <div class="dashboard-edit-panel dashboard-revision-panel">
           <p>This will archive the current version of "<$text text={{{ [<originalPol>get[caption]] }}}/>" and replace it with this draft.</p>
-          <div class="dashboard-edit-buttons">
+          <$list filter="[all[tiddlers]has[draft-of-policy]draft-of-policy<originalPol>] -[<pol>] +[first[]]" variable="ignore">
+            <p style="margin-top: 0.75em; font-weight: bold; font-size: 0.9em;">Also delete these drafts:</p>
+            <$list filter="[all[tiddlers]has[draft-of-policy]draft-of-policy<originalPol>] -[<pol>]" variable="otherDraft">
+              <$let checkState={{{ [[$:/state/rham/promote/delete-draft/]addsuffix<otherDraft>] }}}>
+                <$checkbox tiddler=<<checkState>> field="text" checked="yes" unchecked="no" default="yes">
+                  &nbsp;<$text text={{{ [<otherDraft>get[draft-note]] :else[[Draft]] +[first[]] }}}/>
+                </$checkbox>
+                <br/>
+              </$let>
+            </$list>
+          </$list>
+          <div class="dashboard-edit-buttons" style="margin-top: 0.75em;">
             <$button class="dashboard-btn dashboard-btn-save">
-              <$let archivePrefix={{{ [[$:/_/rham/archive/]] :map[addsuffix{!!modified}] :map[addsuffix[/]] :map[addsuffix<originalPol>] +[first[]] }}}>
-                <!-- Archive current version -->
-                <$list filter="[all[tiddlers]prefix<originalPol>]" variable="src">
-                  <$let
-                    archiveTitle={{{ [<src>removeprefix<originalPol>addprefix<archivePrefix>] }}}
-                    archiveTags={{{ [<src>get[tags]search-replace<originalPol>,<archivePrefix>] }}}
-                  >
-                    <$action-createtiddler
-                      $basetitle=<<archiveTitle>>
-                      caption={{{ [<src>get[caption]] }}}
-                      description={{{ [<src>get[description]] }}}
-                      policy-nbr={{{ [<src>get[policy-nbr]] }}}
-                      structure={{{ [<src>get[structure]] }}}
-                      tags=<<archiveTags>>
-                      type="text/vnd.tiddlywiki"
-                      text={{{ [<src>get[text]] }}}
-                    />
-                  </$let>
-                </$list>
+              <$let archiveTitle={{{ [[$:/_/rham/archive/]addsuffix<originalPol>addsuffix[/]addsuffix<now YYYY0MM0DD0hh0mm0ss0XXX>] }}}>
+                <!-- Archive current version as compound tiddler -->
+                <$action-archive-policy $prefix=<<originalPol>> $archive=<<archiveTitle>>/>
                 <!-- Delete current version -->
-                <$list filter="[all[tiddlers]prefix<originalPol>]" variable="src">
+                <$list filter="[all[tiddlers]prefix<originalPol>] :filter[removeprefix<originalPol>prefix[(]]" variable="src">
                   <$action-deletetiddler $tiddler=<<src>>/>
                 </$list>
+                <$action-deletetiddler $tiddler=<<originalPol>>/>
                 <!-- Copy draft to become current version -->
                 <$list filter="[all[tiddlers]prefix<pol>]" variable="src">
                   <$let
@@ -128,9 +172,21 @@ type: text/vnd.tiddlywiki
                 <$action-setfield $tiddler=<<originalPol>> tags="Policy"/>
                 <$action-setfield $tiddler=<<originalPol>> draft-of-policy=""/>
                 <$action-setfield $tiddler=<<originalPol>> draft-note=""/>
-                <!-- Delete draft tiddlers -->
+                <!-- Delete this draft's tiddlers -->
                 <$list filter="[all[tiddlers]prefix<pol>]" variable="src">
                   <$action-deletetiddler $tiddler=<<src>>/>
+                </$list>
+                <!-- Delete other checked drafts -->
+                <$list filter="[all[tiddlers]has[draft-of-policy]draft-of-policy<originalPol>] -[<pol>]" variable="otherDraft">
+                  <$let checkState={{{ [[$:/state/rham/promote/delete-draft/]addsuffix<otherDraft>] }}}>
+                    <$list filter="[<checkState>get[text]] :else[[yes]] +[match[yes]]" variable="ignore">
+                      <$list filter="[all[tiddlers]prefix<otherDraft>] :filter[removeprefix<otherDraft>prefix[(]]" variable="src">
+                        <$action-deletetiddler $tiddler=<<src>>/>
+                      </$list>
+                      <$action-deletetiddler $tiddler=<<otherDraft>>/>
+                    </$list>
+                    <$action-deletetiddler $tiddler=<<checkState>>/>
+                  </$let>
                 </$list>
               </$let>
               <$action-setfield $tiddler=<<confirmState>> text=""/>
@@ -139,6 +195,10 @@ type: text/vnd.tiddlywiki
               Promote
             </$button>
             <$button class="dashboard-btn">
+              <!-- Clean up checkbox state on cancel -->
+              <$list filter="[all[tiddlers]has[draft-of-policy]draft-of-policy<originalPol>] -[<pol>]" variable="otherDraft">
+                <$action-deletetiddler $tiddler={{{ [[$:/state/rham/promote/delete-draft/]addsuffix<otherDraft>] }}}/>
+              </$list>
               <$action-setfield $tiddler=<<confirmState>> text=""/>
               Cancel
             </$button>
@@ -149,10 +209,48 @@ type: text/vnd.tiddlywiki
   </$let>
 \end dashboard-promote-draft
 
+\procedure dashboard-delete-draft(pol)
+  <$let
+    originalPol={{{ [<pol>get[draft-of-policy]] }}}
+    deleteConfirmState={{{ [[$:/state/rham/dashboard/delete-draft-confirm/]addsuffix<pol>] }}}
+  >
+    <$reveal type="nomatch" stateTitle=<<deleteConfirmState>> text="open" tag="span" style="margin-left: auto;">
+      <$button class="dashboard-btn dashboard-btn-danger">
+        <$action-setfield $tiddler=<<deleteConfirmState>> text="open"/>
+        Delete Draft
+      </$button>
+    </$reveal>
+    <$reveal type="match" stateTitle=<<deleteConfirmState>> text="open" animate="yes" style="margin-left: auto;">
+      <div class="dashboard-edit-panel dashboard-delete-panel" style="margin: 0.5em 0 0 0;">
+        <p>Delete this draft and all its sections?</p>
+        <div class="dashboard-edit-buttons">
+          <$button class="dashboard-btn dashboard-btn-danger-confirm">
+            <$list filter="[all[tiddlers]prefix<pol>] :filter[removeprefix<pol>prefix[(]]" variable="src">
+              <$action-deletetiddler $tiddler=<<src>>/>
+            </$list>
+            <$action-deletetiddler $tiddler=<<pol>>/>
+            <$action-setfield $tiddler=<<deleteConfirmState>> text=""/>
+            <$action-setfield $tiddler="$:/state/rham/dashboard/policy" text=<<originalPol>>/>
+            <$action-navigate $to="$:/_/rham/dashboard/view"/>
+            Delete
+          </$button>
+          <$button class="dashboard-btn">
+            <$action-setfield $tiddler=<<deleteConfirmState>> text=""/>
+            Cancel
+          </$button>
+        </div>
+      </div>
+    </$reveal>
+  </$let>
+\end dashboard-delete-draft
+
 \procedure dashboard-draft-note-editor(pol)
   <% if [<pol>has[draft-of-policy]] %>
     <div class="dashboard-draft-info">
-      <strong>Draft of:</strong> <$link to={{{ [<pol>get[draft-of-policy]] }}}><$text text={{{ [<pol>get[draft-of-policy]get[caption]] }}}/></$link>
+      <div style="display: flex; align-items: center;">
+        <strong>Draft of:&nbsp;</strong><$link to={{{ [<pol>get[draft-of-policy]] }}}><$text text={{{ [<pol>get[draft-of-policy]get[caption]] }}}/></$link>
+        <$transclude $variable="dashboard-delete-draft" pol=<<pol>>/>
+      </div>
       <div class="dashboard-edit-field" style="margin-top: 0.5em;">
         <label>Draft note:</label>
         <$edit-text tiddler=<<pol>> field="draft-note" tag="input" class="dashboard-edit-input"/>

@@ -1,0 +1,8 @@
+created: 20260321172407943
+list-before: $:/config/ViewTemplateTitleFilters/system
+modified: 20260321172453518
+tags: $:/tags/ViewTemplateTitleFilter
+title: $:/_/rham/config/ViewTemplateTitleFilters/caption-title
+type: text/vnd.tiddlywiki
+
+[<currentTiddler>caption-title[yes]then[$:/_/rham/core/ui/ViewTemplate/title/caption]]

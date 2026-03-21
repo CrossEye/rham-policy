@@ -145,6 +145,9 @@ type: text/vnd.tiddlywiki
     deletingState={{{ [[$:/state/rham/dashboard/deleting/]addsuffix<rootPol>] }}}
     descendantCount={{{ [all[tiddlers]prefix<child>] -[<child>] +[count[]] }}}
     caption={{{ [<child>get[caption]] }}}
+    parentPrefix={{{ [<child>search-replace::regexp[\([^\(\)]+\)$],[]] }}}
+    stype={{{ [<child>suffix[(history)]then[history]] :else[<child>suffix[(legal)]then[legal]] }}}
+    laterSiblings={{{ [all[tiddlers]prefix<parentPrefix>] :filter[removeprefix<parentPrefix>split[(]count[]match[2]] :filter[!suffix[(history)]!suffix[(legal)]] +[sortsub:string<byPolNbr>allafter<child>] }}}
   >
     <div class="dashboard-edit-panel dashboard-delete-panel">
       <p>
@@ -155,11 +158,47 @@ type: text/vnd.tiddlywiki
           <$transclude $variable="dashboard-delete-tree" pol=<<child>>/>
         </div>
       <% endif %>
+      <% if [<stype>is[blank]] %>
+        <$list filter="[all[tiddlers]prefix<parentPrefix>] :filter[removeprefix<parentPrefix>split[(]count[]match[2]] :filter[!suffix[(history)]!suffix[(legal)]] +[sortsub:string<byPolNbr>allafter<child>first[]]" variable="ignore">
+          <p class="dashboard-renumber-note">The following sections will be renumbered:</p>
+          <div class="dashboard-rename-scroll">
+            <table class="dashboard-rename-table">
+              <thead><tr><th>Current</th><th>Caption</th><th>New</th></tr></thead>
+              <tbody>
+                <$list filter="[all[tiddlers]prefix<parentPrefix>] :filter[removeprefix<parentPrefix>split[(]count[]match[2]] :filter[!suffix[(history)]!suffix[(legal)]] +[sortsub:string<byPolNbr>allafter<child>]" variable="laterSib">
+                  <$let
+                    laterMarker={{{ [<laterSib>search-replace::regexp<markerRegex>,[$1]] }}}
+                    newMarker={{{ [<laterMarker>prev-marker[]] }}}
+                  >
+                    <tr>
+                      <td>(<$text text=<<laterMarker>>/>)</td>
+                      <td><$text text={{{ [<laterSib>get[caption]] }}}/></td>
+                      <td>(<$text text=<<newMarker>>/>)</td>
+                    </tr>
+                  </$let>
+                </$list>
+              </tbody>
+            </table>
+          </div>
+        </$list>
+      <% endif %>
       <div class="dashboard-edit-buttons">
         <$button class="dashboard-btn dashboard-btn-danger-confirm">
-          <$list filter="[all[tiddlers]prefix<child>]" variable="toDelete">
+          <$action-deletetiddler $tiddler=<<child>>/>
+          <$list filter="[all[tiddlers]prefix<child>] :filter[removeprefix<child>prefix[(]]" variable="toDelete">
             <$action-deletetiddler $tiddler=<<toDelete>>/>
           </$list>
+          <% if [<stype>is[blank]] %>
+            <$list filter="[all[tiddlers]prefix<parentPrefix>] :filter[removeprefix<parentPrefix>split[(]count[]match[2]] :filter[!suffix[(history)]!suffix[(legal)]] +[sortsub:string<byPolNbr>allafter<child>]" variable="laterSib">
+              <$let
+                laterMarker={{{ [<laterSib>search-replace::regexp<markerRegex>,[$1]] }}}
+                newMarker={{{ [<laterMarker>prev-marker[]] }}}
+                newTitle={{{ [<parentPrefix>addsuffix[(]addsuffix<newMarker>addsuffix[)]] }}}
+              >
+                <$action-rename-tree $from=<<laterSib>> $to=<<newTitle>>/>
+              </$let>
+            </$list>
+          <% endif %>
           <$action-setfield $tiddler=<<deletingState>> text=""/>
           Delete
         </$button>
@@ -172,10 +211,100 @@ type: text/vnd.tiddlywiki
   </$let>
 \end dashboard-delete-confirm
 
+\procedure dashboard-move-confirm(rootPol)
+  <$let
+    movingState={{{ [[$:/state/rham/dashboard/moving/]addsuffix<rootPol>] }}}
+    moveTargetState={{{ [[$:/state/rham/dashboard/move-target/]addsuffix<rootPol>] }}}
+    movingNode={{{ [<movingState>get[text]] }}}
+    targetInfo={{{ [<moveTargetState>get[text]] }}}
+    targetParent={{{ [<targetInfo>split[|]first[]] }}}
+    targetBefore={{{ [<targetInfo>split[|]last[]] }}}
+    movingMarker={{{ [<movingNode>search-replace::regexp<markerRegex>,[$1]] }}}
+    movingCaption={{{ [<movingNode>get[caption]] }}}
+    sourceParent={{{ [<movingNode>search-replace::regexp[\([^\(\)]+\)$],[]] }}}
+  >
+    <div class="dashboard-edit-panel dashboard-move-confirm">
+      <div class="dashboard-move-summary">
+        <strong>Move</strong>
+        &nbsp;&nbsp;&nbsp;&nbsp;(<$text text=<<movingMarker>>/>)&nbsp;<$text text=<<movingCaption>>/>
+        <% if [<targetBefore>!match[end]] %>
+          <strong>Before</strong>
+          <$let
+            targetMarker={{{ [<targetBefore>search-replace::regexp<markerRegex>,[$1]] }}}
+            targetCaption={{{ [<targetBefore>get[caption]] }}}
+          >
+            &nbsp;&nbsp;&nbsp;&nbsp;(<$text text=<<targetMarker>>/>)&nbsp;<$text text=<<targetCaption>>/>
+          </$let>
+        <% else %>
+          <strong>As last child of</strong>
+          &nbsp;&nbsp;&nbsp;&nbsp;<$text text={{{ [<targetParent>get[caption]] }}}/>
+        <% endif %>
+      </div>
+      <div class="dashboard-edit-buttons">
+        <$button class="dashboard-btn dashboard-btn-save">
+          <!-- Phase 1: Move source to temp -->
+          <$action-rename-tree $from=<<movingNode>> $to="$:/temp/rham/move/"/>
+          <!-- Phase 2: Close gap at source -->
+          <$list filter="[all[tiddlers]prefix<sourceParent>] :filter[removeprefix<sourceParent>split[(]count[]match[2]] :filter[!suffix[(history)]!suffix[(legal)]] +[sortsub:string<byPolNbr>allafter<movingNode>]" variable="laterSib">
+            <$let
+              laterMarker={{{ [<laterSib>search-replace::regexp<markerRegex>,[$1]] }}}
+              newMarker={{{ [<laterMarker>prev-marker[]] }}}
+              newTitle={{{ [<sourceParent>addsuffix[(]addsuffix<newMarker>addsuffix[)]] }}}
+            >
+              <$action-rename-tree $from=<<laterSib>> $to=<<newTitle>>/>
+            </$let>
+          </$list>
+          <!-- Phase 3: Open slot at target and place node -->
+          <% if [<targetBefore>!match[end]] %>
+            <!-- Shift target siblings at and after targetBefore (in reverse to avoid collision) -->
+            <$list filter="[all[tiddlers]prefix<targetParent>] :filter[removeprefix<targetParent>split[(]count[]match[2]] :filter[!suffix[(history)]!suffix[(legal)]] +[sortsub:string<byPolNbr>rest[]] -[allbefore<targetBefore>] +[reverse[]]" variable="shiftSib">
+              <$let
+                shiftMarker={{{ [<shiftSib>search-replace::regexp<markerRegex>,[$1]] }}}
+                shiftNewMarker={{{ [<shiftMarker>next-marker[]] }}}
+                shiftNewTitle={{{ [<targetParent>addsuffix[(]addsuffix<shiftNewMarker>addsuffix[)]] }}}
+              >
+                <$action-rename-tree $from=<<shiftSib>> $to=<<shiftNewTitle>>/>
+              </$let>
+            </$list>
+            <!-- Place at the targetBefore's marker (now vacated) -->
+            <$let
+              insertMarker={{{ [<targetBefore>search-replace::regexp<markerRegex>,[$1]] }}}
+              finalTitle={{{ [<targetParent>addsuffix[(]addsuffix<insertMarker>addsuffix[)]] }}}
+            >
+              <$action-rename-tree $from="$:/temp/rham/move/" $to=<<finalTitle>>/>
+            </$let>
+          <% else %>
+            <!-- Append as last child -->
+            <$let
+              lastAtTarget={{{ [all[tiddlers]prefix<targetParent>] :filter[removeprefix<targetParent>split[(]count[]match[2]] :filter[!suffix[(history)]!suffix[(legal)]] +[sortsub:string<byPolNbr>last[]] }}}
+              lastMarker={{{ [<lastAtTarget>search-replace::regexp<markerRegex>,[$1]] }}}
+              newMarker={{{ [<lastMarker>next-marker[]] :else[[1]] +[first[]] }}}
+              finalTitle={{{ [<targetParent>addsuffix[(]addsuffix<newMarker>addsuffix[)]] }}}
+            >
+              <$action-rename-tree $from="$:/temp/rham/move/" $to=<<finalTitle>>/>
+            </$let>
+          <% endif %>
+          <$action-setfield $tiddler=<<movingState>> text=""/>
+          <$action-setfield $tiddler=<<moveTargetState>> text=""/>
+          Confirm
+        </$button>
+        <$button class="dashboard-btn">
+          <$action-setfield $tiddler=<<moveTargetState>> text=""/>
+          Cancel
+        </$button>
+      </div>
+    </div>
+  </$let>
+\end dashboard-move-confirm
+
 \procedure dashboard-node(pol, rootPol)
   <$let
     addingState={{{ [[$:/state/rham/dashboard/adding/]addsuffix<rootPol>] }}}
     setupState={{{ [[$:/state/rham/dashboard/parent-setup/]addsuffix<rootPol>] }}}
+    movingState={{{ [[$:/state/rham/dashboard/moving/]addsuffix<rootPol>] }}}
+    moveTargetState={{{ [[$:/state/rham/dashboard/move-target/]addsuffix<rootPol>] }}}
+    isMoving={{{ [<movingState>get[text]!is[blank]then[yes]else[no]] }}}
+    movingNode={{{ [<movingState>get[text]] }}}
   >
     <$list filter="[all[tiddlers]prefix<pol>] :filter[removeprefix<pol>split[(]count[]match[2]] +[sortsub:string<byPolNbr>]" variable="child">
       <$let
@@ -189,8 +318,23 @@ type: text/vnd.tiddlywiki
         lastChildOfNode={{{ [all[tiddlers]prefix<child>] :filter[removeprefix<child>split[(]count[]match[2]] :filter[!suffix[(history)]!suffix[(legal)]] +[sortsub:string<byPolNbr>last[]] }}}
         lastChildMarker={{{ [<lastChildOfNode>search-replace::regexp<markerRegex>,[$1]] }}}
         suggestedMarker={{{ [<lastChildMarker>next-marker[]] :else[[1]] +[first[]] }}}
+        prevSibling={{{ [all[tiddlers]prefix<pol>] :filter[removeprefix<pol>split[(]count[]match[2]] :filter[!suffix[(history)]!suffix[(legal)]] +[sortsub:string<byPolNbr>before<child>] }}}
+        nextSibling={{{ [all[tiddlers]prefix<pol>] :filter[removeprefix<pol>split[(]count[]match[2]] :filter[!suffix[(history)]!suffix[(legal)]] +[sortsub:string<byPolNbr>after<child>] }}}
       >
-        <div class={{{ [<stype>!is[blank]addprefix[dashboard-node dashboard-node-]] :else[[dashboard-node]] }}}>
+        <% if [<isMoving>match[yes]] [<stype>is[blank]] +[allafter[yes]first[]match[]] %>
+          <$let isDescendant={{{ [<child>removeprefix<movingNode>prefix[(]then[yes]] [<child>match<movingNode>then[yes]] +[first[]] }}}
+          >
+            <% if [<isDescendant>!match[yes]] %>
+              <div class="dashboard-move-target">
+                <$button class="tc-btn-invisible">
+                  <$action-setfield $tiddler=<<moveTargetState>> text={{{ [<pol>addsuffix[|]addsuffix<child>] }}}/>
+                  &#8594;&nbsp;move here
+                </$button>
+              </div>
+            <% endif %>
+          </$let>
+        <% endif %>
+        <div class={{{ [<stype>!is[blank]addprefix[dashboard-node dashboard-node-]] :else[<movingNode>match<child>then[dashboard-node dashboard-node-moving]] :else[[dashboard-node]] }}}>
           <div class="dashboard-node-header">
             <span class="dashboard-node-marker">
               <% if [<stype>match[history]] %>
@@ -283,6 +427,30 @@ type: text/vnd.tiddlywiki
                     </$button>
                   <% endif %>
                 <% endif %>
+                <% if [<stype>is[blank]] %>
+                  <% if [<prevSibling>!is[blank]] %>
+                    <$button class="tc-btn-invisible dashboard-btn dashboard-btn-move">
+                      <$action-rename-tree $from=<<child>> $to="$:/temp/rham/swap/"/>
+                      <$action-rename-tree $from=<<prevSibling>> $to=<<child>>/>
+                      <$action-rename-tree $from="$:/temp/rham/swap/" $to=<<prevSibling>>/>
+                      &#9650;
+                    </$button>
+                  <% endif %>
+                  <% if [<nextSibling>!is[blank]] %>
+                    <$button class="tc-btn-invisible dashboard-btn dashboard-btn-move">
+                      <$action-rename-tree $from=<<child>> $to="$:/temp/rham/swap/"/>
+                      <$action-rename-tree $from=<<nextSibling>> $to=<<child>>/>
+                      <$action-rename-tree $from="$:/temp/rham/swap/" $to=<<nextSibling>>/>
+                      &#9660;
+                    </$button>
+                  <% endif %>
+                <% endif %>
+                <% if [<stype>is[blank]] %>
+                  <$button class="tc-btn-invisible dashboard-btn">
+                    <$action-setfield $tiddler=<<movingState>> text=<<child>>/>
+                    move
+                  </$button>
+                <% endif %>
                 <% if [<stype>!match[history]] %>
                   <$button class="tc-btn-invisible dashboard-btn dashboard-btn-danger">
                     <$action-setfield $tiddler={{{ [[$:/state/rham/dashboard/deleting/]addsuffix<rootPol>] }}} text=<<child>>/>
@@ -304,6 +472,18 @@ type: text/vnd.tiddlywiki
           <% if [<hasChildren>compare:integer:gt[0]] %>
             <div class="dashboard-children">
               <$transclude $variable="dashboard-node" pol=<<child>> rootPol=<<rootPol>>/>
+              <% if [<isMoving>match[yes]] [<stype>is[blank]] +[allafter[yes]first[]match[]] %>
+                <$let isDescendant={{{ [<child>removeprefix<movingNode>search[(]count[]compare:integer:gt[0]then[yes]] [<child>match<movingNode>then[yes]] +[first[]] }}}>
+                  <% if [<isDescendant>!match[yes]] %>
+                    <div class="dashboard-move-target">
+                      <$button class="tc-btn-invisible">
+                        <$action-setfield $tiddler=<<moveTargetState>> text={{{ [<child>addsuffix[|end]] }}}/>
+                        &#8594;&nbsp;move here
+                      </$button>
+                    </div>
+                  <% endif %>
+                </$let>
+              <% endif %>
             </div>
           <% endif %>
           <$reveal type="match" stateTitle=<<addingState>> text=<<child>> animate="yes">
@@ -424,7 +604,7 @@ type: text/vnd.tiddlywiki
   lastMarker={{{ [<lastChild>search-replace::regexp<markerRegex>,[$1]] }}}
   suggestedMarker={{{ [<lastMarker>next-marker[]] :else[[1]] +[first[]] }}}
   modeState={{{ [[$:/state/rham/dashboard/mode/]addsuffix<pol>] }}}
-  currentMode={{{ [<modeState>get[text]] :else[[structure]] +[first[]] }}}
+  currentMode={{{ [<modeState>get[text]] :else[[preview]] +[first[]] }}}
 >
 <div class="policy-dashboard">
   <div class="dashboard-title">
@@ -459,27 +639,68 @@ type: text/vnd.tiddlywiki
     </$let>
   </div>
 
-  <$transclude $variable="dashboard-draft-note-editor" pol=<<pol>>/>
-
   <$reveal type="match" stateTitle={{{ [[$:/state/rham/dashboard/header/]addsuffix<pol>] }}} text="open" animate="yes">
     <$transclude $variable="dashboard-header-panel" pol=<<pol>>/>
   </$reveal>
 
+  <$transclude $variable="dashboard-draft-note-editor" pol=<<pol>>/>
+
   <div class="dashboard-mode-tabs">
-    <$button class={{{ [<currentMode>match[structure]then[dashboard-tab dashboard-tab-active]] :else[[dashboard-tab]] +[first[]] }}}>
-      <$action-setfield $tiddler=<<modeState>> text="structure"/>
-      Structure
-    </$button>
     <$button class={{{ [<currentMode>match[preview]then[dashboard-tab dashboard-tab-active]] :else[[dashboard-tab]] +[first[]] }}}>
       <$action-setfield $tiddler=<<modeState>> text="preview"/>
       Preview
     </$button>
+    <$button class={{{ [<currentMode>match[structure]then[dashboard-tab dashboard-tab-active]] :else[[dashboard-tab]] +[first[]] }}}>
+      <$action-setfield $tiddler=<<modeState>> text="structure"/>
+      Structure
+    </$button>
+    <span class="dashboard-tab-actions">
+      <% if [<pol>has[draft-of-policy]] %>
+        <$transclude $variable="dashboard-promote-draft" pol=<<pol>>/>
+      <% endif %>
+      <% if [<pol>!has[draft-of-policy]] %>
+        <$transclude $variable="dashboard-start-revision" pol=<<pol>>/>
+      <% endif %>
+      <$button class="tc-btn-invisible dashboard-btn">
+        <$action-sendmessage $message="tm-close-tiddler" $param=<<pol>>/>
+        <$action-navigate $to=<<pol>>/>
+        <$action-sendmessage $message="tm-close-tiddler" $param="$:/_/rham/dashboard/view"/>
+        Back to Policy
+      </$button>
+    </span>
   </div>
 
   <$let
     polAddingState={{{ [[$:/state/rham/dashboard/adding/]addsuffix<pol>] }}}
     polSetupState={{{ [[$:/state/rham/dashboard/parent-setup/]addsuffix<pol>] }}}
+    movingState={{{ [[$:/state/rham/dashboard/moving/]addsuffix<pol>] }}}
+    moveTargetState={{{ [[$:/state/rham/dashboard/move-target/]addsuffix<pol>] }}}
   >
+
+  <$reveal type="nomatch" stateTitle=<<movingState>> text="" default="" animate="yes">
+    <$let
+      movingNode={{{ [<movingState>get[text]] }}}
+      movingMarker={{{ [<movingNode>search-replace::regexp<markerRegex>,[$1]] }}}
+      movingCaption={{{ [<movingNode>get[caption]] }}}
+    >
+      <div class="dashboard-moving-banner">
+        <span class="dashboard-moving-banner-text">
+          Moving&nbsp;(<$text text=<<movingMarker>>/>)&nbsp;"<$text text=<<movingCaption>>/>"
+        </span>
+        <$button class="dashboard-btn">
+          <$action-setfield $tiddler=<<movingState>> text=""/>
+          <$action-setfield $tiddler=<<moveTargetState>> text=""/>
+          Cancel
+        </$button>
+      </div>
+    </$let>
+  </$reveal>
+
+  <$reveal type="nomatch" stateTitle=<<moveTargetState>> text="" default="" animate="yes">
+    <div class="dashboard-modal-overlay">
+      <$transclude $variable="dashboard-move-confirm" rootPol=<<pol>>/>
+    </div>
+  </$reveal>
 
   <$reveal type="nomatch" stateTitle=<<modeState>> text="preview" animate="yes">
   <div class="dashboard-tree">
@@ -571,17 +792,6 @@ type: text/vnd.tiddlywiki
         + Add Section
       </$button>
     <% endif %>
-    <% if [<pol>!has[draft-of-policy]] %>
-      <$transclude $variable="dashboard-start-revision" pol=<<pol>>/>
-    <% endif %>
-    <% if [<pol>has[draft-of-policy]] %>
-      <$transclude $variable="dashboard-promote-draft" pol=<<pol>>/>
-    <% endif %>
-    <$button class="tc-btn-invisible dashboard-btn">
-      <$action-navigate $to=<<pol>>/>
-      <$action-sendmessage $message="tm-close-tiddler" $param="$:/_/rham/dashboard/view"/>
-      Back to Policy
-    </$button>
   </div>
   </$let>
 </div>
