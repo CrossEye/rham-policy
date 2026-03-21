@@ -59,30 +59,6 @@ type: text/vnd.tiddlywiki
           <option value="s1">No visible markers (s1, s2, s3...)</option>
         </$select>
       </div>
-      <div class="dashboard-edit-buttons">
-        <$button class="dashboard-btn dashboard-btn-save">
-          <$action-setfield $tiddler=<<parent>> structure={{{ [{$:/temp/rham/setup/display-style}!is[blank]] :else[[outline]] +[first[]] }}}/>
-          <$list filter="[<parent>get[text]!search[<<sections>>]]" variable="ignore">
-            <$let newText=`${ [<parent>get[text]] }$
-
-<<sections>>`>
-              <$action-setfield $tiddler=<<parent>> text=<<newText>>/>
-            </$let>
-          </$list>
-          <$action-setfield $tiddler="$:/temp/rham/add/marker" text={{{ [{$:/temp/rham/setup/marker-style}!is[blank]] :else[[1]] +[first[]] }}}/>
-          <$action-setfield $tiddler=<<setupState>> text=""/>
-          <$action-setfield $tiddler=<<addingState>> text=<<parent>>/>
-          <$action-deletetiddler $tiddler="$:/temp/rham/setup/display-style"/>
-          <$action-deletetiddler $tiddler="$:/temp/rham/setup/marker-style"/>
-          Continue
-        </$button>
-        <$button class="dashboard-btn">
-          <$action-setfield $tiddler=<<setupState>> text=""/>
-          <$action-deletetiddler $tiddler="$:/temp/rham/setup/display-style"/>
-          <$action-deletetiddler $tiddler="$:/temp/rham/setup/marker-style"/>
-          Cancel
-        </$button>
-      </div>
     </div>
   </$let>
 \end dashboard-parent-setup
@@ -185,6 +161,7 @@ type: text/vnd.tiddlywiki
         editingState={{{ [[$:/state/rham/dashboard/editing/]addsuffix<rootPol>] }}}
         isEditing={{{ [<editingState>get[text]match<child>then[yes]else[no]] }}}
         isAdding={{{ [<addingState>get[text]match<child>then[yes]else[no]] }}}
+        isSettingUp={{{ [<setupState>get[text]match<child>then[yes]else[no]] }}}
         lastChildOfNode={{{ [all[tiddlers]prefix<child>] :filter[removeprefix<child>split[(]count[]match[2]] :filter[!suffix[(history)]!suffix[(legal)]] +[sortsub:string<byPolNbr>last[]] }}}
         lastChildMarker={{{ [<lastChildOfNode>search-replace::regexp<markerRegex>,[$1]] }}}
         suggestedMarker={{{ [<lastChildMarker>next-marker[]] :else[[1]] +[first[]] }}}
@@ -237,6 +214,29 @@ type: text/vnd.tiddlywiki
                     Cancel
                   </$button>
                 </$let>
+              <% elseif [<isSettingUp>match[yes]] %>
+                <$button class="dashboard-btn dashboard-btn-save">
+                  <$action-setfield $tiddler=<<child>> structure={{{ [{$:/temp/rham/setup/display-style}!is[blank]] :else[[outline]] +[first[]] }}}/>
+                  <$list filter="[<child>get[text]!search[<<sections>>]]" variable="ignore">
+                    <$let newText=`${ [<child>get[text]] }$
+
+<<sections>>`>
+                      <$action-setfield $tiddler=<<child>> text=<<newText>>/>
+                    </$let>
+                  </$list>
+                  <$action-setfield $tiddler="$:/temp/rham/add/marker" text={{{ [{$:/temp/rham/setup/marker-style}!is[blank]] :else[[1]] +[first[]] }}}/>
+                  <$action-setfield $tiddler=<<setupState>> text=""/>
+                  <$action-setfield $tiddler=<<addingState>> text=<<child>>/>
+                  <$action-deletetiddler $tiddler="$:/temp/rham/setup/display-style"/>
+                  <$action-deletetiddler $tiddler="$:/temp/rham/setup/marker-style"/>
+                  Continue
+                </$button>
+                <$button class="dashboard-btn">
+                  <$action-setfield $tiddler=<<setupState>> text=""/>
+                  <$action-deletetiddler $tiddler="$:/temp/rham/setup/display-style"/>
+                  <$action-deletetiddler $tiddler="$:/temp/rham/setup/marker-style"/>
+                  Cancel
+                </$button>
               <% else %>
                 <$button class="tc-btn-invisible dashboard-btn">
                   <$action-setfield $tiddler="$:/temp/rham/edit/caption" text={{{ [<child>get[caption]] }}}/>
