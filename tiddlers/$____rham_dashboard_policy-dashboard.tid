@@ -353,80 +353,88 @@ type: text/vnd.tiddlywiki
     <$transclude $variable="dashboard-node" pol=<<pol>> rootPol=<<pol>>/>
   </div>
 
-  <$reveal type="match" stateTitle={{{ [[$:/state/rham/dashboard/parent-setup/]addsuffix<pol>] }}} text=<<pol>> animate="yes">
-    <$transclude $variable="dashboard-parent-setup" parent=<<pol>> rootPol=<<pol>>/>
-  </$reveal>
-
-  <$reveal type="match" stateTitle={{{ [[$:/state/rham/dashboard/adding/]addsuffix<pol>] }}} text=<<pol>> animate="yes">
-    <$transclude $variable="dashboard-section-editor" mode="add" parent=<<pol>> rootPol=<<pol>>/>
-  </$reveal>
-
   <$let
     polAddingState={{{ [[$:/state/rham/dashboard/adding/]addsuffix<pol>] }}}
     polSetupState={{{ [[$:/state/rham/dashboard/parent-setup/]addsuffix<pol>] }}}
-    isPolAdding={{{ [<polAddingState>get[text]match<pol>then[yes]else[no]] }}}
-    isPolSettingUp={{{ [<polSetupState>get[text]match<pol>then[yes]else[no]] }}}
   >
-  <div class="dashboard-footer">
-    <% if [<isPolAdding>match[yes]] %>
-      <$let
-        newMarker={{{ [{$:/temp/rham/add/marker}] }}}
-        newTitle={{{ [<pol>addsuffix[(]addsuffix<newMarker>addsuffix[)]] }}}
-        newCaption={{{ [{$:/temp/rham/add/caption}!is[blank]] :else[[New Section]] +[first[]] }}}
-        newContent={{{ [{$:/temp/rham/add/content}] }}}
-      >
-        <$button class="dashboard-btn dashboard-btn-save">
-          <$action-createtiddler $basetitle=<<newTitle>> caption=<<newCaption>> tags=<<pol>> type="text/vnd.tiddlywiki" text=<<newContent>>/>
-          <$action-setfield $tiddler=<<polAddingState>> text=""/>
-          <$action-deletetiddler $tiddler="$:/temp/rham/add/marker"/>
-          <$action-deletetiddler $tiddler="$:/temp/rham/add/caption"/>
-          <$action-deletetiddler $tiddler="$:/temp/rham/add/content"/>
-          Save
-        </$button>
-        <$button class="dashboard-btn">
-          <$action-setfield $tiddler=<<polAddingState>> text=""/>
-          <$action-deletetiddler $tiddler="$:/temp/rham/add/marker"/>
-          <$action-deletetiddler $tiddler="$:/temp/rham/add/caption"/>
-          <$action-deletetiddler $tiddler="$:/temp/rham/add/content"/>
-          Cancel
-        </$button>
-      </$let>
-    <% elseif [<isPolSettingUp>match[yes]] %>
-      <$button class="dashboard-btn dashboard-btn-save">
-        <$action-setfield $tiddler=<<pol>> structure={{{ [{$:/temp/rham/setup/display-style}!is[blank]] :else[[outline]] +[first[]] }}}/>
-        <$list filter="[<pol>get[text]!search[<<sections>>]]" variable="ignore">
-          <$let newText=`${ [<pol>get[text]] }$
+  <$reveal type="match" stateTitle=<<polSetupState>> text=<<pol>> animate="yes">
+    <div class="dashboard-node">
+      <div class="dashboard-node-header">
+        <span class="dashboard-node-caption">Configure subsections</span>
+        <span class="dashboard-node-actions">
+          <$button class="dashboard-btn dashboard-btn-save">
+            <$action-setfield $tiddler=<<pol>> structure={{{ [{$:/temp/rham/setup/display-style}!is[blank]] :else[[outline]] +[first[]] }}}/>
+            <$list filter="[<pol>get[text]!search[<<sections>>]]" variable="ignore">
+              <$let newText=`${ [<pol>get[text]] }$
 
 <<sections>>`>
-            <$action-setfield $tiddler=<<pol>> text=<<newText>>/>
+                <$action-setfield $tiddler=<<pol>> text=<<newText>>/>
+              </$let>
+            </$list>
+            <$action-setfield $tiddler="$:/temp/rham/add/marker" text={{{ [{$:/temp/rham/setup/marker-style}!is[blank]] :else[[1]] +[first[]] }}}/>
+            <$action-setfield $tiddler=<<polSetupState>> text=""/>
+            <$action-setfield $tiddler=<<polAddingState>> text=<<pol>>/>
+            <$action-deletetiddler $tiddler="$:/temp/rham/setup/display-style"/>
+            <$action-deletetiddler $tiddler="$:/temp/rham/setup/marker-style"/>
+            Continue
+          </$button>
+          <$button class="dashboard-btn">
+            <$action-setfield $tiddler=<<polSetupState>> text=""/>
+            <$action-deletetiddler $tiddler="$:/temp/rham/setup/display-style"/>
+            <$action-deletetiddler $tiddler="$:/temp/rham/setup/marker-style"/>
+            Cancel
+          </$button>
+        </span>
+      </div>
+      <$transclude $variable="dashboard-parent-setup" parent=<<pol>> rootPol=<<pol>>/>
+    </div>
+  </$reveal>
+
+  <$reveal type="match" stateTitle=<<polAddingState>> text=<<pol>> animate="yes">
+    <div class="dashboard-node">
+      <div class="dashboard-node-header">
+        <span class="dashboard-node-caption">New section</span>
+        <span class="dashboard-node-actions">
+          <$let
+            newMarker={{{ [{$:/temp/rham/add/marker}] }}}
+            newTitle={{{ [<pol>addsuffix[(]addsuffix<newMarker>addsuffix[)]] }}}
+            newCaption={{{ [{$:/temp/rham/add/caption}!is[blank]] :else[[New Section]] +[first[]] }}}
+            newContent={{{ [{$:/temp/rham/add/content}] }}}
+          >
+            <$button class="dashboard-btn dashboard-btn-save">
+              <$action-createtiddler $basetitle=<<newTitle>> caption=<<newCaption>> tags=<<pol>> type="text/vnd.tiddlywiki" text=<<newContent>>/>
+              <$action-setfield $tiddler=<<polAddingState>> text=""/>
+              <$action-deletetiddler $tiddler="$:/temp/rham/add/marker"/>
+              <$action-deletetiddler $tiddler="$:/temp/rham/add/caption"/>
+              <$action-deletetiddler $tiddler="$:/temp/rham/add/content"/>
+              Save
+            </$button>
+            <$button class="dashboard-btn">
+              <$action-setfield $tiddler=<<polAddingState>> text=""/>
+              <$action-deletetiddler $tiddler="$:/temp/rham/add/marker"/>
+              <$action-deletetiddler $tiddler="$:/temp/rham/add/caption"/>
+              <$action-deletetiddler $tiddler="$:/temp/rham/add/content"/>
+              Cancel
+            </$button>
           </$let>
-        </$list>
-        <$action-setfield $tiddler="$:/temp/rham/add/marker" text={{{ [{$:/temp/rham/setup/marker-style}!is[blank]] :else[[1]] +[first[]] }}}/>
-        <$action-setfield $tiddler=<<polSetupState>> text=""/>
+        </span>
+      </div>
+      <$transclude $variable="dashboard-section-editor" mode="add" parent=<<pol>> rootPol=<<pol>>/>
+    </div>
+  </$reveal>
+
+  <div class="dashboard-footer">
+    <% if [<hasChildren>compare:integer:gt[0]] %>
+      <$button class="tc-btn-invisible dashboard-btn">
+        <$action-setfield $tiddler="$:/temp/rham/add/marker" text=<<suggestedMarker>>/>
         <$action-setfield $tiddler=<<polAddingState>> text=<<pol>>/>
-        <$action-deletetiddler $tiddler="$:/temp/rham/setup/display-style"/>
-        <$action-deletetiddler $tiddler="$:/temp/rham/setup/marker-style"/>
-        Continue
-      </$button>
-      <$button class="dashboard-btn">
-        <$action-setfield $tiddler=<<polSetupState>> text=""/>
-        <$action-deletetiddler $tiddler="$:/temp/rham/setup/display-style"/>
-        <$action-deletetiddler $tiddler="$:/temp/rham/setup/marker-style"/>
-        Cancel
+        + Add Section
       </$button>
     <% else %>
-      <% if [<hasChildren>compare:integer:gt[0]] %>
-        <$button class="tc-btn-invisible dashboard-btn">
-          <$action-setfield $tiddler="$:/temp/rham/add/marker" text=<<suggestedMarker>>/>
-          <$action-setfield $tiddler=<<polAddingState>> text=<<pol>>/>
-          + Add Section
-        </$button>
-      <% else %>
-        <$button class="tc-btn-invisible dashboard-btn">
-          <$action-setfield $tiddler=<<polSetupState>> text=<<pol>>/>
-          + Add Section
-        </$button>
-      <% endif %>
+      <$button class="tc-btn-invisible dashboard-btn">
+        <$action-setfield $tiddler=<<polSetupState>> text=<<pol>>/>
+        + Add Section
+      </$button>
     <% endif %>
     <% if [<pol>!has[draft-of-policy]] %>
       <$transclude $variable="dashboard-start-revision" pol=<<pol>>/>
