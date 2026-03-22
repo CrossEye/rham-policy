@@ -2,3 +2,11 @@ caption: Outline block
 style-id: outline-block
 tags: $:/tags/Outline/DisplayStyle
 title: $:/_/rham/display-styles/outline-block
+type: text/vnd.tiddlywiki
+
+\procedure outline-block()
+  <div class=`level ${ [<section-type>] }$`>
+    <div class="term"><$link><<marker>> </$link></div>
+    <$transclude $mode="block"/>
+  </div>
+\end outline-block

@@ -2,3 +2,8 @@ caption: Heading 2
 style-id: heading2
 tags: $:/tags/Outline/DisplayStyle
 title: $:/_/rham/display-styles/heading2
+type: text/vnd.tiddlywiki
+
+\procedure heading2()
+  <$transclude $variable="heading"/>
+\end heading2

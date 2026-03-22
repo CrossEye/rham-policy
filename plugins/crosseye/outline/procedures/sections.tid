@@ -5,37 +5,8 @@ type: text/vnd.tiddlywiki
 
 \define markerRegex() .*\(([^\(\)]+)\)$
 
-\procedure heading()
-  <div class=<<section-type>> >
-    <h2><$link>{{!!caption}}</$link></h2>
-    <$transclude $mode="block"/>
-  </div>
-\end heading
-
-\procedure list()
-  <div class="list-item">
-    <div class="marker"><$link><<marker>></$link>. </div>
-    <$transclude $mode="block"/>
-  </div>
-\end list
-
-\procedure outline()
-  <div class=`level ${ [<section-type>] }$`>
-    <div class="heading"><$link><% if [<marker>!is[blank]] %><<marker>>. <% endif %>{{!!caption}}</$link></div>
-    <$transclude $mode="block"/>
-  </div>
-\end outline
-
-\procedure plain()
-  <div class=<<section-type>> >
-    <% if [<section-type>!is[blank]] %>
-      <h2><$link>{{!!caption}}</$link></h2>
-    <% endif %>
-    <$transclude $mode="block"/>
-  </div>
-\end plain
-
 \procedure sections()
+<$importvariables filter="[all[tiddlers+shadows]tag[$:/tags/Outline/DisplayStyle]!disabled[yes]]">
 <$let outline-structure={{{ [{!!display-style}] }}}>
   <$list filter="[all[tiddlers]prefix<currentTiddler>]  :filter[removeprefix<..currentTiddler>split[(]count[]match[2]] +[sortsub:string<outlineOrder>] ">
     <$let
@@ -53,4 +24,5 @@ type: text/vnd.tiddlywiki
     </$let>
   </$list>
 </$let>
+</$importvariables>
 \end sections

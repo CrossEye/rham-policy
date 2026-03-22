@@ -11,7 +11,7 @@ type: text/vnd.tiddlywiki
 
 \procedure outline-display-style-select(tid, field:"display-style")
   <$select tiddler=<<tid>> field=<<field>> class="dashboard-edit-select">
-    <$list filter="[tag[$:/tags/Outline/DisplayStyle]sort[caption]]">
+    <$list filter="[all[tiddlers+shadows]tag[$:/tags/Outline/DisplayStyle]!disabled[yes]sort[caption]]">
       <option value={{{ [{!!style-id}] }}}><$text text={{!!caption}}/></option>
     </$list>
   </$select>

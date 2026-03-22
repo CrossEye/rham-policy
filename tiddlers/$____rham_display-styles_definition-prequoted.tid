@@ -2,3 +2,11 @@ caption: Definition (prequoted)
 style-id: definition-prequoted
 tags: $:/tags/Outline/DisplayStyle
 title: $:/_/rham/display-styles/definition-prequoted
+type: text/vnd.tiddlywiki
+
+\procedure definition-prequoted()
+  <div class="definition level">
+    <div class="term"><$link>{{!!caption}}</$link></div>
+    <$transclude $mode="block"/>
+  </div>
+\end definition-prequoted

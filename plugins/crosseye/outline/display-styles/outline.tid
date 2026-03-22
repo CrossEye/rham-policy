@@ -2,3 +2,11 @@ caption: Outline
 style-id: outline
 tags: $:/tags/Outline/DisplayStyle
 title: $:/plugins/crosseye/outline/display-styles/outline
+type: text/vnd.tiddlywiki
+
+\procedure outline()
+  <div class=`level ${ [<section-type>] }$`>
+    <div class="heading"><$link><% if [<marker>!is[blank]] %><<marker>>. <% endif %>{{!!caption}}</$link></div>
+    <$transclude $mode="block"/>
+  </div>
+\end outline

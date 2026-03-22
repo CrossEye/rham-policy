@@ -1,4 +1,14 @@
 caption: Definition
+created: 20260322145354233
+modified: 20260322145354233
 style-id: definition
 tags: $:/tags/Outline/DisplayStyle
 title: $:/_/rham/display-styles/definition
+type: text/vnd.tiddlywiki
+
+\procedure definition()
+  <div class="definition level">
+    <div class="term"><$link><<marker>>. {{!!caption}}</$link>: </div>
+    <$transclude $mode="block"/>
+  </div>
+\end definition

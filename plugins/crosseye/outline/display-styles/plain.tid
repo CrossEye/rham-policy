@@ -2,3 +2,13 @@ caption: Plain
 style-id: plain
 tags: $:/tags/Outline/DisplayStyle
 title: $:/plugins/crosseye/outline/display-styles/plain
+type: text/vnd.tiddlywiki
+
+\procedure plain()
+  <div class=<<section-type>> >
+    <% if [<section-type>!is[blank]] %>
+      <h2><$link>{{!!caption}}</$link></h2>
+    <% endif %>
+    <$transclude $mode="block"/>
+  </div>
+\end plain

@@ -36,7 +36,7 @@ Override these shadow tiddlers to customize the plugin for your wiki:
 
 The plugin ships with four display styles: ''Outline'', ''Heading'', ''List'', and ''Plain''. Each outline chooses one via its `display-style` field.
 
-Add your own by creating a tiddler tagged `$:/tags/Outline/DisplayStyle` with a `style-id` field and a `caption`. Then define a procedure with the same name as `style-id` that renders a single section. It will be called with `<<marker>>` (the section label) and `<<section-type>>` (blank for normal sections, the suffix for special sections) available as variables.
+Add your own by creating a single tiddler tagged `$:/tags/Outline/DisplayStyle` with a `style-id` field, a `caption`, and a `\procedure` in the body whose name matches the `style-id`. The procedure renders a single section and has `<<marker>>` (the section label) and `<<section-type>>` (blank for normal sections, the suffix for special sections) available as variables. Set `disabled: yes` on any display style tiddler to suppress it from the dropdown and rendering.
 
 !! Special Sections
 

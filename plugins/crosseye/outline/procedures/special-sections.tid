@@ -4,7 +4,7 @@ title: $:/plugins/crosseye/outline/procedures/special-sections
 type: text/vnd.tiddlywiki
 
 \function outline-all-special-sections()
-  [tag[$:/tags/Outline/SpecialSection/Top]] [tag[$:/tags/Outline/SpecialSection/Bottom]]
+  [all[tiddlers+shadows]tag[$:/tags/Outline/SpecialSection/Top]] [all[tiddlers+shadows]tag[$:/tags/Outline/SpecialSection/Bottom]]
 \end outline-all-special-sections
 
 \function outline-is-special(suffix)
@@ -42,7 +42,7 @@ type: text/vnd.tiddlywiki
 \end outline-missing-mandatory
 
 \function outline-section-type(suffix)
-  [tag[$:/tags/Outline/SpecialSection/Top]] :filter[get[suffix]match<suffix>] +[first[]then[top]]
-  :else[tag[$:/tags/Outline/SpecialSection/Bottom]] :filter[get[suffix]match<suffix>] +[first[]then[bottom]]
+  [all[tiddlers+shadows]tag[$:/tags/Outline/SpecialSection/Top]] :filter[get[suffix]match<suffix>] +[first[]then[top]]
+  :else[all[tiddlers+shadows]tag[$:/tags/Outline/SpecialSection/Bottom]] :filter[get[suffix]match<suffix>] +[first[]then[bottom]]
   :else[[normal]]
 \end outline-section-type

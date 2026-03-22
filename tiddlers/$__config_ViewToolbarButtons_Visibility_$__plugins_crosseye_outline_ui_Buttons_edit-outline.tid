@@ -1,6 +1,6 @@
 created: 20260322032617939
-modified: 20260322041726574
+modified: 20260322173122658
 title: $:/config/ViewToolbarButtons/Visibility/$:/plugins/crosseye/outline/ui/Buttons/edit-outline
 type: text/vnd.tiddlywiki
 
-hide
+show

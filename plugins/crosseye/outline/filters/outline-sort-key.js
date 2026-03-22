@@ -26,7 +26,7 @@ var TOP_TAG = "$:/tags/Outline/SpecialSection/Top";
 var BOTTOM_TAG = "$:/tags/Outline/SpecialSection/Bottom";
 
 function getOrderedSuffixes(wiki, tag) {
-	var tagged = wiki.filterTiddlers("[tag[" + tag + "]]");
+	var tagged = wiki.filterTiddlers("[all[tiddlers+shadows]tag[" + tag + "]]");
 	var result = [];
 	for(var i = 0; i < tagged.length; i++) {
 		var tiddler = wiki.getTiddler(tagged[i]);

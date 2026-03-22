@@ -2,3 +2,11 @@ caption: Numbered list
 style-id: list
 tags: $:/tags/Outline/DisplayStyle
 title: $:/plugins/crosseye/outline/display-styles/list
+type: text/vnd.tiddlywiki
+
+\procedure list()
+  <div class="list-item">
+    <div class="marker"><$link><<marker>></$link>. </div>
+    <$transclude $mode="block"/>
+  </div>
+\end list

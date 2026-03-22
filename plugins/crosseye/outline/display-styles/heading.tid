@@ -2,3 +2,11 @@ caption: Heading
 style-id: heading
 tags: $:/tags/Outline/DisplayStyle
 title: $:/plugins/crosseye/outline/display-styles/heading
+type: text/vnd.tiddlywiki
+
+\procedure heading()
+  <div class=<<section-type>> >
+    <h2><$link>{{!!caption}}</$link></h2>
+    <$transclude $mode="block"/>
+  </div>
+\end heading
