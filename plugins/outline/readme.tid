@@ -1,0 +1,77 @@
+title: $:/plugins/crosseye/outline/readme
+type: text/vnd.tiddlywiki
+
+! Outline Editor Plugin
+
+A ~TiddlyWiki plugin for creating and editing hierarchical outlines — structured documents composed of nested sections stored as individual tiddlers.
+
+!! Overview
+
+Each outline is a tiddler (tagged `Outline` by default) whose content is a tree of child tiddlers named by convention: `MyOutline(s1)`, `MyOutline(s1)(a)`, `MyOutline(s1)(a)(1)`, and so on. The plugin provides:
+
+* A ''dashboard editor'' for managing the outline structure: adding, removing, renaming, and reordering sections without touching raw wikitext
+* ''Display styles'' that control how sections render (outline, heading, list, plain), configurable per outline
+* ''Special sections'' (e.g., table of contents) that pin to the top or bottom of the rendered output
+* A ''revision/draft system'' for editing a copy of an outline without modifying the live version
+* A ''compound archive'' that snapshots an entire outline tree into a single tiddler
+
+!! Getting Started
+
+# Install the plugin.
+# Tag a tiddler with `Outline` (or your configured tag) and set its `text` field to `<<sections>>`.
+# Click the ''edit outline'' toolbar button to open the dashboard.
+# Use the dashboard to add sections, set a display style, and edit section content.
+
+!! Configuration
+
+Override these shadow tiddlers to customize the plugin for your wiki:
+
+|!Tiddler |!Default |!Purpose |
+|`$:/plugins/crosseye/outline/config/tag` |`Outline` |Tag that identifies outline tiddlers |
+|`$:/plugins/crosseye/outline/config/draft-tag` |`OutlineDraft` |Tag for draft/revision copies |
+|`$:/plugins/crosseye/outline/config/archive-prefix` |`$:/outline/archive/` |Title prefix for archived snapshots |
+|`$:/plugins/crosseye/outline/config/button-filter` |//(matches tag)// |Filter controlling which tiddlers show the edit button |
+
+!! Display Styles
+
+The plugin ships with four display styles: ''Outline'', ''Heading'', ''List'', and ''Plain''. Each outline chooses one via its `display-style` field.
+
+Add your own by creating a tiddler tagged `$:/tags/Outline/DisplayStyle` with a `style-id` field and a `caption`. Then define a procedure with the same name as `style-id` that renders a single section. It will be called with `<<marker>>` (the section label) and `<<section-type>>` (blank for normal sections, the suffix for special sections) available as variables.
+
+!! Special Sections
+
+Special sections are pinned to the top or bottom of the rendered outline, outside the normal section ordering. They are defined by configuration tiddlers rather than code changes.
+
+''Built-in:'' Table of Contents (top, skipped by default).
+
+To register a new special section, create a tiddler with:
+
+* ''Tag:'' `$:/tags/Outline/SpecialSection/Top` or `$:/tags/Outline/SpecialSection/Bottom`
+* ''Fields:''
+** `suffix` — the parenthesized suffix used in tiddler titles (e.g., `history`)
+** `caption` — display name shown in the dashboard
+** `default` — `include` or `skip` (whether new outlines include it)
+** `mandatory` — `yes` to show a warning banner when it's missing
+** `content-type` — `manual` (user-edited) or `generated` (rendered by a procedure)
+** `render-procedure` — procedure name to call when `content-type` is `generated`
+
+Use the `list-before` / `list-after` fields on your config tiddlers, referencing other special section config tiddlers, to control ordering within the top or bottom group.
+
+!! Revision / Draft Workflow
+
+# Click ''Start Revision'' in the dashboard footer.
+# A draft copy of the entire outline tree is created with a `draft-of-outline` field pointing back to the original.
+# Edit the draft freely — all changes are isolated.
+# Click ''Finish Revision'' to archive the current live version and promote the draft, or ''Discard'' to delete it.
+
+Draft tiddlers are tagged with `OutlineDraft` (configurable) and a banner appears on the live outline linking to any in-progress revisions.
+
+!! Extension Points
+
+* ''Header panel:'' Override `$:/plugins/crosseye/outline/procedures/header-panel` to add fields above the section tree in the dashboard (e.g., policy number, description).
+* ''New outline wizard:'' Override `$:/plugins/crosseye/outline/dashboard/new-outline-wizard` to customize the creation form.
+* ''Edit button:'' Override `$:/plugins/crosseye/outline/ui/Buttons/edit-outline` to customize or replace the toolbar button.
+
+!! Requirements
+
+~TiddlyWiki >= 5.3.6

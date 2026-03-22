@@ -5,12 +5,6 @@ tags: $:/tags/Global
 title: $:/_/rham/procedures/sections
 type: text/vnd.tiddlywiki
 
-\define markerRegex() .*\(([^\(\)]+)\)$
-
-\function section-type()
-  [<currentTiddler>suffix[(history)]then[history]] :else[<currentTiddler>suffix[(legal)]then[legal]]
-\end section-type 
-
 \procedure definition()
   <div class="definition level">
     <div class="term"><$link><<marker>>. {{!!caption}}</$link>: </div>
@@ -41,10 +35,7 @@ type: text/vnd.tiddlywiki
 \end definition-quoted
 
 \procedure heading2()
-  <div class=<<section-type>> >
-    <h2><$link>{{!!caption}}</$link></h2>
-    <$transclude $mode="block"/>
-  </div>
+  <$transclude $variable="heading"/>
 \end heading2
 
 \procedure heading3-upper()
@@ -61,51 +52,11 @@ type: text/vnd.tiddlywiki
   </div>
 \end heading3-underline
 
-\procedure list()
-  <div class="list-item">
-    <div class="marker"><$link><<marker>></$link>. </div>
-    <$transclude $mode="block"/>
-  </div>
-\end list
-
-\procedure outline()
-  <div class=`level ${ [<section-type>] }$`>
-    <div class="heading"><$link><% if [<marker>!is[blank]] %><<marker>>. <% endif %>{{!!caption}}</$link></div>
-    <$transclude $mode="block"/>
-  </div>
-\end outline
-
 \procedure outline-block()
   <div class=`level ${ [<section-type>] }$`>
     <div class="term"><$link><<marker>> </$link></div>
     <$transclude $mode="block"/>
   </div>
 \end outline-block
-
-\procedure plain()
-  <div class=<<section-type>> >
-    <% if [<section-type>match[legal]] %>
-      <h2><$link>{{!!caption}}</$link></h2>
-    <% endif %>
-    <% if [<section-type>match[history]] %>
-      <h2><$link>{{!!caption}}</$link></h2>
-    <% endif %>
-    <$transclude $mode="block"/>
-  </div>
-\end plain
-
-
-\procedure sections()
-<$let outline-structure={{{ [{!!display-style}] }}}>
-  <$list filter="[all[tiddlers]prefix<currentTiddler>]  :filter[removeprefix<..currentTiddler>split[(]count[]match[2]] +[sortsub:string<byPolNbr>] ">
-    <$let
-      tid=<<currentTiddler>>
-      marker={{{  [<tid>search-replace::regexp<markerRegex>,[$1]search-replace::[history],[]search-replace::[legal],[]] }}}
-    >
-      <$transclude $variable=<<outline-structure>> $mode="block"/>
-    </$let>
-  </$list>
-</$let>
-\end sections
 
 \function policy.section(tid) [<tid>regexp[^Policy\d\d\d\d]then[yes]else[no]]

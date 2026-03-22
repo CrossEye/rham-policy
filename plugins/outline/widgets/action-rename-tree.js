@@ -1,5 +1,5 @@
 /*\
-title: $:/_/rham/widgets/action-rename-tree
+title: $:/plugins/crosseye/outline/widgets/action-rename-tree
 type: application/javascript
 module-type: widget
 

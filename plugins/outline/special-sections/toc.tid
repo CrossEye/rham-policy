@@ -1,0 +1,7 @@
+caption: Table of Contents
+content-type: generated
+default: skip
+render-procedure: outline-render-toc
+suffix: toc
+tags: $:/tags/Outline/SpecialSection/Top
+title: $:/plugins/crosseye/outline/special-sections/toc

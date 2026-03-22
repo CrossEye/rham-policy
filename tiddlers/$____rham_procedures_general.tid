@@ -9,6 +9,4 @@ type: text/vnd.tiddlywiki
 
 \procedure display-link(section) <$link to=<<section>> ><$text text={{{ [{$:/info/url/full}addsuffix[#]addsuffix<section>] }}} /> </$link>
 
-\define byPolNbr() [{!!title}search:title:regexp[\(legal\)$]then[~~~~~~~~]] [{!!title}search:title:regexp[\(history\)$]then[~~~~~~~~~~]] [{!!title}] +[first[]]
-
 

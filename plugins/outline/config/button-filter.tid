@@ -1,0 +1,3 @@
+title: $:/plugins/crosseye/outline/config/button-filter
+
+[<currentTiddler>tag{$:/plugins/crosseye/outline/config/tag}] [<currentTiddler>tag{$:/plugins/crosseye/outline/config/draft-tag}]

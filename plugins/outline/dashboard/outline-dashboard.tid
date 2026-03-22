@@ -1,19 +1,27 @@
 code-body: yes
 created: 20260319120000000
-modified: 20260319120000000
+modified: 20260321120000000
 tags: $:/tags/Global
-title: $:/_/rham/dashboard/policy-dashboard
+title: $:/plugins/crosseye/outline/dashboard/outline-dashboard
 type: text/vnd.tiddlywiki
 
 \whitespace trim
 
 \define markerRegex() .*\(([^\(\)]+)\)$
 
+\procedure outline-display-style-select(tid, field:"display-style")
+  <$select tiddler=<<tid>> field=<<field>> class="dashboard-edit-select">
+    <$list filter="[tag[$:/tags/Outline/DisplayStyle]sort[caption]]">
+      <option value={{{ [{!!style-id}] }}}><$text text={{!!caption}}/></option>
+    </$list>
+  </$select>
+\end outline-display-style-select
+
 \procedure dashboard-text-editor(tid, field:"text")
   <div class="dashboard-editor-wrapper">
     <$edit tiddler=<<tid>> field=<<field>> class="dashboard-edit-textarea tc-edit-texteditor tc-edit-texteditor-body" type="text/vnd.tiddlywiki">
       <$set name="targetTiddler" value=<<tid>>>
-        <$list filter="[enlist[$:/core/ui/EditorToolbar/bold $:/core/ui/EditorToolbar/italic $:/core/ui/EditorToolbar/underline $:/core/ui/EditorToolbar/strikethrough $:/core/ui/EditorToolbar/list-bullet $:/core/ui/EditorToolbar/list-number $:/core/ui/EditorToolbar/quote $:/core/ui/EditorToolbar/superscript $:/core/ui/EditorToolbar/subscript]]" variable="toolbar-button">
+        <$list filter="[enlist{$:/plugins/crosseye/outline/config/editor-buttons}]" variable="toolbar-button">
           <$reveal type="nomatch" stateTitle={{{ [<toolbar-button>addprefix[$:/config/EditorToolbarButtons/Visibility/]] }}} text="hide" class="tc-text-editor-toolbar-item-wrapper">
             <$set name="currentTiddler" value=<<toolbar-button>>>
               <$transclude tiddler="$:/core/ui/EditTemplate/body/toolbar/button" mode="inline"/>
@@ -27,30 +35,18 @@ type: text/vnd.tiddlywiki
 
 \procedure dashboard-parent-setup(parent, rootPol)
   <$let
-    setupState={{{ [[$:/state/rham/dashboard/parent-setup/]addsuffix<rootPol>] }}}
-    addingState={{{ [[$:/state/rham/dashboard/adding/]addsuffix<rootPol>] }}}
+    setupState={{{ [[$:/state/outline/dashboard/parent-setup/]addsuffix<rootPol>] }}}
+    addingState={{{ [[$:/state/outline/dashboard/adding/]addsuffix<rootPol>] }}}
   >
     <div class="dashboard-edit-panel dashboard-parent-setup-panel">
       <p>Configure subsections:</p>
       <div class="dashboard-edit-field">
         <label>Display style:</label>
-        <$select tiddler="$:/temp/rham/setup/display-style" field="text" default="outline" class="dashboard-edit-select">
-          <option value="heading2">Heading 2</option>
-          <option value="heading3-upper">Heading 3 (uppercase)</option>
-          <option value="heading3-underline">Heading 3 (underline)</option>
-          <option value="list">Numbered list</option>
-          <option value="outline">Outline</option>
-          <option value="outline-block">Outline block</option>
-          <option value="definition">Definition</option>
-          <option value="definition-inline">Definition (inline)</option>
-          <option value="definition-quoted">Definition (quoted)</option>
-          <option value="definition-prequoted">Definition (pre-quoted)</option>
-          <option value="plain">Plain</option>
-        </$select>
+        <$transclude $variable="outline-display-style-select" tid="$:/temp/outline/setup/display-style" field="text"/>
       </div>
       <div class="dashboard-edit-field">
         <label>Marker style:</label>
-        <$select tiddler="$:/temp/rham/setup/marker-style" field="text" default="1" class="dashboard-edit-select">
+        <$select tiddler="$:/temp/outline/setup/marker-style" field="text" default="1" class="dashboard-edit-select">
           <option value="I">I, II, III...</option>
           <option value="A">A, B, C...</option>
           <option value="1">1, 2, 3...</option>
@@ -65,20 +61,21 @@ type: text/vnd.tiddlywiki
 
 \procedure dashboard-section-editor(mode, child, parent, rootPol)
   <$let
-    editingState={{{ [[$:/state/rham/dashboard/editing/]addsuffix<rootPol>] }}}
-    addingState={{{ [[$:/state/rham/dashboard/adding/]addsuffix<rootPol>] }}}
-    stype={{{ [<child>suffix[(history)]then[history]] :else[<child>suffix[(legal)]then[legal]] }}}
+    editingState={{{ [[$:/state/outline/dashboard/editing/]addsuffix<rootPol>] }}}
+    addingState={{{ [[$:/state/outline/dashboard/adding/]addsuffix<rootPol>] }}}
+    rawSuffix={{{ [<child>search-replace::regexp<markerRegex>,[$1]] }}}
+    isSpecial={{{ [function[outline-is-special],<rawSuffix>] }}}
   >
     <div class="dashboard-edit-panel">
       <% if [<mode>match[add]] %>
         <div class="dashboard-edit-field">
           <label>Marker:</label>
-          <span class="dashboard-marker-readonly">(<$text text={{{ [{$:/temp/rham/add/marker}] }}}/>)</span>
+          <span class="dashboard-marker-readonly">(<$text text={{{ [{$:/temp/outline/add/marker}] }}}/>)</span>
         </div>
-      <% elseif [<stype>is[blank]] %>
+      <% elseif [<isSpecial>match[no]] %>
         <div class="dashboard-edit-field">
           <label>Marker:</label>
-          <span class="dashboard-marker-readonly">(<$text text={{{ [<child>search-replace::regexp<markerRegex>,[$1]] }}}/>)</span>
+          <span class="dashboard-marker-readonly">(<$text text=<<rawSuffix>>/>)</span>
         </div>
       <% endif %>
       <div class="dashboard-edit-field">
@@ -86,26 +83,14 @@ type: text/vnd.tiddlywiki
         <% if [<mode>match[edit]] %>
           <$edit-text tiddler=<<child>> field="caption" tag="input" class="dashboard-edit-input"/>
         <% else %>
-          <$edit-text tiddler="$:/temp/rham/add/caption" field="text" tag="input" class="dashboard-edit-input" placeholder="Section title"/>
+          <$edit-text tiddler="$:/temp/outline/add/caption" field="text" tag="input" class="dashboard-edit-input" placeholder="Section title"/>
         <% endif %>
       </div>
       <% if [<mode>match[edit]] %>
         <$list filter="[all[tiddlers]prefix<child>] :filter[removeprefix<child>split[(]count[]match[2]] +[first[]]" variable="ignore">
           <div class="dashboard-edit-field">
             <label>Display style:</label>
-            <$select tiddler=<<child>> field="display-style" class="dashboard-edit-select">
-              <option value="heading2">Heading 2</option>
-              <option value="heading3-upper">Heading 3 (uppercase)</option>
-              <option value="heading3-underline">Heading 3 (underline)</option>
-              <option value="list">Numbered list</option>
-              <option value="outline">Outline</option>
-              <option value="outline-block">Outline block</option>
-              <option value="definition">Definition</option>
-              <option value="definition-inline">Definition (inline)</option>
-              <option value="definition-quoted">Definition (quoted)</option>
-              <option value="definition-prequoted">Definition (pre-quoted)</option>
-              <option value="plain">Plain</option>
-            </$select>
+            <$transclude $variable="outline-display-style-select" tid=<<child>>/>
           </div>
         </$list>
       <% endif %>
@@ -114,7 +99,7 @@ type: text/vnd.tiddlywiki
         <% if [<mode>match[edit]] %>
           <$transclude $variable="dashboard-text-editor" tid=<<child>>/>
         <% else %>
-          <$transclude $variable="dashboard-text-editor" tid="$:/temp/rham/add/content"/>
+          <$transclude $variable="dashboard-text-editor" tid="$:/temp/outline/add/content"/>
         <% endif %>
       </div>
     </div>
@@ -122,16 +107,17 @@ type: text/vnd.tiddlywiki
 \end dashboard-section-editor
 
 \procedure dashboard-delete-tree(pol)
-  <$list filter="[all[tiddlers]prefix<pol>] :filter[removeprefix<pol>split[(]count[]match[2]] +[sortsub:string<byPolNbr>]" variable="desc">
+  <$list filter="[all[tiddlers]prefix<pol>] :filter[removeprefix<pol>split[(]count[]match[2]] +[sortsub:string<outlineOrder>]" variable="desc">
     <$let
-      marker={{{ [<desc>search-replace::regexp<markerRegex>,[$1]] }}}
-      stype={{{ [<desc>suffix[(history)]then[history]] :else[<desc>suffix[(legal)]then[legal]] }}}
+      rawSuffix={{{ [<desc>search-replace::regexp<markerRegex>,[$1]] }}}
+      isSpecial={{{ [function[outline-is-special],<rawSuffix>] }}}
     >
       <div class="dashboard-delete-tree-item">
         <span class="dashboard-node-marker">
-          <% if [<stype>match[history]] %>History
-          <% elseif [<stype>match[legal]] %>Legal References
-          <% else %>(<$text text=<<marker>>/>)
+          <% if [<isSpecial>match[yes]] %>
+            <$text text={{{ [function[outline-special-caption],<rawSuffix>] }}}/>
+          <% else %>
+            (<$text text=<<rawSuffix>>/>)
           <% endif %>
         </span>&nbsp;<$text text={{{ [<desc>get[caption]] }}}/>
         <$transclude $variable="dashboard-delete-tree" pol=<<desc>>/>
@@ -142,12 +128,13 @@ type: text/vnd.tiddlywiki
 
 \procedure dashboard-delete-confirm(child, rootPol)
   <$let
-    deletingState={{{ [[$:/state/rham/dashboard/deleting/]addsuffix<rootPol>] }}}
+    deletingState={{{ [[$:/state/outline/dashboard/deleting/]addsuffix<rootPol>] }}}
     descendantCount={{{ [all[tiddlers]prefix<child>] -[<child>] +[count[]] }}}
     caption={{{ [<child>get[caption]] }}}
     parentPrefix={{{ [<child>search-replace::regexp[\([^\(\)]+\)$],[]] }}}
-    stype={{{ [<child>suffix[(history)]then[history]] :else[<child>suffix[(legal)]then[legal]] }}}
-    laterSiblings={{{ [all[tiddlers]prefix<parentPrefix>] :filter[removeprefix<parentPrefix>split[(]count[]match[2]] :filter[!suffix[(history)]!suffix[(legal)]] +[sortsub:string<byPolNbr>allafter<child>] }}}
+    rawSuffix={{{ [<child>search-replace::regexp<markerRegex>,[$1]] }}}
+    isSpecial={{{ [function[outline-is-special],<rawSuffix>] }}}
+    laterSiblings={{{ [all[tiddlers]prefix<parentPrefix>] :filter[removeprefix<parentPrefix>split[(]count[]match[2]] :filter[<currentTiddler>outline-sort-key[]!prefix[!]!prefix[~]] +[sortsub:string<outlineOrder>allafter<child>] }}}
   >
     <div class="dashboard-edit-panel dashboard-delete-panel">
       <p>
@@ -158,14 +145,14 @@ type: text/vnd.tiddlywiki
           <$transclude $variable="dashboard-delete-tree" pol=<<child>>/>
         </div>
       <% endif %>
-      <% if [<stype>is[blank]] %>
-        <$list filter="[all[tiddlers]prefix<parentPrefix>] :filter[removeprefix<parentPrefix>split[(]count[]match[2]] :filter[!suffix[(history)]!suffix[(legal)]] +[sortsub:string<byPolNbr>allafter<child>first[]]" variable="ignore">
+      <% if [<isSpecial>match[no]] %>
+        <$list filter="[all[tiddlers]prefix<parentPrefix>] :filter[removeprefix<parentPrefix>split[(]count[]match[2]] :filter[<currentTiddler>outline-sort-key[]!prefix[!]!prefix[~]] +[sortsub:string<outlineOrder>allafter<child>first[]]" variable="ignore">
           <p class="dashboard-renumber-note">The following sections will be renumbered:</p>
           <div class="dashboard-rename-scroll">
             <table class="dashboard-rename-table">
               <thead><tr><th>Current</th><th>Caption</th><th>New</th></tr></thead>
               <tbody>
-                <$list filter="[all[tiddlers]prefix<parentPrefix>] :filter[removeprefix<parentPrefix>split[(]count[]match[2]] :filter[!suffix[(history)]!suffix[(legal)]] +[sortsub:string<byPolNbr>allafter<child>]" variable="laterSib">
+                <$list filter="[all[tiddlers]prefix<parentPrefix>] :filter[removeprefix<parentPrefix>split[(]count[]match[2]] :filter[<currentTiddler>outline-sort-key[]!prefix[!]!prefix[~]] +[sortsub:string<outlineOrder>allafter<child>]" variable="laterSib">
                   <$let
                     laterMarker={{{ [<laterSib>search-replace::regexp<markerRegex>,[$1]] }}}
                     newMarker={{{ [<laterMarker>prev-marker[]] }}}
@@ -188,8 +175,8 @@ type: text/vnd.tiddlywiki
           <$list filter="[all[tiddlers]prefix<child>] :filter[removeprefix<child>prefix[(]]" variable="toDelete">
             <$action-deletetiddler $tiddler=<<toDelete>>/>
           </$list>
-          <% if [<stype>is[blank]] %>
-            <$list filter="[all[tiddlers]prefix<parentPrefix>] :filter[removeprefix<parentPrefix>split[(]count[]match[2]] :filter[!suffix[(history)]!suffix[(legal)]] +[sortsub:string<byPolNbr>allafter<child>]" variable="laterSib">
+          <% if [<isSpecial>match[no]] %>
+            <$list filter="[all[tiddlers]prefix<parentPrefix>] :filter[removeprefix<parentPrefix>split[(]count[]match[2]] :filter[<currentTiddler>outline-sort-key[]!prefix[!]!prefix[~]] +[sortsub:string<outlineOrder>allafter<child>]" variable="laterSib">
               <$let
                 laterMarker={{{ [<laterSib>search-replace::regexp<markerRegex>,[$1]] }}}
                 newMarker={{{ [<laterMarker>prev-marker[]] }}}
@@ -213,8 +200,8 @@ type: text/vnd.tiddlywiki
 
 \procedure dashboard-move-confirm(rootPol)
   <$let
-    movingState={{{ [[$:/state/rham/dashboard/moving/]addsuffix<rootPol>] }}}
-    moveTargetState={{{ [[$:/state/rham/dashboard/move-target/]addsuffix<rootPol>] }}}
+    movingState={{{ [[$:/state/outline/dashboard/moving/]addsuffix<rootPol>] }}}
+    moveTargetState={{{ [[$:/state/outline/dashboard/move-target/]addsuffix<rootPol>] }}}
     movingNode={{{ [<movingState>get[text]] }}}
     targetInfo={{{ [<moveTargetState>get[text]] }}}
     targetParent={{{ [<targetInfo>split[|]first[]] }}}
@@ -243,9 +230,9 @@ type: text/vnd.tiddlywiki
       <div class="dashboard-edit-buttons">
         <$button class="dashboard-btn dashboard-btn-save">
           <!-- Phase 1: Move source to temp -->
-          <$action-rename-tree $from=<<movingNode>> $to="$:/temp/rham/move/"/>
+          <$action-rename-tree $from=<<movingNode>> $to="$:/temp/outline/move/"/>
           <!-- Phase 2: Close gap at source -->
-          <$list filter="[all[tiddlers]prefix<sourceParent>] :filter[removeprefix<sourceParent>split[(]count[]match[2]] :filter[!suffix[(history)]!suffix[(legal)]] +[sortsub:string<byPolNbr>allafter<movingNode>]" variable="laterSib">
+          <$list filter="[all[tiddlers]prefix<sourceParent>] :filter[removeprefix<sourceParent>split[(]count[]match[2]] :filter[<currentTiddler>outline-sort-key[]!prefix[!]!prefix[~]] +[sortsub:string<outlineOrder>allafter<movingNode>]" variable="laterSib">
             <$let
               laterMarker={{{ [<laterSib>search-replace::regexp<markerRegex>,[$1]] }}}
               newMarker={{{ [<laterMarker>prev-marker[]] }}}
@@ -257,7 +244,7 @@ type: text/vnd.tiddlywiki
           <!-- Phase 3: Open slot at target and place node -->
           <% if [<targetBefore>!match[end]] %>
             <!-- Shift target siblings at and after targetBefore (in reverse to avoid collision) -->
-            <$list filter="[all[tiddlers]prefix<targetParent>] :filter[removeprefix<targetParent>split[(]count[]match[2]] :filter[!suffix[(history)]!suffix[(legal)]] +[sortsub:string<byPolNbr>rest[]] -[allbefore<targetBefore>] +[reverse[]]" variable="shiftSib">
+            <$list filter="[all[tiddlers]prefix<targetParent>] :filter[removeprefix<targetParent>split[(]count[]match[2]] :filter[<currentTiddler>outline-sort-key[]!prefix[!]!prefix[~]] +[sortsub:string<outlineOrder>rest[]] -[allbefore<targetBefore>] +[reverse[]]" variable="shiftSib">
               <$let
                 shiftMarker={{{ [<shiftSib>search-replace::regexp<markerRegex>,[$1]] }}}
                 shiftNewMarker={{{ [<shiftMarker>next-marker[]] }}}
@@ -271,17 +258,17 @@ type: text/vnd.tiddlywiki
               insertMarker={{{ [<targetBefore>search-replace::regexp<markerRegex>,[$1]] }}}
               finalTitle={{{ [<targetParent>addsuffix[(]addsuffix<insertMarker>addsuffix[)]] }}}
             >
-              <$action-rename-tree $from="$:/temp/rham/move/" $to=<<finalTitle>>/>
+              <$action-rename-tree $from="$:/temp/outline/move/" $to=<<finalTitle>>/>
             </$let>
           <% else %>
             <!-- Append as last child -->
             <$let
-              lastAtTarget={{{ [all[tiddlers]prefix<targetParent>] :filter[removeprefix<targetParent>split[(]count[]match[2]] :filter[!suffix[(history)]!suffix[(legal)]] +[sortsub:string<byPolNbr>last[]] }}}
+              lastAtTarget={{{ [all[tiddlers]prefix<targetParent>] :filter[removeprefix<targetParent>split[(]count[]match[2]] :filter[<currentTiddler>outline-sort-key[]!prefix[!]!prefix[~]] +[sortsub:string<outlineOrder>last[]] }}}
               lastMarker={{{ [<lastAtTarget>search-replace::regexp<markerRegex>,[$1]] }}}
               newMarker={{{ [<lastMarker>next-marker[]] :else[[1]] +[first[]] }}}
               finalTitle={{{ [<targetParent>addsuffix[(]addsuffix<newMarker>addsuffix[)]] }}}
             >
-              <$action-rename-tree $from="$:/temp/rham/move/" $to=<<finalTitle>>/>
+              <$action-rename-tree $from="$:/temp/outline/move/" $to=<<finalTitle>>/>
             </$let>
           <% endif %>
           <$action-setfield $tiddler=<<movingState>> text=""/>
@@ -299,29 +286,32 @@ type: text/vnd.tiddlywiki
 
 \procedure dashboard-node(pol, rootPol)
   <$let
-    addingState={{{ [[$:/state/rham/dashboard/adding/]addsuffix<rootPol>] }}}
-    setupState={{{ [[$:/state/rham/dashboard/parent-setup/]addsuffix<rootPol>] }}}
-    movingState={{{ [[$:/state/rham/dashboard/moving/]addsuffix<rootPol>] }}}
-    moveTargetState={{{ [[$:/state/rham/dashboard/move-target/]addsuffix<rootPol>] }}}
+    addingState={{{ [[$:/state/outline/dashboard/adding/]addsuffix<rootPol>] }}}
+    setupState={{{ [[$:/state/outline/dashboard/parent-setup/]addsuffix<rootPol>] }}}
+    movingState={{{ [[$:/state/outline/dashboard/moving/]addsuffix<rootPol>] }}}
+    moveTargetState={{{ [[$:/state/outline/dashboard/move-target/]addsuffix<rootPol>] }}}
     isMoving={{{ [<movingState>get[text]!is[blank]then[yes]else[no]] }}}
     movingNode={{{ [<movingState>get[text]] }}}
   >
-    <$list filter="[all[tiddlers]prefix<pol>] :filter[removeprefix<pol>split[(]count[]match[2]] +[sortsub:string<byPolNbr>]" variable="child">
+    <$list filter="[all[tiddlers]prefix<pol>] :filter[removeprefix<pol>split[(]count[]match[2]] +[sortsub:string<outlineOrder>]" variable="child">
       <$let
-        marker={{{ [<child>search-replace::regexp<markerRegex>,[$1]] }}}
-        stype={{{ [<child>suffix[(history)]then[history]] :else[<child>suffix[(legal)]then[legal]] }}}
+        rawSuffix={{{ [<child>search-replace::regexp<markerRegex>,[$1]] }}}
+        isSpecial={{{ [function[outline-is-special],<rawSuffix>] }}}
+        specialCaption={{{ [function[outline-special-caption],<rawSuffix>] }}}
+        isMandatory={{{ [function[outline-all-special-sections]] :filter[get[suffix]match<rawSuffix>] :filter[get[mandatory]match[yes]] +[count[]compare:integer:gt[0]then[yes]else[no]] }}}
+        marker={{{ [<isSpecial>match[yes]then[]] :else[<rawSuffix>] +[first[]] }}}
         hasChildren={{{ [all[tiddlers]prefix<child>] :filter[removeprefix<child>split[(]count[]match[2]] +[count[]] }}}
-        editingState={{{ [[$:/state/rham/dashboard/editing/]addsuffix<rootPol>] }}}
+        editingState={{{ [[$:/state/outline/dashboard/editing/]addsuffix<rootPol>] }}}
         isEditing={{{ [<editingState>get[text]match<child>then[yes]else[no]] }}}
         isAdding={{{ [<addingState>get[text]match<child>then[yes]else[no]] }}}
         isSettingUp={{{ [<setupState>get[text]match<child>then[yes]else[no]] }}}
-        lastChildOfNode={{{ [all[tiddlers]prefix<child>] :filter[removeprefix<child>split[(]count[]match[2]] :filter[!suffix[(history)]!suffix[(legal)]] +[sortsub:string<byPolNbr>last[]] }}}
+        lastChildOfNode={{{ [all[tiddlers]prefix<child>] :filter[removeprefix<child>split[(]count[]match[2]] :filter[<currentTiddler>outline-sort-key[]!prefix[!]!prefix[~]] +[sortsub:string<outlineOrder>last[]] }}}
         lastChildMarker={{{ [<lastChildOfNode>search-replace::regexp<markerRegex>,[$1]] }}}
         suggestedMarker={{{ [<lastChildMarker>next-marker[]] :else[[1]] +[first[]] }}}
-        prevSibling={{{ [all[tiddlers]prefix<pol>] :filter[removeprefix<pol>split[(]count[]match[2]] :filter[!suffix[(history)]!suffix[(legal)]] +[sortsub:string<byPolNbr>before<child>] }}}
-        nextSibling={{{ [all[tiddlers]prefix<pol>] :filter[removeprefix<pol>split[(]count[]match[2]] :filter[!suffix[(history)]!suffix[(legal)]] +[sortsub:string<byPolNbr>after<child>] }}}
+        prevSibling={{{ [all[tiddlers]prefix<pol>] :filter[removeprefix<pol>split[(]count[]match[2]] :filter[<currentTiddler>outline-sort-key[]!prefix[!]!prefix[~]] +[sortsub:string<outlineOrder>before<child>] }}}
+        nextSibling={{{ [all[tiddlers]prefix<pol>] :filter[removeprefix<pol>split[(]count[]match[2]] :filter[<currentTiddler>outline-sort-key[]!prefix[!]!prefix[~]] +[sortsub:string<outlineOrder>after<child>] }}}
       >
-        <% if [<isMoving>match[yes]] [<stype>is[blank]] +[allafter[yes]first[]match[]] %>
+        <% if [<isMoving>match[yes]] [<isSpecial>match[no]] +[allafter[yes]first[]match[]] %>
           <$let isDescendant={{{ [<child>removeprefix<movingNode>prefix[(]then[yes]] [<child>match<movingNode>then[yes]] +[first[]] }}}
           >
             <% if [<isDescendant>!match[yes]] %>
@@ -334,13 +324,11 @@ type: text/vnd.tiddlywiki
             <% endif %>
           </$let>
         <% endif %>
-        <div class={{{ [<stype>!is[blank]addprefix[dashboard-node dashboard-node-]] :else[<movingNode>match<child>then[dashboard-node dashboard-node-moving]] :else[[dashboard-node]] }}}>
+        <div class={{{ [<isSpecial>match[yes]addprefix[dashboard-node dashboard-node-]addsuffix<rawSuffix>] :else[<movingNode>match<child>then[dashboard-node dashboard-node-moving]] :else[[dashboard-node]] }}}>
           <div class="dashboard-node-header">
             <span class="dashboard-node-marker">
-              <% if [<stype>match[history]] %>
-                History
-              <% elseif [<stype>match[legal]] %>
-                Legal References
+              <% if [<isSpecial>match[yes]] %>
+                <$text text=<<specialCaption>>/>
               <% elseif [<marker>!is[blank]] %>
                 (<$text text=<<marker>>/>)
               <% endif %>
@@ -353,38 +341,38 @@ type: text/vnd.tiddlywiki
                   Save
                 </$button>
                 <$button class="dashboard-btn">
-                  <$action-setfield $tiddler=<<child>> caption={{{ [{$:/temp/rham/edit/caption}] }}}/>
-                  <$action-setfield $tiddler=<<child>> text={{{ [{$:/temp/rham/edit/text}] }}}/>
-                  <$action-setfield $tiddler=<<child>> display-style={{{ [{$:/temp/rham/edit/display-style}] }}}/>
+                  <$action-setfield $tiddler=<<child>> caption={{{ [{$:/temp/outline/edit/caption}] }}}/>
+                  <$action-setfield $tiddler=<<child>> text={{{ [{$:/temp/outline/edit/text}] }}}/>
+                  <$action-setfield $tiddler=<<child>> display-style={{{ [{$:/temp/outline/edit/display-style}] }}}/>
                   <$action-setfield $tiddler=<<editingState>> text=""/>
                   Cancel
                 </$button>
               <% elseif [<isAdding>match[yes]] %>
                 <$let
-                  newMarker={{{ [{$:/temp/rham/add/marker}] }}}
+                  newMarker={{{ [{$:/temp/outline/add/marker}] }}}
                   newTitle={{{ [<child>addsuffix[(]addsuffix<newMarker>addsuffix[)]] }}}
-                  newCaption={{{ [{$:/temp/rham/add/caption}!is[blank]] :else[[New Section]] +[first[]] }}}
-                  newContent={{{ [{$:/temp/rham/add/content}] }}}
+                  newCaption={{{ [{$:/temp/outline/add/caption}!is[blank]] :else[[New Section]] +[first[]] }}}
+                  newContent={{{ [{$:/temp/outline/add/content}] }}}
                 >
                   <$button class="dashboard-btn dashboard-btn-save">
                     <$action-createtiddler $basetitle=<<newTitle>> caption=<<newCaption>> tags=<<child>> type="text/vnd.tiddlywiki" text=<<newContent>>/>
                     <$action-setfield $tiddler=<<addingState>> text=""/>
-                    <$action-deletetiddler $tiddler="$:/temp/rham/add/marker"/>
-                    <$action-deletetiddler $tiddler="$:/temp/rham/add/caption"/>
-                    <$action-deletetiddler $tiddler="$:/temp/rham/add/content"/>
+                    <$action-deletetiddler $tiddler="$:/temp/outline/add/marker"/>
+                    <$action-deletetiddler $tiddler="$:/temp/outline/add/caption"/>
+                    <$action-deletetiddler $tiddler="$:/temp/outline/add/content"/>
                     Save
                   </$button>
                   <$button class="dashboard-btn">
                     <$action-setfield $tiddler=<<addingState>> text=""/>
-                    <$action-deletetiddler $tiddler="$:/temp/rham/add/marker"/>
-                    <$action-deletetiddler $tiddler="$:/temp/rham/add/caption"/>
-                    <$action-deletetiddler $tiddler="$:/temp/rham/add/content"/>
+                    <$action-deletetiddler $tiddler="$:/temp/outline/add/marker"/>
+                    <$action-deletetiddler $tiddler="$:/temp/outline/add/caption"/>
+                    <$action-deletetiddler $tiddler="$:/temp/outline/add/content"/>
                     Cancel
                   </$button>
                 </$let>
               <% elseif [<isSettingUp>match[yes]] %>
                 <$button class="dashboard-btn dashboard-btn-save">
-                  <$action-setfield $tiddler=<<child>> display-style={{{ [{$:/temp/rham/setup/display-style}!is[blank]] :else[[outline]] +[first[]] }}}/>
+                  <$action-setfield $tiddler=<<child>> display-style={{{ [{$:/temp/outline/setup/display-style}!is[blank]] :else[[outline]] +[first[]] }}}/>
                   <$list filter="[<child>get[text]!search[<<sections>>]]" variable="ignore">
                     <$let newText=`${ [<child>get[text]] }$
 
@@ -392,31 +380,31 @@ type: text/vnd.tiddlywiki
                       <$action-setfield $tiddler=<<child>> text=<<newText>>/>
                     </$let>
                   </$list>
-                  <$action-setfield $tiddler="$:/temp/rham/add/marker" text={{{ [{$:/temp/rham/setup/marker-style}!is[blank]] :else[[1]] +[first[]] }}}/>
+                  <$action-setfield $tiddler="$:/temp/outline/add/marker" text={{{ [{$:/temp/outline/setup/marker-style}!is[blank]] :else[[1]] +[first[]] }}}/>
                   <$action-setfield $tiddler=<<setupState>> text=""/>
                   <$action-setfield $tiddler=<<addingState>> text=<<child>>/>
-                  <$action-deletetiddler $tiddler="$:/temp/rham/setup/display-style"/>
-                  <$action-deletetiddler $tiddler="$:/temp/rham/setup/marker-style"/>
+                  <$action-deletetiddler $tiddler="$:/temp/outline/setup/display-style"/>
+                  <$action-deletetiddler $tiddler="$:/temp/outline/setup/marker-style"/>
                   Continue
                 </$button>
                 <$button class="dashboard-btn">
                   <$action-setfield $tiddler=<<setupState>> text=""/>
-                  <$action-deletetiddler $tiddler="$:/temp/rham/setup/display-style"/>
-                  <$action-deletetiddler $tiddler="$:/temp/rham/setup/marker-style"/>
+                  <$action-deletetiddler $tiddler="$:/temp/outline/setup/display-style"/>
+                  <$action-deletetiddler $tiddler="$:/temp/outline/setup/marker-style"/>
                   Cancel
                 </$button>
               <% else %>
                 <$button class="tc-btn-invisible dashboard-btn">
-                  <$action-setfield $tiddler="$:/temp/rham/edit/caption" text={{{ [<child>get[caption]] }}}/>
-                  <$action-setfield $tiddler="$:/temp/rham/edit/text" text={{{ [<child>get[text]] }}}/>
-                  <$action-setfield $tiddler="$:/temp/rham/edit/display-style" text={{{ [<child>get[display-style]] }}}/>
+                  <$action-setfield $tiddler="$:/temp/outline/edit/caption" text={{{ [<child>get[caption]] }}}/>
+                  <$action-setfield $tiddler="$:/temp/outline/edit/text" text={{{ [<child>get[text]] }}}/>
+                  <$action-setfield $tiddler="$:/temp/outline/edit/display-style" text={{{ [<child>get[display-style]] }}}/>
                   <$action-setfield $tiddler=<<editingState>> text=<<child>>/>
                   edit
                 </$button>
-                <% if [<stype>is[blank]] %>
+                <% if [<isSpecial>match[no]] %>
                   <% if [<hasChildren>compare:integer:gt[0]] %>
                     <$button class="tc-btn-invisible dashboard-btn">
-                      <$action-setfield $tiddler="$:/temp/rham/add/marker" text=<<suggestedMarker>>/>
+                      <$action-setfield $tiddler="$:/temp/outline/add/marker" text=<<suggestedMarker>>/>
                       <$action-setfield $tiddler=<<addingState>> text=<<child>>/>
                       + child
                     </$button>
@@ -427,33 +415,33 @@ type: text/vnd.tiddlywiki
                     </$button>
                   <% endif %>
                 <% endif %>
-                <% if [<stype>is[blank]] %>
+                <% if [<isSpecial>match[no]] %>
                   <% if [<prevSibling>!is[blank]] %>
                     <$button class="tc-btn-invisible dashboard-btn dashboard-btn-move">
-                      <$action-rename-tree $from=<<child>> $to="$:/temp/rham/swap/"/>
+                      <$action-rename-tree $from=<<child>> $to="$:/temp/outline/swap/"/>
                       <$action-rename-tree $from=<<prevSibling>> $to=<<child>>/>
-                      <$action-rename-tree $from="$:/temp/rham/swap/" $to=<<prevSibling>>/>
+                      <$action-rename-tree $from="$:/temp/outline/swap/" $to=<<prevSibling>>/>
                       &#9650;
                     </$button>
                   <% endif %>
                   <% if [<nextSibling>!is[blank]] %>
                     <$button class="tc-btn-invisible dashboard-btn dashboard-btn-move">
-                      <$action-rename-tree $from=<<child>> $to="$:/temp/rham/swap/"/>
+                      <$action-rename-tree $from=<<child>> $to="$:/temp/outline/swap/"/>
                       <$action-rename-tree $from=<<nextSibling>> $to=<<child>>/>
-                      <$action-rename-tree $from="$:/temp/rham/swap/" $to=<<nextSibling>>/>
+                      <$action-rename-tree $from="$:/temp/outline/swap/" $to=<<nextSibling>>/>
                       &#9660;
                     </$button>
                   <% endif %>
                 <% endif %>
-                <% if [<stype>is[blank]] %>
+                <% if [<isSpecial>match[no]] %>
                   <$button class="tc-btn-invisible dashboard-btn">
                     <$action-setfield $tiddler=<<movingState>> text=<<child>>/>
                     move
                   </$button>
                 <% endif %>
-                <% if [<stype>!match[history]] %>
+                <% if [<isMandatory>match[no]] %>
                   <$button class="tc-btn-invisible dashboard-btn dashboard-btn-danger">
-                    <$action-setfield $tiddler={{{ [[$:/state/rham/dashboard/deleting/]addsuffix<rootPol>] }}} text=<<child>>/>
+                    <$action-setfield $tiddler={{{ [[$:/state/outline/dashboard/deleting/]addsuffix<rootPol>] }}} text=<<child>>/>
                     delete
                   </$button>
                 <% endif %>
@@ -463,7 +451,7 @@ type: text/vnd.tiddlywiki
           <$reveal type="match" stateTitle=<<editingState>> text=<<child>> animate="yes">
             <$transclude $variable="dashboard-section-editor" mode="edit" child=<<child>> parent=<<pol>> rootPol=<<rootPol>>/>
           </$reveal>
-          <$reveal type="match" stateTitle={{{ [[$:/state/rham/dashboard/deleting/]addsuffix<rootPol>] }}} text=<<child>> animate="yes">
+          <$reveal type="match" stateTitle={{{ [[$:/state/outline/dashboard/deleting/]addsuffix<rootPol>] }}} text=<<child>> animate="yes">
             <$transclude $variable="dashboard-delete-confirm" child=<<child>> rootPol=<<rootPol>>/>
           </$reveal>
           <$reveal type="match" stateTitle=<<setupState>> text=<<child>> animate="yes">
@@ -472,7 +460,7 @@ type: text/vnd.tiddlywiki
           <% if [<hasChildren>compare:integer:gt[0]] %>
             <div class="dashboard-children">
               <$transclude $variable="dashboard-node" pol=<<child>> rootPol=<<rootPol>>/>
-              <% if [<isMoving>match[yes]] [<stype>is[blank]] +[allafter[yes]first[]match[]] %>
+              <% if [<isMoving>match[yes]] [<isSpecial>match[no]] +[allafter[yes]first[]match[]] %>
                 <$let isDescendant={{{ [<child>removeprefix<movingNode>search[(]count[]compare:integer:gt[0]then[yes]] [<child>match<movingNode>then[yes]] +[first[]] }}}>
                   <% if [<isDescendant>!match[yes]] %>
                     <div class="dashboard-move-target">
@@ -495,36 +483,6 @@ type: text/vnd.tiddlywiki
   </$let>
 \end dashboard-node
 
-\procedure dashboard-header-panel(pol)
-  <div class="dashboard-edit-panel">
-    <div class="dashboard-edit-field">
-      <label>Policy number:</label>
-      <$edit-text tiddler=<<pol>> field="policy-nbr" tag="input" class="dashboard-edit-input"/>
-    </div>
-    <div class="dashboard-edit-field">
-      <label>Title:</label>
-      <$edit-text tiddler=<<pol>> field="description" tag="input" class="dashboard-edit-input"/>
-    </div>
-    <div class="dashboard-edit-field">
-      <label>Caption (number + title):</label>
-      <$edit-text tiddler=<<pol>> field="caption" tag="input" class="dashboard-edit-input"/>
-    </div>
-    <div class="dashboard-edit-field">
-      <label>Display style:</label>
-      <$select tiddler=<<pol>> field="display-style" class="dashboard-edit-select">
-        <option value="heading2">Heading 2</option>
-        <option value="heading3-upper">Heading 3 (uppercase)</option>
-        <option value="heading3-underline">Heading 3 (underline)</option>
-        <option value="list">Numbered list</option>
-        <option value="outline">Outline</option>
-        <option value="outline-block">Outline block</option>
-        <option value="definition">Definition</option>
-        <option value="plain">Plain</option>
-      </$select>
-    </div>
-  </div>
-\end dashboard-header-panel
-
 \procedure dashboard-preview-content(child)
 <$let rawText={{{ [<child>get[text]search-replace[<<sections>>],[]] }}}>
 <$transclude $variable="rawText" $mode="block"/>
@@ -533,22 +491,22 @@ type: text/vnd.tiddlywiki
 
 \procedure dashboard-preview-node(pol, rootPol)
   <$let
-    editingState={{{ [[$:/state/rham/dashboard/editing/]addsuffix<rootPol>] }}}
+    editingState={{{ [[$:/state/outline/dashboard/editing/]addsuffix<rootPol>] }}}
   >
-    <$list filter="[all[tiddlers]prefix<pol>] :filter[removeprefix<pol>split[(]count[]match[2]] +[sortsub:string<byPolNbr>]" variable="child">
+    <$list filter="[all[tiddlers]prefix<pol>] :filter[removeprefix<pol>split[(]count[]match[2]] +[sortsub:string<outlineOrder>]" variable="child">
       <$let
-        marker={{{ [<child>search-replace::regexp<markerRegex>,[$1]] }}}
-        stype={{{ [<child>suffix[(history)]then[history]] :else[<child>suffix[(legal)]then[legal]] }}}
+        rawSuffix={{{ [<child>search-replace::regexp<markerRegex>,[$1]] }}}
+        isSpecial={{{ [function[outline-is-special],<rawSuffix>] }}}
+        specialCaption={{{ [function[outline-special-caption],<rawSuffix>] }}}
+        marker={{{ [<isSpecial>match[yes]then[]] :else[<rawSuffix>] +[first[]] }}}
         hasChildren={{{ [all[tiddlers]prefix<child>] :filter[removeprefix<child>split[(]count[]match[2]] +[count[]] }}}
         isEditing={{{ [<editingState>get[text]match<child>then[yes]else[no]] }}}
       >
-        <div class={{{ [<stype>!is[blank]addprefix[dashboard-preview-section dashboard-preview-section-]] :else[[dashboard-preview-section]] }}}>
+        <div class={{{ [<isSpecial>match[yes]addprefix[dashboard-preview-section dashboard-preview-section-]addsuffix<rawSuffix>] :else[[dashboard-preview-section]] }}}>
           <div class="dashboard-preview-heading">
             <span class="dashboard-preview-marker">
-              <% if [<stype>match[history]] %>
-                History
-              <% elseif [<stype>match[legal]] %>
-                Legal References
+              <% if [<isSpecial>match[yes]] %>
+                <$text text=<<specialCaption>>/>
               <% elseif [<marker>!is[blank]] %>
                 (<$text text=<<marker>>/>)
               <% endif %>
@@ -561,17 +519,17 @@ type: text/vnd.tiddlywiki
                   Save
                 </$button>
                 <$button class="dashboard-btn">
-                  <$action-setfield $tiddler=<<child>> caption={{{ [{$:/temp/rham/edit/caption}] }}}/>
-                  <$action-setfield $tiddler=<<child>> text={{{ [{$:/temp/rham/edit/text}] }}}/>
-                  <$action-setfield $tiddler=<<child>> display-style={{{ [{$:/temp/rham/edit/display-style}] }}}/>
+                  <$action-setfield $tiddler=<<child>> caption={{{ [{$:/temp/outline/edit/caption}] }}}/>
+                  <$action-setfield $tiddler=<<child>> text={{{ [{$:/temp/outline/edit/text}] }}}/>
+                  <$action-setfield $tiddler=<<child>> display-style={{{ [{$:/temp/outline/edit/display-style}] }}}/>
                   <$action-setfield $tiddler=<<editingState>> text=""/>
                   Cancel
                 </$button>
               <% else %>
                 <$button class="tc-btn-invisible dashboard-btn">
-                  <$action-setfield $tiddler="$:/temp/rham/edit/caption" text={{{ [<child>get[caption]] }}}/>
-                  <$action-setfield $tiddler="$:/temp/rham/edit/text" text={{{ [<child>get[text]] }}}/>
-                  <$action-setfield $tiddler="$:/temp/rham/edit/display-style" text={{{ [<child>get[display-style]] }}}/>
+                  <$action-setfield $tiddler="$:/temp/outline/edit/caption" text={{{ [<child>get[caption]] }}}/>
+                  <$action-setfield $tiddler="$:/temp/outline/edit/text" text={{{ [<child>get[text]] }}}/>
+                  <$action-setfield $tiddler="$:/temp/outline/edit/display-style" text={{{ [<child>get[display-style]] }}}/>
                   <$action-setfield $tiddler=<<editingState>> text=<<child>>/>
                   edit
                 </$button>
@@ -597,19 +555,20 @@ type: text/vnd.tiddlywiki
   </$let>
 \end dashboard-preview-node
 
-\procedure policy-dashboard(pol)
+\procedure outline-dashboard(pol)
 <$let
   hasChildren={{{ [all[tiddlers]prefix<pol>] :filter[removeprefix<pol>split[(]count[]match[2]] +[count[]] }}}
-  lastChild={{{ [all[tiddlers]prefix<pol>] :filter[removeprefix<pol>split[(]count[]match[2]] :filter[!suffix[(history)]!suffix[(legal)]] +[sortsub:string<byPolNbr>last[]] }}}
+  lastChild={{{ [all[tiddlers]prefix<pol>] :filter[removeprefix<pol>split[(]count[]match[2]] :filter[<currentTiddler>outline-sort-key[]!prefix[!]!prefix[~]] +[sortsub:string<outlineOrder>last[]] }}}
   lastMarker={{{ [<lastChild>search-replace::regexp<markerRegex>,[$1]] }}}
   suggestedMarker={{{ [<lastMarker>next-marker[]] :else[[1]] +[first[]] }}}
-  modeState={{{ [[$:/state/rham/dashboard/mode/]addsuffix<pol>] }}}
+  modeState={{{ [[$:/state/outline/dashboard/mode/]addsuffix<pol>] }}}
   currentMode={{{ [<modeState>get[text]] :else[[preview]] +[first[]] }}}
+  outlineTag={{{ [function[outline-tag]] }}}
 >
 <div class="policy-dashboard">
   <div class="dashboard-title">
     <h2 class="dashboard-title-text"><$text text={{{ [<pol>get[caption]] }}}/></h2>
-    <$let headerState={{{ [[$:/state/rham/dashboard/header/]addsuffix<pol>] }}}>
+    <$let headerState={{{ [[$:/state/outline/dashboard/header/]addsuffix<pol>] }}}>
     <span class="dashboard-title-actions">
       <$reveal type="match" stateTitle=<<headerState>> text="open" tag="span">
         <$button class="dashboard-btn dashboard-btn-save">
@@ -617,20 +576,16 @@ type: text/vnd.tiddlywiki
           Save
         </$button>
         <$button class="dashboard-btn">
-          <$action-setfield $tiddler=<<pol>> policy-nbr={{{ [{$:/temp/rham/edit/header/policy-nbr}] }}}/>
-          <$action-setfield $tiddler=<<pol>> description={{{ [{$:/temp/rham/edit/header/description}] }}}/>
-          <$action-setfield $tiddler=<<pol>> caption={{{ [{$:/temp/rham/edit/header/caption}] }}}/>
-          <$action-setfield $tiddler=<<pol>> display-style={{{ [{$:/temp/rham/edit/header/display-style}] }}}/>
+          <$action-setfield $tiddler=<<pol>> caption={{{ [{$:/temp/outline/edit/header/caption}] }}}/>
+          <$action-setfield $tiddler=<<pol>> display-style={{{ [{$:/temp/outline/edit/header/display-style}] }}}/>
           <$action-setfield $tiddler=<<headerState>> text=""/>
           Cancel
         </$button>
       </$reveal>
       <$reveal type="nomatch" stateTitle=<<headerState>> text="open" tag="span">
         <$button class="tc-btn-invisible dashboard-btn">
-          <$action-setfield $tiddler="$:/temp/rham/edit/header/policy-nbr" text={{{ [<pol>get[policy-nbr]] }}}/>
-          <$action-setfield $tiddler="$:/temp/rham/edit/header/description" text={{{ [<pol>get[description]] }}}/>
-          <$action-setfield $tiddler="$:/temp/rham/edit/header/caption" text={{{ [<pol>get[caption]] }}}/>
-          <$action-setfield $tiddler="$:/temp/rham/edit/header/display-style" text={{{ [<pol>get[display-style]] }}}/>
+          <$action-setfield $tiddler="$:/temp/outline/edit/header/caption" text={{{ [<pol>get[caption]] }}}/>
+          <$action-setfield $tiddler="$:/temp/outline/edit/header/display-style" text={{{ [<pol>get[display-style]] }}}/>
           <$action-setfield $tiddler=<<headerState>> text="open"/>
           edit
         </$button>
@@ -639,11 +594,33 @@ type: text/vnd.tiddlywiki
     </$let>
   </div>
 
-  <$reveal type="match" stateTitle={{{ [[$:/state/rham/dashboard/header/]addsuffix<pol>] }}} text="open" animate="yes">
-    <$transclude $variable="dashboard-header-panel" pol=<<pol>>/>
+  <$reveal type="match" stateTitle={{{ [[$:/state/outline/dashboard/header/]addsuffix<pol>] }}} text="open" animate="yes">
+    <$transclude $variable="outline-header-panel" pol=<<pol>>/>
   </$reveal>
 
   <$transclude $variable="dashboard-draft-note-editor" pol=<<pol>>/>
+
+  <!-- Mandatory sections banner -->
+  <$let missingSections={{{ [function[outline-missing-mandatory],<pol>] }}}>
+    <% if [<missingSections>!is[blank]] %>
+      <div class="dashboard-mandatory-banner">
+        <span class="dashboard-mandatory-icon">&#9888;</span>
+        Missing required sections:
+        <$list filter="[function[outline-missing-mandatory],<pol>]" variable="missingSuffix">
+          <$button class="tc-btn-invisible dashboard-btn">
+            <$let
+              specialCfg={{{ [function[outline-special-config],<missingSuffix>] }}}
+              newTitle={{{ [<pol>addsuffix[(]addsuffix<missingSuffix>addsuffix[)]] }}}
+              newCaption={{{ [function[outline-special-caption],<missingSuffix>] }}}
+            >
+              <$action-createtiddler $basetitle=<<newTitle>> caption=<<newCaption>> tags=<<pol>> type="text/vnd.tiddlywiki"/>
+            </$let>
+            + <$text text={{{ [function[outline-special-caption],<missingSuffix>] }}}/>
+          </$button>
+        </$list>
+      </div>
+    <% endif %>
+  </$let>
 
   <div class="dashboard-mode-tabs">
     <$button class={{{ [<currentMode>match[preview]then[dashboard-tab dashboard-tab-active]] :else[[dashboard-tab]] +[first[]] }}}>
@@ -655,26 +632,28 @@ type: text/vnd.tiddlywiki
       Structure
     </$button>
     <span class="dashboard-tab-actions">
-      <% if [<pol>has[draft-of-policy]] %>
+      <% if [<pol>has[draft-of-outline]] %>
         <$transclude $variable="dashboard-promote-draft" pol=<<pol>>/>
       <% endif %>
-      <% if [<pol>!has[draft-of-policy]] %>
+      <% if [<pol>!has[draft-of-outline]] %>
         <$transclude $variable="dashboard-start-revision" pol=<<pol>>/>
       <% endif %>
+      <$let basePol={{{ [<pol>get[draft-of-outline]!is[blank]] :else[<pol>] +[first[]] }}}>
       <$button class="tc-btn-invisible dashboard-btn">
-        <$action-sendmessage $message="tm-close-tiddler" $param=<<pol>>/>
-        <$action-navigate $to=<<pol>>/>
-        <$action-sendmessage $message="tm-close-tiddler" $param="$:/_/rham/dashboard/view"/>
-        Back to Policy
+        <$action-sendmessage $message="tm-close-tiddler" $param=<<basePol>>/>
+        <$action-navigate $to=<<basePol>>/>
+        <$action-sendmessage $message="tm-close-tiddler" $param="$:/plugins/crosseye/outline/dashboard/view"/>
+        Back to <$text text=<<outlineTag>>/>
       </$button>
+      </$let>
     </span>
   </div>
 
   <$let
-    polAddingState={{{ [[$:/state/rham/dashboard/adding/]addsuffix<pol>] }}}
-    polSetupState={{{ [[$:/state/rham/dashboard/parent-setup/]addsuffix<pol>] }}}
-    movingState={{{ [[$:/state/rham/dashboard/moving/]addsuffix<pol>] }}}
-    moveTargetState={{{ [[$:/state/rham/dashboard/move-target/]addsuffix<pol>] }}}
+    polAddingState={{{ [[$:/state/outline/dashboard/adding/]addsuffix<pol>] }}}
+    polSetupState={{{ [[$:/state/outline/dashboard/parent-setup/]addsuffix<pol>] }}}
+    movingState={{{ [[$:/state/outline/dashboard/moving/]addsuffix<pol>] }}}
+    moveTargetState={{{ [[$:/state/outline/dashboard/move-target/]addsuffix<pol>] }}}
   >
 
   <$reveal type="nomatch" stateTitle=<<movingState>> text="" default="" animate="yes">
@@ -702,7 +681,7 @@ type: text/vnd.tiddlywiki
     </div>
   </$reveal>
 
-  <$reveal type="nomatch" stateTitle=<<modeState>> text="preview" animate="yes">
+  <$reveal type="nomatch" stateTitle=<<modeState>> default="preview" text="preview" animate="yes">
   <div class="dashboard-tree">
     <$transclude $variable="dashboard-node" pol=<<pol>> rootPol=<<pol>>/>
   </div>
@@ -712,7 +691,7 @@ type: text/vnd.tiddlywiki
         <span class="dashboard-node-caption">Configure subsections</span>
         <span class="dashboard-node-actions">
           <$button class="dashboard-btn dashboard-btn-save">
-            <$action-setfield $tiddler=<<pol>> display-style={{{ [{$:/temp/rham/setup/display-style}!is[blank]] :else[[outline]] +[first[]] }}}/>
+            <$action-setfield $tiddler=<<pol>> display-style={{{ [{$:/temp/outline/setup/display-style}!is[blank]] :else[[outline]] +[first[]] }}}/>
             <$list filter="[<pol>get[text]!search[<<sections>>]]" variable="ignore">
               <$let newText=`${ [<pol>get[text]] }$
 
@@ -720,17 +699,17 @@ type: text/vnd.tiddlywiki
                 <$action-setfield $tiddler=<<pol>> text=<<newText>>/>
               </$let>
             </$list>
-            <$action-setfield $tiddler="$:/temp/rham/add/marker" text={{{ [{$:/temp/rham/setup/marker-style}!is[blank]] :else[[1]] +[first[]] }}}/>
+            <$action-setfield $tiddler="$:/temp/outline/add/marker" text={{{ [{$:/temp/outline/setup/marker-style}!is[blank]] :else[[1]] +[first[]] }}}/>
             <$action-setfield $tiddler=<<polSetupState>> text=""/>
             <$action-setfield $tiddler=<<polAddingState>> text=<<pol>>/>
-            <$action-deletetiddler $tiddler="$:/temp/rham/setup/display-style"/>
-            <$action-deletetiddler $tiddler="$:/temp/rham/setup/marker-style"/>
+            <$action-deletetiddler $tiddler="$:/temp/outline/setup/display-style"/>
+            <$action-deletetiddler $tiddler="$:/temp/outline/setup/marker-style"/>
             Continue
           </$button>
           <$button class="dashboard-btn">
             <$action-setfield $tiddler=<<polSetupState>> text=""/>
-            <$action-deletetiddler $tiddler="$:/temp/rham/setup/display-style"/>
-            <$action-deletetiddler $tiddler="$:/temp/rham/setup/marker-style"/>
+            <$action-deletetiddler $tiddler="$:/temp/outline/setup/display-style"/>
+            <$action-deletetiddler $tiddler="$:/temp/outline/setup/marker-style"/>
             Cancel
           </$button>
         </span>
@@ -745,24 +724,24 @@ type: text/vnd.tiddlywiki
         <span class="dashboard-node-caption">New section</span>
         <span class="dashboard-node-actions">
           <$let
-            newMarker={{{ [{$:/temp/rham/add/marker}] }}}
+            newMarker={{{ [{$:/temp/outline/add/marker}] }}}
             newTitle={{{ [<pol>addsuffix[(]addsuffix<newMarker>addsuffix[)]] }}}
-            newCaption={{{ [{$:/temp/rham/add/caption}!is[blank]] :else[[New Section]] +[first[]] }}}
-            newContent={{{ [{$:/temp/rham/add/content}] }}}
+            newCaption={{{ [{$:/temp/outline/add/caption}!is[blank]] :else[[New Section]] +[first[]] }}}
+            newContent={{{ [{$:/temp/outline/add/content}] }}}
           >
             <$button class="dashboard-btn dashboard-btn-save">
               <$action-createtiddler $basetitle=<<newTitle>> caption=<<newCaption>> tags=<<pol>> type="text/vnd.tiddlywiki" text=<<newContent>>/>
               <$action-setfield $tiddler=<<polAddingState>> text=""/>
-              <$action-deletetiddler $tiddler="$:/temp/rham/add/marker"/>
-              <$action-deletetiddler $tiddler="$:/temp/rham/add/caption"/>
-              <$action-deletetiddler $tiddler="$:/temp/rham/add/content"/>
+              <$action-deletetiddler $tiddler="$:/temp/outline/add/marker"/>
+              <$action-deletetiddler $tiddler="$:/temp/outline/add/caption"/>
+              <$action-deletetiddler $tiddler="$:/temp/outline/add/content"/>
               Save
             </$button>
             <$button class="dashboard-btn">
               <$action-setfield $tiddler=<<polAddingState>> text=""/>
-              <$action-deletetiddler $tiddler="$:/temp/rham/add/marker"/>
-              <$action-deletetiddler $tiddler="$:/temp/rham/add/caption"/>
-              <$action-deletetiddler $tiddler="$:/temp/rham/add/content"/>
+              <$action-deletetiddler $tiddler="$:/temp/outline/add/marker"/>
+              <$action-deletetiddler $tiddler="$:/temp/outline/add/caption"/>
+              <$action-deletetiddler $tiddler="$:/temp/outline/add/content"/>
               Cancel
             </$button>
           </$let>
@@ -773,7 +752,7 @@ type: text/vnd.tiddlywiki
   </$reveal>
   </$reveal>
 
-  <$reveal type="match" stateTitle=<<modeState>> text="preview" animate="yes">
+  <$reveal type="match" stateTitle=<<modeState>> default="preview" text="preview" animate="yes">
   <div class="dashboard-preview">
     <$transclude $variable="dashboard-preview-node" pol=<<pol>> rootPol=<<pol>>/>
   </div>
@@ -782,7 +761,7 @@ type: text/vnd.tiddlywiki
   <div class="dashboard-footer">
     <% if [<hasChildren>compare:integer:gt[0]] %>
       <$button class="tc-btn-invisible dashboard-btn">
-        <$action-setfield $tiddler="$:/temp/rham/add/marker" text=<<suggestedMarker>>/>
+        <$action-setfield $tiddler="$:/temp/outline/add/marker" text=<<suggestedMarker>>/>
         <$action-setfield $tiddler=<<polAddingState>> text=<<pol>>/>
         + Add Section
       </$button>
@@ -792,8 +771,22 @@ type: text/vnd.tiddlywiki
         + Add Section
       </$button>
     <% endif %>
+    <!-- Special section shortcuts -->
+    <$list filter="[function[outline-all-special-sections]] :filter[get[suffix]addprefix[(]addsuffix[)]addprefix<pol>!is[tiddler]]" variable="specialCfg">
+      <$let
+        specialSuffix={{{ [<specialCfg>get[suffix]] }}}
+        specialCaption={{{ [<specialCfg>get[caption]] }}}
+        specialPosition={{{ [<specialCfg>tag[$:/tags/Outline/SpecialSection/Top]then[top]] :else[[bottom]] }}}
+        newTitle={{{ [<pol>addsuffix[(]addsuffix<specialSuffix>addsuffix[)]] }}}
+      >
+        <$button class="tc-btn-invisible dashboard-btn">
+          <$action-createtiddler $basetitle=<<newTitle>> caption=<<specialCaption>> tags=<<pol>> type="text/vnd.tiddlywiki"/>
+          + Add&nbsp;<$text text=<<specialCaption>>/>&nbsp;(<$text text=<<specialPosition>>/>)
+        </$button>
+      </$let>
+    </$list>
   </div>
   </$let>
 </div>
 </$let>
-\end policy-dashboard
+\end outline-dashboard

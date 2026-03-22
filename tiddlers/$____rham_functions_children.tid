@@ -10,7 +10,7 @@ type: text/vnd.tiddlywiki
 
 <!-- todo: simplify and combine regexes -->
 \function pol.children(pol)
-  [prefix<pol>] -[<pol>] :filter[trim:prefix<pol>regexp[^\(]!regexp[.*\(.*\(]] +[sortsub:string<byPolNbr>] +[enlist-input[]join[ ]] 
+  [prefix<pol>] -[<pol>] :filter[trim:prefix<pol>regexp[^\(]!regexp[.*\(.*\(]] +[sortsub:string<outlineOrder>] +[enlist-input[]join[ ]]
 \end pol.children
 
 \function children(pol)

@@ -1,0 +1,8 @@
+caption: History
+content-type: manual
+default: include
+list-after: $:/_/rham/special-sections/legal
+mandatory: yes
+suffix: history
+tags: $:/tags/Outline/SpecialSection/Bottom
+title: $:/_/rham/special-sections/history

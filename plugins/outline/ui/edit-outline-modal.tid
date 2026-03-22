@@ -1,0 +1,124 @@
+title: $:/plugins/crosseye/outline/ui/edit-outline-modal
+subtitle: <$text text={{{ [[Edit ]addsuffix{$:/plugins/crosseye/outline/config/tag}] }}}/>: <$text text={{{ [<policyTiddler>get[caption]] }}}/>
+class: outline-edit-modal
+type: text/vnd.tiddlywiki
+
+\whitespace trim
+
+<$let
+  outlineTag={{{ [{$:/plugins/crosseye/outline/config/tag}] }}}
+  basePolicy={{{ [<policyTiddler>get[draft-of-outline]!is[blank]] :else[<policyTiddler>] +[first[]] }}}
+  createState="$:/state/outline/edit-popup-create"
+>
+
+  <div class="outline-modal-section">
+    <div class="outline-modal-heading">{{$:/core/images/file}} Drafts</div>
+    <$list filter="[all[tiddlers]has[draft-of-outline]draft-of-outline<basePolicy>] +[!sortsub:string<draft-latest-modified>]" variable="draft" emptyMessage="""<div class='outline-modal-empty'>No drafts yet</div>""">
+      <$let
+        isFirst={{{ [all[tiddlers]has[draft-of-outline]draft-of-outline<basePolicy>] +[!sortsub:string<draft-latest-modified>first[]] +[match<draft>then[yes]else[no]] }}}
+      >
+        <$button class="tc-btn-invisible outline-modal-item">
+          <$action-setfield $tiddler="$:/state/outline/dashboard/policy" text=<<draft>>/>
+          <$action-navigate $to="$:/plugins/crosseye/outline/dashboard/view"/>
+          <$action-sendmessage $message="tm-close-tiddler" $param=<<policyTiddler>>/>
+          <$action-sendmessage $message="tm-close-tiddler"/>
+          <span class="outline-modal-item-icon">
+            <% if [<isFirst>match[yes]] %>
+              <span class="outline-draft-star">&#9733;</span>
+            <% else %>
+              {{$:/core/images/file}}
+            <% endif %>
+          </span>
+          <span class="outline-modal-item-body">
+            <span class="outline-modal-item-title"><$text text={{{ [<draft>get[draft-note]] :else[[Untitled draft]] +[first[]] }}}/></span>
+            <span class="outline-modal-item-meta">
+              Modified <$view tiddler=<<draft>> field="modified" format="relativedate"/>
+            </span>
+          </span>
+        </$button>
+      </$let>
+    </$list>
+  </div>
+
+  <div class="outline-modal-section">
+    <div class="outline-modal-heading">{{$:/core/images/edit-button}} Current Version</div>
+    <$button class="tc-btn-invisible outline-modal-item">
+      <$action-setfield $tiddler="$:/state/outline/dashboard/policy" text=<<basePolicy>>/>
+      <$action-navigate $to="$:/plugins/crosseye/outline/dashboard/view"/>
+      <$action-sendmessage $message="tm-close-tiddler" $param=<<policyTiddler>>/>
+      <$action-sendmessage $message="tm-close-tiddler"/>
+      <span class="outline-modal-item-icon">{{$:/core/images/edit-button}}</span>
+      <span class="outline-modal-item-body">
+        <span class="outline-modal-item-title">Edit live &nbsp;<$text text=<<outlineTag>>/></span>
+        <span class="outline-modal-item-meta">
+          Modified <$view tiddler=<<basePolicy>> field="modified" format="relativedate"/>
+        </span>
+      </span>
+    </$button>
+  </div>
+
+  <div class="outline-modal-section">
+    <div class="outline-modal-heading">{{$:/core/images/new-button}} New Draft</div>
+
+    <!-- From current version -->
+    <$reveal type="nomatch" stateTitle=<<createState>> text="current">
+      <$button class="tc-btn-invisible outline-modal-item" setTitle=<<createState>> setTo="current">
+        <span class="outline-modal-item-icon">{{$:/core/images/clone-button}}</span>
+        <span class="outline-modal-item-body">
+          <span class="outline-modal-item-title">From current version</span>
+        </span>
+      </$button>
+    </$reveal>
+    <$reveal type="match" stateTitle=<<createState>> text="current" animate="yes">
+      <div class="outline-modal-create-form">
+        <$edit-text tiddler="$:/temp/outline/popup/draft-note" field="text" tag="input" placeholder="Draft note (e.g. 'Committee review')..." class="outline-modal-input"/>
+        <div class="outline-modal-create-buttons">
+          <$button class="tc-btn-invisible dashboard-btn dashboard-btn-save">
+            <$transclude $variable="popup-create-draft-actions" pol=<<basePolicy>> source=<<basePolicy>>/>
+            <$action-sendmessage $message="tm-close-tiddler" $param=<<policyTiddler>>/>
+            <$action-sendmessage $message="tm-close-tiddler"/>
+            Create Draft
+          </$button>
+          <$button class="tc-btn-invisible">
+            <$action-setfield $tiddler=<<createState>> text=""/>
+            <$action-deletetiddler $tiddler="$:/temp/outline/popup/draft-note"/>
+            Cancel
+          </$button>
+        </div>
+      </div>
+    </$reveal>
+
+    <!-- From each existing draft -->
+    <$list filter="[all[tiddlers]has[draft-of-outline]draft-of-outline<basePolicy>] +[!sortsub:string<draft-latest-modified>]" variable="srcDraft">
+      <$let srcCreateState={{{ [[$:/state/outline/edit-popup-create/]addsuffix<srcDraft>] }}}>
+        <$reveal type="nomatch" stateTitle=<<srcCreateState>> text="open">
+          <$button class="tc-btn-invisible outline-modal-item" setTitle=<<srcCreateState>> setTo="open">
+            <span class="outline-modal-item-icon">{{$:/core/images/clone-button}}</span>
+            <span class="outline-modal-item-body">
+              <span class="outline-modal-item-title">From "<$text text={{{ [<srcDraft>get[draft-note]] :else[[Draft]] +[first[]] }}}/>"</span>
+            </span>
+          </$button>
+        </$reveal>
+        <$reveal type="match" stateTitle=<<srcCreateState>> text="open" animate="yes">
+          <div class="outline-modal-create-form">
+            <$edit-text tiddler="$:/temp/outline/popup/draft-note" field="text" tag="input" placeholder="Draft note..." class="outline-modal-input"/>
+            <div class="outline-modal-create-buttons">
+              <$button class="tc-btn-invisible dashboard-btn dashboard-btn-save">
+                <$transclude $variable="popup-create-draft-actions" pol=<<basePolicy>> source=<<srcDraft>>/>
+                <$action-sendmessage $message="tm-close-tiddler" $param=<<policyTiddler>>/>
+                <$action-sendmessage $message="tm-close-tiddler"/>
+                Create Draft
+              </$button>
+              <$button class="tc-btn-invisible">
+                <$action-setfield $tiddler=<<srcCreateState>> text=""/>
+                <$action-deletetiddler $tiddler="$:/temp/outline/popup/draft-note"/>
+                Cancel
+              </$button>
+            </div>
+          </div>
+        </$reveal>
+      </$let>
+    </$list>
+  </div>
+
+</$let>

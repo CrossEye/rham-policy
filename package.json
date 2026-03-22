@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "pkg": "cross-var echo Package $npm_package_version",
-    "build": "cross-var node scripts/updateVersion latest && tiddlywiki . --output docs/latest --build index",
-    "release": "cross-var node scripts/updateVersion $npm_package_version && tiddlywiki . --output docs --build index && cross-var shx mkdir -p docs/$npm_package_version && cross-var shx cp docs/index.html docs/$npm_package_version/index.html",
-    "start": "tiddlywiki . --listen port=7425"
+    "build": "cross-env TIDDLYWIKI_PLUGIN_PATH=./plugins cross-var node scripts/updateVersion latest && cross-env TIDDLYWIKI_PLUGIN_PATH=./plugins tiddlywiki . --output docs/latest --build index",
+    "release": "cross-env TIDDLYWIKI_PLUGIN_PATH=./plugins cross-var node scripts/updateVersion $npm_package_version && cross-env TIDDLYWIKI_PLUGIN_PATH=./plugins tiddlywiki . --output docs --build index && cross-var shx mkdir -p docs/$npm_package_version && cross-var shx cp docs/index.html docs/$npm_package_version/index.html",
+    "start": "cross-env TIDDLYWIKI_PLUGIN_PATH=./plugins tiddlywiki . --listen port=7425"
   },
   "keywords": [
     "TiddlyWiki",
@@ -23,6 +23,7 @@
     "tiddlywiki": "^5.3.8"
   },
   "devDependencies": {
+    "cross-env": "^10.1.0",
     "cross-var": "^1.1.0",
     "shx": "^0.3.4"
   }

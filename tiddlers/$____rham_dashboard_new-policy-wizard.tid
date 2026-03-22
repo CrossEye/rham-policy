@@ -12,40 +12,41 @@ type: text/vnd.tiddlywiki
   <div class="dashboard-edit-panel">
     <div class="dashboard-edit-field">
       <label>Policy number (4 digits, e.g. 3330):</label>
-      <$edit-text tiddler="$:/temp/rham/new-policy/number" field="text" tag="input" class="dashboard-edit-input" placeholder="e.g. 3330"/>
+      <$edit-text tiddler="$:/temp/outline/new-policy/number" field="text" tag="input" class="dashboard-edit-input" placeholder="e.g. 3330"/>
     </div>
     <div class="dashboard-edit-field">
       <label>Policy title:</label>
-      <$edit-text tiddler="$:/temp/rham/new-policy/title" field="text" tag="input" class="dashboard-edit-input" placeholder="e.g. Purchasing"/>
+      <$edit-text tiddler="$:/temp/outline/new-policy/title" field="text" tag="input" class="dashboard-edit-input" placeholder="e.g. Purchasing"/>
     </div>
     <div class="dashboard-edit-field">
       <label>Display style:</label>
-      <$select tiddler="$:/temp/rham/new-policy/display-style" field="text" class="dashboard-edit-select" default="outline">
-        <option value="heading2">Heading 2</option>
-        <option value="heading3-upper">Heading 3 (uppercase)</option>
-        <option value="heading3-underline">Heading 3 (underline)</option>
-        <option value="list">Numbered list</option>
-        <option value="outline">Outline</option>
-        <option value="outline-block">Outline block</option>
-        <option value="definition">Definition</option>
-        <option value="plain">Plain</option>
-      </$select>
+      <$transclude $variable="outline-display-style-select" tid="$:/temp/outline/new-policy/display-style" field="text"/>
     </div>
-    <div class="dashboard-edit-field">
-      <label>
-        <$checkbox tiddler="$:/temp/rham/new-policy/legal" field="text" checked="yes" unchecked="no" default="yes"/>
-        Include Legal References section
-      </label>
-    </div>
+
+    <!-- Special section checkboxes -->
+    <$list filter="[function[outline-all-special-sections]]" variable="specialCfg">
+      <$let
+        specialSuffix={{{ [<specialCfg>get[suffix]] }}}
+        specialCaption={{{ [<specialCfg>get[caption]] }}}
+        specialDefault={{{ [<specialCfg>get[default]] }}}
+        checkTiddler={{{ [[$:/temp/outline/new-policy/include-]addsuffix<specialSuffix>] }}}
+      >
+        <div class="dashboard-edit-field">
+          <label>
+            <$checkbox tiddler=<<checkTiddler>> field="text" checked="yes" unchecked="no" default={{{ [<specialDefault>match[include]then[yes]] :else[[no]] +[first[]] }}}/>
+            Include <$text text=<<specialCaption>>/>
+          </label>
+        </div>
+      </$let>
+    </$list>
 
     <div class="dashboard-edit-buttons">
       <$let
-        polNbr={{{ [{$:/temp/rham/new-policy/number}] }}}
-        polTitle={{{ [{$:/temp/rham/new-policy/title}] }}}
-        polStructure={{{ [{$:/temp/rham/new-policy/display-style}!is[blank]] :else[[outline]] +[first[]] }}}
+        polNbr={{{ [{$:/temp/outline/new-policy/number}] }}}
+        polTitle={{{ [{$:/temp/outline/new-policy/title}] }}}
+        polStyle={{{ [{$:/temp/outline/new-policy/display-style}!is[blank]] :else[[outline]] +[first[]] }}}
         polTiddler={{{ [<polNbr>addprefix[Policy]] }}}
         polCaption={{{ [<polNbr>addsuffix[ - ]addsuffix<polTitle>] }}}
-        includeLegal={{{ [{$:/temp/rham/new-policy/legal}!is[blank]] :else[[yes]] +[first[]] }}}
       >
         <$button class="dashboard-btn dashboard-btn-save">
           <$action-createtiddler
@@ -53,31 +54,39 @@ type: text/vnd.tiddlywiki
             caption=<<polCaption>>
             description=<<polTitle>>
             policy-nbr=<<polNbr>>
-            display-style=<<polStructure>>
+            display-style=<<polStyle>>
             tags="Policy"
             type="text/vnd.tiddlywiki"
             text="<<sections>>"
           />
-          <$action-createtiddler
-            $basetitle={{{ [<polTiddler>addsuffix[(history)]] }}}
-            caption="History"
-            tags=<<polTiddler>>
-            type="text/vnd.tiddlywiki"
-          />
-          <% if [<includeLegal>match[yes]] %>
-            <$action-createtiddler
-              $basetitle={{{ [<polTiddler>addsuffix[(legal)]] }}}
-              caption="Legal References"
-              tags=<<polTiddler>>
-              type="text/vnd.tiddlywiki"
-            />
-          <% endif %>
-          <$action-setfield $tiddler="$:/state/rham/dashboard/policy" text=<<polTiddler>>/>
+          <!-- Create included special sections -->
+          <$list filter="[function[outline-all-special-sections]]" variable="specialCfg">
+            <$let
+              specialSuffix={{{ [<specialCfg>get[suffix]] }}}
+              specialCaption={{{ [<specialCfg>get[caption]] }}}
+              checkTiddler={{{ [[$:/temp/outline/new-policy/include-]addsuffix<specialSuffix>] }}}
+              shouldInclude={{{ [<checkTiddler>get[text]] :else[<specialCfg>get[default]match[include]then[yes]] :else[[no]] +[first[]] }}}
+              sectionTitle={{{ [<polTiddler>addsuffix[(]addsuffix<specialSuffix>addsuffix[)]] }}}
+            >
+              <% if [<shouldInclude>match[yes]] %>
+                <$action-createtiddler
+                  $basetitle=<<sectionTitle>>
+                  caption=<<specialCaption>>
+                  tags=<<polTiddler>>
+                  type="text/vnd.tiddlywiki"
+                />
+              <% endif %>
+            </$let>
+          </$list>
+          <$action-setfield $tiddler="$:/state/outline/dashboard/policy" text=<<polTiddler>>/>
           <$action-navigate $to="$:/_/rham/dashboard/view"/>
-          <$action-setfield $tiddler="$:/temp/rham/new-policy/number" text=""/>
-          <$action-setfield $tiddler="$:/temp/rham/new-policy/title" text=""/>
-          <$action-setfield $tiddler="$:/temp/rham/new-policy/display-style" text=""/>
-          <$action-setfield $tiddler="$:/temp/rham/new-policy/legal" text=""/>
+          <!-- Clean up temp tiddlers -->
+          <$action-setfield $tiddler="$:/temp/outline/new-policy/number" text=""/>
+          <$action-setfield $tiddler="$:/temp/outline/new-policy/title" text=""/>
+          <$action-setfield $tiddler="$:/temp/outline/new-policy/display-style" text=""/>
+          <$list filter="[function[outline-all-special-sections]]" variable="specialCfg">
+            <$action-deletetiddler $tiddler={{{ [[$:/temp/outline/new-policy/include-]addsuffix{!!suffix}] }}}/>
+          </$list>
           Create Policy
         </$button>
       </$let>

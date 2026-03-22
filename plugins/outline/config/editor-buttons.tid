@@ -1,0 +1,3 @@
+title: $:/plugins/crosseye/outline/config/editor-buttons
+
+$:/core/ui/EditorToolbar/bold $:/core/ui/EditorToolbar/italic $:/core/ui/EditorToolbar/underline $:/core/ui/EditorToolbar/strikethrough $:/core/ui/EditorToolbar/list-bullet $:/core/ui/EditorToolbar/list-number $:/core/ui/EditorToolbar/quote $:/core/ui/EditorToolbar/superscript $:/core/ui/EditorToolbar/subscript

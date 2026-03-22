@@ -1,0 +1,87 @@
+caption: New Outline
+tags: $:/tags/Global
+title: $:/plugins/crosseye/outline/dashboard/new-outline-wizard
+type: text/vnd.tiddlywiki
+
+\whitespace trim
+
+\procedure outline-new-wizard()
+<div class="policy-dashboard">
+  <h2 class="dashboard-title">Create New Outline</h2>
+
+  <div class="dashboard-edit-panel">
+    <div class="dashboard-edit-field">
+      <label>Title:</label>
+      <$edit-text tiddler="$:/temp/outline/new/title" field="text" tag="input" class="dashboard-edit-input" placeholder="e.g. My Outline"/>
+    </div>
+    <div class="dashboard-edit-field">
+      <label>Display style:</label>
+      <$transclude $variable="outline-display-style-select" tid="$:/temp/outline/new/display-style" field="text"/>
+    </div>
+
+    <!-- Special section checkboxes -->
+    <$list filter="[function[outline-all-special-sections]]" variable="specialCfg">
+      <$let
+        specialSuffix={{{ [<specialCfg>get[suffix]] }}}
+        specialCaption={{{ [<specialCfg>get[caption]] }}}
+        specialDefault={{{ [<specialCfg>get[default]] }}}
+        checkTiddler={{{ [[$:/temp/outline/new/include-]addsuffix<specialSuffix>] }}}
+      >
+        <div class="dashboard-edit-field">
+          <label>
+            <$checkbox tiddler=<<checkTiddler>> field="text" checked="yes" unchecked="no" default={{{ [<specialDefault>match[include]then[yes]] :else[[no]] +[first[]] }}}/>
+            Include <$text text=<<specialCaption>>/>
+          </label>
+        </div>
+      </$let>
+    </$list>
+
+    <div class="dashboard-edit-buttons">
+      <$let
+        outlineTitle={{{ [{$:/temp/outline/new/title}] }}}
+        outlineStyle={{{ [{$:/temp/outline/new/display-style}!is[blank]] :else[[outline]] +[first[]] }}}
+        outlineTag={{{ [function[outline-tag]] }}}
+      >
+        <$button class="dashboard-btn dashboard-btn-save">
+          <$action-createtiddler
+            $basetitle=<<outlineTitle>>
+            caption=<<outlineTitle>>
+            display-style=<<outlineStyle>>
+            tags=<<outlineTag>>
+            type="text/vnd.tiddlywiki"
+            text="<<sections>>"
+          />
+          <!-- Create included special sections -->
+          <$list filter="[function[outline-all-special-sections]]" variable="specialCfg">
+            <$let
+              specialSuffix={{{ [<specialCfg>get[suffix]] }}}
+              specialCaption={{{ [<specialCfg>get[caption]] }}}
+              checkTiddler={{{ [[$:/temp/outline/new/include-]addsuffix<specialSuffix>] }}}
+              shouldInclude={{{ [<checkTiddler>get[text]] :else[<specialCfg>get[default]match[include]then[yes]] :else[[no]] +[first[]] }}}
+              sectionTitle={{{ [<outlineTitle>addsuffix[(]addsuffix<specialSuffix>addsuffix[)]] }}}
+            >
+              <% if [<shouldInclude>match[yes]] %>
+                <$action-createtiddler
+                  $basetitle=<<sectionTitle>>
+                  caption=<<specialCaption>>
+                  tags=<<outlineTitle>>
+                  type="text/vnd.tiddlywiki"
+                />
+              <% endif %>
+            </$let>
+          </$list>
+          <$action-setfield $tiddler="$:/state/outline/dashboard/policy" text=<<outlineTitle>>/>
+          <$action-navigate $to="$:/plugins/crosseye/outline/dashboard/view"/>
+          <!-- Clean up temp tiddlers -->
+          <$action-setfield $tiddler="$:/temp/outline/new/title" text=""/>
+          <$action-setfield $tiddler="$:/temp/outline/new/display-style" text=""/>
+          <$list filter="[function[outline-all-special-sections]]" variable="specialCfg">
+            <$action-deletetiddler $tiddler={{{ [[$:/temp/outline/new/include-]addsuffix{!!suffix}] }}}/>
+          </$list>
+          Create Outline
+        </$button>
+      </$let>
+    </div>
+  </div>
+</div>
+\end outline-new-wizard

@@ -1,0 +1,22 @@
+caption: {{$:/plugins/crosseye/outline/images/edit-outline}} edit outline
+created: 20260322025801512
+description: Edit this outline in the dashboard editor
+list-after: $:/core/ui/Buttons/edit
+modified: 20260322033618165
+tags: $:/tags/ViewToolbar
+title: $:/plugins/crosseye/outline/ui/Buttons/edit-outline
+type: text/vnd.tiddlywiki
+
+\whitespace trim
+
+<% if [subfilter{$:/plugins/crosseye/outline/config/button-filter}] %>
+  <$button class=<<tv-config-toolbar-class>> >
+    <$action-sendmessage $message="tm-modal" $param="$:/plugins/crosseye/outline/ui/edit-outline-modal" policyTiddler=<<currentTiddler>>/>
+    <%if [<tv-config-toolbar-icons>match[yes]] %>{{$:/plugins/crosseye/outline/images/edit-outline}}<%endif%>
+    <%if [<tv-config-toolbar-text>match[yes]] %>
+      <span class="tc-btn-text">
+        <$text text=`edit ${ [{$:/plugins/crosseye/outline/config/tag}lowercase[]] }$`/>
+      </span>
+    <%endif%>
+  </$button>
+<% endif %>

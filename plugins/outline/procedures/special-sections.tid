@@ -1,0 +1,48 @@
+code-body: yes
+tags: $:/tags/Global
+title: $:/plugins/crosseye/outline/procedures/special-sections
+type: text/vnd.tiddlywiki
+
+\function outline-all-special-sections()
+  [tag[$:/tags/Outline/SpecialSection/Top]] [tag[$:/tags/Outline/SpecialSection/Bottom]]
+\end outline-all-special-sections
+
+\function outline-is-special(suffix)
+  [function[outline-all-special-sections]]
+  :filter[get[suffix]match<suffix>]
+  +[count[]compare:integer:gt[0]then[yes]else[no]]
+\end outline-is-special
+
+\function outline-special-config(suffix)
+  [function[outline-all-special-sections]]
+  :filter[get[suffix]match<suffix>]
+  +[first[]]
+\end outline-special-config
+
+\function outline-special-caption(suffix)
+  [function[outline-special-config],<suffix>]
+  :map[get[caption]]
+\end outline-special-caption
+
+\function outline-special-content-type(suffix)
+  [function[outline-special-config],<suffix>]
+  :map[get[content-type]]
+\end outline-special-content-type
+
+\function outline-special-render-procedure(suffix)
+  [function[outline-special-config],<suffix>]
+  :map[get[render-procedure]]
+\end outline-special-render-procedure
+
+\function outline-missing-mandatory(pol)
+  [function[outline-all-special-sections]]
+  :filter[get[mandatory]match[yes]]
+  +[get[suffix]]
+  :filter[addprefix[(]addsuffix[)]addprefix<pol>!is[tiddler]]
+\end outline-missing-mandatory
+
+\function outline-section-type(suffix)
+  [tag[$:/tags/Outline/SpecialSection/Top]] :filter[get[suffix]match<suffix>] +[first[]then[top]]
+  :else[tag[$:/tags/Outline/SpecialSection/Bottom]] :filter[get[suffix]match<suffix>] +[first[]then[bottom]]
+  :else[[normal]]
+\end outline-section-type

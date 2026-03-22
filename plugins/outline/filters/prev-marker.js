@@ -1,12 +1,12 @@
 /*\
-title: $:/_/rham/filters/prev-marker
+title: $:/plugins/crosseye/outline/filters/prev-marker
 type: application/javascript
 module-type: filteroperator
 
-Decrements a policy section marker to the previous value.
-Handles: numeric (2→1), s-numbered (s2→s1), lowercase (b→a),
-uppercase (B→A), roman numerals (II→I, IV→III, etc.),
-and lowercase roman numerals (ii→i, iv→iii, etc.)
+Decrements an outline section marker to the previous value.
+Handles: numeric (2->1), s-numbered (s2->s1), lowercase (b->a),
+uppercase (B->A), roman numerals (II->I, IV->III, etc.),
+and lowercase roman numerals (ii->i, iv->iii, etc.)
 
 Returns empty string if already at the first marker in the sequence.
 

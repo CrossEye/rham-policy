@@ -1,8 +1,6 @@
-caption: Policy Dashboard
+caption: Outline Dashboard
 caption-title: yes
-created: 20260319120000000
-modified: 20260321174507476
-title: $:/_/rham/dashboard/view
+title: $:/plugins/crosseye/outline/dashboard/view
 type: text/vnd.tiddlywiki
 
 \whitespace trim
@@ -11,6 +9,6 @@ type: text/vnd.tiddlywiki
   <% if [<pol>!is[blank]] %>
     <$transclude $variable="outline-dashboard" pol=<<pol>> />
   <% else %>
-    No policy selected.
+    No outline selected.
   <% endif %>
 </$let>

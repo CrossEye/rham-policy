@@ -1,0 +1,10 @@
+{
+    "title": "$:/plugins/crosseye/outline",
+    "name": "Outline Editor",
+    "description": "Hierarchical outline editor with revision/draft management",
+    "author": "Scott Sauyet",
+    "version": "0.1.0",
+    "core-version": ">=5.3.6",
+    "list": "readme",
+    "plugin-type": "plugin"
+}

@@ -1,11 +1,11 @@
 /*\
-title: $:/_/rham/widgets/action-archive-policy
+title: $:/plugins/crosseye/outline/widgets/action-archive-outline
 type: application/javascript
 module-type: widget
 
-Action widget to archive a policy tree into a single compound tiddler.
+Action widget to archive an outline tree into a single compound tiddler.
 
-Usage: <$action-archive-policy $prefix="Policy3330" $archive="$:/_/rham/archive/Policy3330/20260321160000000"/>
+Usage: <$action-archive-outline $prefix="Policy3330" $archive="$:/outline/archive/Policy3330/20260321160000000"/>
 
 Creates a tiddler of type text/vnd.tiddlywiki-multiple containing all tiddlers
 matching the prefix, preserving all fields.
@@ -16,27 +16,27 @@ matching the prefix, preserving all fields.
 
 var Widget = require("$:/core/modules/widgets/widget.js").widget;
 
-var ArchivePolicyWidget = function(parseTreeNode, options) {
+var ArchiveOutlineWidget = function(parseTreeNode, options) {
 	this.initialise(parseTreeNode, options);
 };
 
-ArchivePolicyWidget.prototype = new Widget();
+ArchiveOutlineWidget.prototype = new Widget();
 
-ArchivePolicyWidget.prototype.render = function(parent, nextSibling) {
+ArchiveOutlineWidget.prototype.render = function(parent, nextSibling) {
 	this.computeAttributes();
 	this.execute();
 };
 
-ArchivePolicyWidget.prototype.execute = function() {
+ArchiveOutlineWidget.prototype.execute = function() {
 	this.actionPrefix = this.getAttribute("$prefix");
 	this.actionArchive = this.getAttribute("$archive");
 };
 
-ArchivePolicyWidget.prototype.refresh = function() {
+ArchiveOutlineWidget.prototype.refresh = function() {
 	return false;
 };
 
-ArchivePolicyWidget.prototype.invokeAction = function(triggeringWidget, event) {
+ArchiveOutlineWidget.prototype.invokeAction = function(triggeringWidget, event) {
 	var prefix = this.actionPrefix;
 	var archiveTitle = this.actionArchive;
 	var wiki = this.wiki;
@@ -81,4 +81,4 @@ ArchivePolicyWidget.prototype.invokeAction = function(triggeringWidget, event) {
 	return true;
 };
 
-exports["action-archive-policy"] = ArchivePolicyWidget;
+exports["action-archive-outline"] = ArchiveOutlineWidget;

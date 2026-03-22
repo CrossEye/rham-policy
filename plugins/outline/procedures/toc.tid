@@ -1,0 +1,61 @@
+code-body: yes
+tags: $:/tags/Global
+title: $:/plugins/crosseye/outline/procedures/toc
+type: text/vnd.tiddlywiki
+
+\whitespace trim
+
+\define markerRegex() .*\(([^\(\)]+)\)$
+
+\procedure outline-toc-node(pol, depth, maxDepth)
+  <ol class="tc-toc toc-selective-expandable">
+    <$list filter="[all[tiddlers]prefix<pol>] :filter[removeprefix<pol>split[(]count[]match[2]] :filter[<currentTiddler>outline-sort-key[]!prefix[!]!prefix[~]] +[sortsub:string<outlineOrder>]" variable="child">
+      <$let
+        marker={{{ [<child>search-replace::regexp<markerRegex>,[$1]] }}}
+        hasChildren={{{ [all[tiddlers]prefix<child>] :filter[removeprefix<child>split[(]count[]match[2]] :filter[<currentTiddler>outline-sort-key[]!prefix[!]!prefix[~]] +[count[]] }}}
+        canExpand={{{ [<maxDepth>is[blank]then[yes]] :else[<depth>compare:integer:lt<maxDepth>then[yes]] :else[[no]] +[first[]] }}}
+      >
+        <$qualify name="toc-state" title={{{ [[$:/state/outline/toc/]addsuffix<child>] }}}>
+          <li class="toc-item">
+            <$link to=<<child>>>
+              <% if [<hasChildren>compare:integer:gt[0]] [<canExpand>match[yes]] +[allafter[0]first[]match[yes]] %>
+                <$reveal type="nomatch" stateTitle=<<toc-state>> text="open">
+                  <$button setTitle=<<toc-state>> setTo="open" class="tc-btn-invisible tc-popup-keep">
+                    {{$:/core/images/right-arrow}}
+                  </$button>
+                </$reveal>
+                <$reveal type="match" stateTitle=<<toc-state>> text="open">
+                  <$button setTitle=<<toc-state>> setTo="close" class="tc-btn-invisible tc-popup-keep">
+                    {{$:/core/images/down-arrow}}
+                  </$button>
+                </$reveal>
+              <% else %>
+                <$button class="tc-btn-invisible">{{$:/core/images/blank}}</$button>
+              <% endif %>
+              <% if [<marker>!is[blank]] %>(<<marker>>)&nbsp;<% endif %>{{!!caption}}
+            </$link>
+            <% if [<hasChildren>compare:integer:gt[0]] [<canExpand>match[yes]] +[allafter[0]first[]match[yes]] %>
+              <$reveal type="match" stateTitle=<<toc-state>> text="open">
+                <$let nextDepth={{{ [<depth>add[1]] }}}>
+                  <$transclude $variable="outline-toc-node" pol=<<child>> depth=<<nextDepth>> maxDepth=<<maxDepth>>/>
+                </$let>
+              </$reveal>
+            <% endif %>
+          </li>
+        </$qualify>
+      </$let>
+    </$list>
+  </ol>
+\end outline-toc-node
+
+\procedure outline-render-toc()
+  <$let
+    tocTiddler=<<currentTiddler>>
+    tocDepth={{{ [<tocTiddler>get[toc-depth]] }}}
+    outlineRoot={{{ [<tocTiddler>search-replace::regexp[\([^\(\)]+\)$],[]] }}}
+  >
+    <div class="tc-table-of-contents">
+      <$transclude $variable="outline-toc-node" pol=<<outlineRoot>> depth="1" maxDepth=<<tocDepth>>/>
+    </div>
+  </$let>
+\end outline-render-toc

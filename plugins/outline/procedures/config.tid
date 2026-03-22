@@ -1,0 +1,18 @@
+code-body: yes
+tags: $:/tags/Global
+title: $:/plugins/crosseye/outline/procedures/config
+type: text/vnd.tiddlywiki
+
+\function outline-tag() [{$:/plugins/crosseye/outline/config/tag}!is[blank]] :else[[Outline]] +[first[]]
+\end outline-tag
+
+\function outline-draft-tag() [{$:/plugins/crosseye/outline/config/draft-tag}!is[blank]] :else[[OutlineDraft]] +[first[]]
+\end outline-draft-tag
+
+\function outline-archive-prefix() [{$:/plugins/crosseye/outline/config/archive-prefix}!is[blank]] :else[[$:/outline/archive/]] +[first[]]
+\end outline-archive-prefix
+
+\function outline-button-filter() [{$:/plugins/crosseye/outline/config/button-filter}!is[blank]] :else[[[<currentTiddler>tag[Outline]] [<currentTiddler>tag[OutlineDraft]]]] +[first[]]
+\end outline-button-filter
+
+

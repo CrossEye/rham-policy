@@ -1,0 +1,19 @@
+list-after: $:/core/ui/ViewTemplate/tags
+tags: $:/tags/ViewTemplate
+title: $:/plugins/crosseye/outline/viewtemplates/draft-banner
+type: text/vnd.tiddlywiki
+
+\whitespace trim
+
+<% if [<currentTiddler>tag{$:/plugins/crosseye/outline/config/tag}] %>
+  <$list filter="[all[tiddlers]has[draft-of-outline]draft-of-outline<currentTiddler>]" variable="draft">
+    <div class="dashboard-draft-banner">
+      Revision in progress:&nbsp;<$button class="tc-btn-invisible dashboard-draft-banner-link">
+        <$action-setfield $tiddler="$:/state/outline/dashboard/policy" text=<<draft>>/>
+        <$action-navigate $to="$:/plugins/crosseye/outline/dashboard/view"/>
+        <$action-sendmessage $message="tm-close-tiddler" $param=<<currentTiddler>>/>
+        <$text text={{{ [<draft>get[draft-note]] }}}/>
+      </$button>
+    </div>
+  </$list>
+<% endif %>

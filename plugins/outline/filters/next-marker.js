@@ -1,12 +1,12 @@
 /*\
-title: $:/_/rham/filters/next-marker
+title: $:/plugins/crosseye/outline/filters/next-marker
 type: application/javascript
 module-type: filteroperator
 
-Increments a policy section marker to the next value.
-Handles: numeric (1→2), s-numbered (s1→s2), lowercase (a→b),
-uppercase (A→B), roman numerals (I→II, III→IV, etc.),
-and lowercase roman numerals (i→ii, iii→iv, etc.)
+Increments an outline section marker to the next value.
+Handles: numeric (1->2), s-numbered (s1->s2), lowercase (a->b),
+uppercase (A->B), roman numerals (I->II, III->IV, etc.),
+and lowercase roman numerals (i->ii, iii->iv, etc.)
 
 Usage: [<marker>next-marker[]]
 \*/

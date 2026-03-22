@@ -1,0 +1,17 @@
+code-body: yes
+tags: $:/tags/Global
+title: $:/plugins/crosseye/outline/procedures/header-panel
+type: text/vnd.tiddlywiki
+
+\procedure outline-header-panel(pol)
+  <div class="dashboard-edit-panel">
+    <div class="dashboard-edit-field">
+      <label>Caption:</label>
+      <$edit-text tiddler=<<pol>> field="caption" tag="input" class="dashboard-edit-input"/>
+    </div>
+    <div class="dashboard-edit-field">
+      <label>Display style:</label>
+      <$transclude $variable="outline-display-style-select" tid=<<pol>>/>
+    </div>
+  </div>
+\end outline-header-panel
