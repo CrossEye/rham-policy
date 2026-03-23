@@ -412,7 +412,7 @@
   transition: opacity 0.15s;
 }
 
-.dashboard-preview-heading:hover .dashboard-preview-actions,
+.dashboard-preview-section:hover:not(:has(.dashboard-preview-section:hover)) > .dashboard-preview-heading .dashboard-preview-actions,
 .dashboard-preview-actions:has(.dashboard-btn-save) {
   opacity: 1;
 }

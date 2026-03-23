@@ -3,6 +3,7 @@ style-id: list
 tags: $:/tags/Outline/DisplayStyle
 title: $:/plugins/crosseye/outline/display-styles/list
 type: text/vnd.tiddlywiki
+code-body: yes
 
 \procedure list()
   <div class="list-item">

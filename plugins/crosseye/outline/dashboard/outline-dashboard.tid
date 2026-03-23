@@ -113,13 +113,12 @@ type: text/vnd.tiddlywiki
       isSpecial={{{ [function[outline-is-special],<rawSuffix>] }}}
     >
       <div class="dashboard-delete-tree-item">
-        <span class="dashboard-node-marker">
-          <% if [<isSpecial>match[yes]] %>
-            <$text text={{{ [function[outline-special-caption],<rawSuffix>] }}}/>
-          <% else %>
+        <% if [<isSpecial>!match[yes]] %>
+          <span class="dashboard-node-marker">
             (<$text text=<<rawSuffix>>/>)
-          <% endif %>
-        </span>&nbsp;<$text text={{{ [<desc>get[caption]] }}}/>
+          </span>&nbsp;
+        <% endif %>
+        <$text text={{{ [<desc>get[caption]] }}}/>
         <$transclude $variable="dashboard-delete-tree" pol=<<desc>>/>
       </div>
     </$let>
@@ -326,13 +325,13 @@ type: text/vnd.tiddlywiki
         <% endif %>
         <div class={{{ [<isSpecial>match[yes]addprefix[dashboard-node dashboard-node-]addsuffix<rawSuffix>] :else[<movingNode>match<child>then[dashboard-node dashboard-node-moving]] :else[[dashboard-node]] }}}>
           <div class="dashboard-node-header">
-            <span class="dashboard-node-marker">
-              <% if [<isSpecial>match[yes]] %>
-                <$text text=<<specialCaption>>/>
-              <% elseif [<marker>!is[blank]] %>
-                (<$text text=<<marker>>/>)
-              <% endif %>
-            </span>
+            <% if [<isSpecial>!match[yes]] %>
+              <span class="dashboard-node-marker">
+                <% if [<marker>!is[blank]] %>
+                  (<$text text=<<marker>>/>)
+                <% endif %>
+              </span>
+            <% endif %>
             <span class="dashboard-node-caption"><$text text={{{ [<child>get[caption]] }}}/></span>
             <span class="dashboard-node-actions">
               <% if [<isEditing>match[yes]] %>
@@ -504,13 +503,13 @@ type: text/vnd.tiddlywiki
       >
         <div class={{{ [<isSpecial>match[yes]addprefix[dashboard-preview-section dashboard-preview-section-]addsuffix<rawSuffix>] :else[[dashboard-preview-section]] }}}>
           <div class="dashboard-preview-heading">
-            <span class="dashboard-preview-marker">
-              <% if [<isSpecial>match[yes]] %>
-                <$text text=<<specialCaption>>/>
-              <% elseif [<marker>!is[blank]] %>
-                (<$text text=<<marker>>/>)
-              <% endif %>
-            </span>
+            <% if [<isSpecial>!match[yes]] %>
+              <span class="dashboard-preview-marker">
+                <% if [<marker>!is[blank]] %>
+                  (<$text text=<<marker>>/>)
+                <% endif %>
+              </span>
+            <% endif %>
             <span class="dashboard-preview-caption"><$text text={{{ [<child>get[caption]] }}}/></span>
             <span class="dashboard-preview-actions">
               <% if [<isEditing>match[yes]] %>
@@ -758,6 +757,7 @@ type: text/vnd.tiddlywiki
   </div>
   </$reveal>
 
+  <$reveal type="nomatch" stateTitle=<<modeState>> default="preview" text="preview" animate="yes">
   <div class="dashboard-footer">
     <% if [<hasChildren>compare:integer:gt[0]] %>
       <$button class="tc-btn-invisible dashboard-btn">
@@ -786,6 +786,7 @@ type: text/vnd.tiddlywiki
       </$let>
     </$list>
   </div>
+  </$reveal>
   </$let>
 </div>
 </$let>

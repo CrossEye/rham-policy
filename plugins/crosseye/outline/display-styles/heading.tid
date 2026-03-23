@@ -3,6 +3,7 @@ style-id: heading
 tags: $:/tags/Outline/DisplayStyle
 title: $:/plugins/crosseye/outline/display-styles/heading
 type: text/vnd.tiddlywiki
+code-body: yes
 
 \procedure heading()
   <div class=<<section-type>> >

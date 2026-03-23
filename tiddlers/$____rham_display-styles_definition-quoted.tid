@@ -3,6 +3,7 @@ style-id: definition-quoted
 tags: $:/tags/Outline/DisplayStyle
 title: $:/_/rham/display-styles/definition-quoted
 type: text/vnd.tiddlywiki
+code-body: yes
 
 \procedure definition-quoted()
   <div class="definition level">

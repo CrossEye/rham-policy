@@ -3,6 +3,7 @@ style-id: heading3-upper
 tags: $:/tags/Outline/DisplayStyle
 title: $:/_/rham/display-styles/heading3-upper
 type: text/vnd.tiddlywiki
+code-body: yes
 
 \procedure heading3-upper()
   <div class=<<section-type>> >

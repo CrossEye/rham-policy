@@ -3,6 +3,7 @@ style-id: outline
 tags: $:/tags/Outline/DisplayStyle
 title: $:/plugins/crosseye/outline/display-styles/outline
 type: text/vnd.tiddlywiki
+code-body: yes
 
 \procedure outline()
   <div class=`level ${ [<section-type>] }$`>

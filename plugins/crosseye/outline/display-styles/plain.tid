@@ -3,6 +3,7 @@ style-id: plain
 tags: $:/tags/Outline/DisplayStyle
 title: $:/plugins/crosseye/outline/display-styles/plain
 type: text/vnd.tiddlywiki
+code-body: yes
 
 \procedure plain()
   <div class=<<section-type>> >

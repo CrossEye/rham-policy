@@ -3,6 +3,7 @@ style-id: heading3-underline
 tags: $:/tags/Outline/DisplayStyle
 title: $:/_/rham/display-styles/heading3-underline
 type: text/vnd.tiddlywiki
+code-body: yes
 
 \procedure heading3-underline()
   <div class=<<section-type>> >
