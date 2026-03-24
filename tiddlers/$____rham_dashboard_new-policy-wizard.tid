@@ -31,11 +31,9 @@ type: text/vnd.tiddlywiki
         specialDefault={{{ [<specialCfg>get[default]] }}}
         checkTiddler={{{ [[$:/temp/outline/new-policy/include-]addsuffix<specialSuffix>] }}}
       >
-        <div class="dashboard-edit-field">
-          <label>
-            <$checkbox tiddler=<<checkTiddler>> field="text" checked="yes" unchecked="no" default={{{ [<specialDefault>match[include]then[yes]] :else[[no]] +[first[]] }}}/>
-            Include <$text text=<<specialCaption>>/>
-          </label>
+        <div class="dashboard-edit-checkbox">
+          <$checkbox tiddler=<<checkTiddler>> field="text" checked="yes" unchecked="no" default={{{ [<specialDefault>match[include]then[yes]] :else[[no]] +[first[]] }}}/>
+          &nbsp;Include&nbsp;<$text text=<<specialCaption>>/>
         </div>
       </$let>
     </$list>

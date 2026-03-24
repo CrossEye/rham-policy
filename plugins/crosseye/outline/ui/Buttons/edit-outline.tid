@@ -10,7 +10,7 @@ type: text/vnd.tiddlywiki
 \whitespace trim
 
 <% if [subfilter{$:/plugins/crosseye/outline/config/button-filter}] %>
-  <$button class=<<tv-config-toolbar-class>> >
+  <$button class=<<tv-config-toolbar-class>> tooltip=`Edit this ${ [{$:/plugins/crosseye/outline/config/tag}lowercase[]] }$`>
     <$action-sendmessage $message="tm-modal" $param="$:/plugins/crosseye/outline/ui/edit-outline-modal" policyTiddler=<<currentTiddler>>/>
     <%if [<tv-config-toolbar-icons>match[yes]] %>{{$:/plugins/crosseye/outline/images/edit-outline}}<%endif%>
     <%if [<tv-config-toolbar-text>match[yes]] %>

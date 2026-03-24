@@ -1,0 +1,6 @@
+title: $:/plugins/crosseye/outline/images/new-outline
+tags:
+type: text/vnd.tiddlywiki
+
+\parameters (size:"22pt")
+<svg width=<<size>> height=<<size>> class="tc-image-new-outline tc-image-button" viewBox="0 0 128 128"><rect x="90" y="10" width="14" height="52" rx="7"/><rect x="77" y="29" width="40" height="14" rx="7"/><circle cx="8" cy="80" r="5"/><rect x="20" y="75" width="50" height="10" rx="3"/><circle cx="20" cy="100" r="5"/><rect x="32" y="95" width="40" height="10" rx="3"/><circle cx="32" cy="120" r="5"/><rect x="44" y="115" width="30" height="10" rx="3"/></svg>

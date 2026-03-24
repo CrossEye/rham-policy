@@ -1,0 +1,6 @@
+subtitle: Create New Outline
+title: $:/plugins/crosseye/outline/ui/new-outline-modal
+type: text/vnd.tiddlywiki
+footer: <$button message="tm-close-tiddler" class="tc-btn-invisible">Close</$button>
+
+<$transclude $variable="outline-new-wizard"/>
