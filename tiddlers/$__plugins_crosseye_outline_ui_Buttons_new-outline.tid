@@ -1,0 +1,20 @@
+caption: {{$:/plugins/crosseye/outline/images/new-outline}} new outline
+created: 20260324030718699
+description: Create a new outline
+list-after: $:/core/ui/Buttons/new-tiddler
+modified: 20260324030718699
+tags: $:/tags/PageControls
+title: $:/plugins/crosseye/outline/ui/Buttons/new-outline
+type: text/vnd.tiddlywiki
+
+\whitespace trim
+
+<$button class="tc-btn-invisible" tooltip=`Create a new ${ [{$:/plugins/crosseye/outline/config/tag}lowercase[]] }$`>
+  <$action-sendmessage $message="tm-modal" $param="$:/plugins/crosseye/outline/ui/new-outline-modal"/>
+  <%if [<tv-config-toolbar-icons>match[yes]] %>{{$:/plugins/crosseye/outline/images/new-outline}}<%endif%>
+  <%if [<tv-config-toolbar-text>match[yes]] %>
+    <span class="tc-btn-text">
+      <$text text=`new ${ [{$:/plugins/crosseye/outline/config/tag}lowercase[]] }$`/>
+    </span>
+  <%endif%>
+</$button>
