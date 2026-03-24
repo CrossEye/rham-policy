@@ -164,6 +164,39 @@
   background: #3a8eca;
 }
 
+.dashboard-btn-danger {
+  color: #c00;
+}
+
+.dashboard-btn-danger:hover {
+  background: #c00;
+  color: white;
+  border-color: #a00;
+}
+
+.dashboard-delete-confirm {
+  margin-top: 0.75em;
+  padding: 0.75em;
+  border: 1px solid #c00;
+  border-radius: 4px;
+  background: #fff5f5;
+}
+
+.dashboard-delete-confirm ul {
+  margin: 0.5em 0;
+  padding-left: 1.5em;
+  max-height: 200px;
+  overflow-y: auto;
+  font-size: 0.85em;
+  color: #666;
+}
+
+.dashboard-delete-confirm-buttons {
+  display: flex;
+  gap: 0.5em;
+  margin-top: 0.75em;
+}
+
 .dashboard-delete-panel {
   border-color: #c00;
   background: #fff5f5;

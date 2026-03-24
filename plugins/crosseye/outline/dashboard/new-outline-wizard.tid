@@ -18,6 +18,17 @@ type: text/vnd.tiddlywiki
       <label>Display style:</label>
       <$transclude $variable="outline-display-style-select" tid="$:/temp/outline/new/display-style" field="text"/>
     </div>
+    <div class="dashboard-edit-field">
+      <label>Marker style:</label>
+      <$select tiddler="$:/temp/outline/new/marker-style" field="text" default="1" class="dashboard-edit-select">
+        <option value="I">I, II, III...</option>
+        <option value="A">A, B, C...</option>
+        <option value="1">1, 2, 3...</option>
+        <option value="a">a, b, c...</option>
+        <option value="i">i, ii, iii...</option>
+        <option value="s1">No visible markers (s1, s2, s3...)</option>
+      </$select>
+    </div>
 
     <!-- Special section checkboxes -->
     <$list filter="[function[outline-all-special-sections]]" variable="specialCfg">
@@ -38,6 +49,7 @@ type: text/vnd.tiddlywiki
       <$let
         outlineTitle={{{ [{$:/temp/outline/new/title}] }}}
         outlineStyle={{{ [{$:/temp/outline/new/display-style}!is[blank]] :else[[outline]] +[first[]] }}}
+        outlineMarker={{{ [{$:/temp/outline/new/marker-style}!is[blank]] :else[[1]] +[first[]] }}}
         outlineTag={{{ [function[outline-tag]] }}}
       >
         <$button class="dashboard-btn dashboard-btn-save">
@@ -45,6 +57,7 @@ type: text/vnd.tiddlywiki
             $basetitle=<<outlineTitle>>
             caption=<<outlineTitle>>
             display-style=<<outlineStyle>>
+            marker-style=<<outlineMarker>>
             tags=<<outlineTag>>
             type="text/vnd.tiddlywiki"
             text="<<sections>>"
@@ -73,6 +86,7 @@ type: text/vnd.tiddlywiki
           <!-- Clean up temp tiddlers -->
           <$action-setfield $tiddler="$:/temp/outline/new/title" text=""/>
           <$action-setfield $tiddler="$:/temp/outline/new/display-style" text=""/>
+          <$action-deletetiddler $tiddler="$:/temp/outline/new/marker-style"/>
           <$list filter="[function[outline-all-special-sections]]" variable="specialCfg">
             <$action-deletetiddler $tiddler={{{ [[$:/temp/outline/new/include-]addsuffix{!!suffix}] }}}/>
           </$list>

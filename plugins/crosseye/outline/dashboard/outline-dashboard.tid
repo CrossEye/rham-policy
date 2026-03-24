@@ -584,6 +584,37 @@ type: text/vnd.tiddlywiki
           <$action-setfield $tiddler=<<headerState>> text="open"/>
           edit
         </$button>
+        <$let deleteState={{{ [[$:/state/outline/dashboard/delete-confirm/]addsuffix<pol>] }}}>
+        <$button class="tc-btn-invisible dashboard-btn dashboard-btn-danger">
+          <$action-setfield $tiddler=<<deleteState>> text="confirm"/>
+          delete
+        </$button>
+        <$reveal type="match" stateTitle=<<deleteState>> text="confirm" animate="yes">
+          <div class="dashboard-delete-confirm">
+            <p>''Delete this entire <$text text={{{ [{$:/plugins/crosseye/outline/config/tag}lowercase[]] }}}/>?'' This will remove:</p>
+            <ul>
+              <$list filter="[all[tiddlers]prefix<pol>sort[]]">
+                <li><$text text=<<currentTiddler>>/></li>
+              </$list>
+            </ul>
+            <div class="dashboard-delete-confirm-buttons">
+              <$button class="dashboard-btn dashboard-btn-danger">
+                <$list filter="[all[tiddlers]prefix<pol>sort[]]">
+                  <$action-deletetiddler $tiddler=<<currentTiddler>>/>
+                </$list>
+                <$action-setfield $tiddler=<<deleteState>> text=""/>
+                <$action-setfield $tiddler="$:/state/outline/dashboard/policy" text=""/>
+                <$action-sendmessage $message="tm-close-tiddler" $param="$:/plugins/crosseye/outline/dashboard/view"/>
+                Yes, delete all
+              </$button>
+              <$button class="dashboard-btn">
+                <$action-setfield $tiddler=<<deleteState>> text=""/>
+                Cancel
+              </$button>
+            </div>
+          </div>
+        </$reveal>
+        </$let>
       </$reveal>
     </span>
     </$let>

@@ -1,5 +1,6 @@
 caption: {{$:/plugins/crosseye/outline/images/new-outline}} new outline
 description: Create a new outline
+list-after: $:/core/ui/Buttons/new-tiddler
 tags: $:/tags/PageControls
 title: $:/plugins/crosseye/outline/ui/Buttons/new-outline
 type: text/vnd.tiddlywiki
