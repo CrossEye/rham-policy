@@ -50,6 +50,38 @@ function repeatChar(ch, n) {
 	return s;
 }
 
+var ROMAN_MAP = [
+	[1000, "M"], [900, "CM"], [500, "D"], [400, "CD"],
+	[100, "C"], [90, "XC"], [50, "L"], [40, "XL"],
+	[10, "X"], [9, "IX"], [5, "V"], [4, "IV"], [1, "I"]
+];
+
+function romanToInt(s) {
+	var upper = s.toUpperCase();
+	var result = 0;
+	for(var i = 0; i < ROMAN_MAP.length; i++) {
+		while(upper.indexOf(ROMAN_MAP[i][1]) === 0) {
+			result += ROMAN_MAP[i][0];
+			upper = upper.slice(ROMAN_MAP[i][1].length);
+		}
+	}
+	return upper.length === 0 ? result : -1;
+}
+
+function padMarker(title) {
+	return title.replace(/\(([^()]+)\)/g, function(whole, inner) {
+		var asInt = parseInt(inner, 10);
+		if(!isNaN(asInt)) {
+			return "(" + ("0000" + asInt).slice(-4) + ")";
+		}
+		var asRoman = romanToInt(inner);
+		if(asRoman > 0) {
+			return "(" + ("0000" + asRoman).slice(-4) + ")";
+		}
+		return whole;
+	});
+}
+
 exports["outline-sort-key"] = function(source, operator, options) {
 	var results = [];
 	var wiki = options.wiki;
@@ -75,7 +107,7 @@ exports["outline-sort-key"] = function(source, operator, options) {
 				return;
 			}
 		}
-		results.push(title);
+		results.push(padMarker(title));
 	});
 	return results;
 };

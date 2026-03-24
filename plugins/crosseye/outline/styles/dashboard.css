@@ -61,6 +61,7 @@
 
 .dashboard-node-caption {
   flex: 1;
+  font-weight: bold;
 }
 
 .dashboard-node-actions {
@@ -70,7 +71,7 @@
   transition: opacity 0.15s;
 }
 
-.dashboard-node-header:hover .dashboard-node-actions,
+.dashboard-node:hover:not(:has(.dashboard-node:hover)) > .dashboard-node-header .dashboard-node-actions,
 .dashboard-node-actions:has(.dashboard-btn-save) {
   opacity: 1;
 }
@@ -342,33 +343,14 @@
   max-width: 300px;
 }
 
-.dashboard-mode-tabs {
+.dashboard-view-controls {
   display: flex;
   flex-wrap: wrap;
-  gap: 0;
+  align-items: center;
+  gap: 0.5em;
   margin-bottom: 1em;
-  border-bottom: 2px solid #ccc;
-}
-
-.dashboard-tab {
-  padding: 0.4em 1.2em;
-  border: 1px solid #ccc;
-  border-bottom: none;
-  border-radius: 4px 4px 0 0;
-  background: #f5f5f5;
-  cursor: pointer;
-  font-size: 0.9em;
-  margin-bottom: -2px;
-}
-
-.dashboard-tab:hover {
-  background: #e8e8e8;
-}
-
-.dashboard-tab-active {
-  background: white;
-  border-bottom: 2px solid white;
-  font-weight: bold;
+  padding-bottom: 0.5em;
+  border-bottom: 1px solid #ddd;
 }
 
 .dashboard-tab-actions {
@@ -378,51 +360,42 @@
   gap: 0.5em;
 }
 
-.dashboard-preview-section {
-  margin: 0.25em 0;
-  padding: 0.25em 0.5em;
-  border-left: 2px solid #ddd;
+.dashboard-node-content {
+  margin: 0.25em 0 0.5em 2em;
 }
 
-.dashboard-preview-section:hover:not(:has(.dashboard-preview-section:hover)) {
-  background: #f0f4f8;
-}
-
-.dashboard-preview-heading {
+.dashboard-node-collapse-actions {
   display: flex;
-  align-items: center;
-  gap: 0.5em;
-  min-height: 1.8em;
-  font-weight: bold;
-}
-
-.dashboard-preview-marker {
-  min-width: 2em;
-  color: #666;
-}
-
-.dashboard-preview-caption {
-  flex: 1;
-}
-
-.dashboard-preview-actions {
-  display: flex;
-  gap: 0.25em;
+  gap: 0.1em;
   opacity: 0;
   transition: opacity 0.15s;
 }
 
-.dashboard-preview-section:hover:not(:has(.dashboard-preview-section:hover)) > .dashboard-preview-heading .dashboard-preview-actions,
-.dashboard-preview-actions:has(.dashboard-btn-save) {
+.dashboard-node:hover:not(:has(.dashboard-node:hover)) > .dashboard-node-header .dashboard-node-collapse-actions {
   opacity: 1;
 }
 
-.dashboard-preview-content {
-  margin: 0.25em 0 0.5em 2em;
+.dashboard-btn-collapse {
+  font-size: 0.75em;
+  padding: 0.1em 0.25em;
+  min-width: 1.2em;
+  text-align: center;
+  color: #666;
 }
 
-.dashboard-preview-children {
-  margin-left: 1.5em;
+.dashboard-btn-collapse:hover {
+  background: #e8e8e8;
+  border-radius: 3px;
+}
+
+.dashboard-btn-collapse-double {
+  letter-spacing: -0.35em;
+  padding-right: 0.6em;
+}
+
+.dashboard-btn-collapse-rotated {
+  display: inline-block;
+  transform: rotate(90deg);
 }
 
 /* Edit Outline Modal */

@@ -59,6 +59,29 @@ type: text/vnd.tiddlywiki
   </$let>
 \end dashboard-parent-setup
 
+\procedure dashboard-collapse-all(pol)
+<$action-setfield $tiddler={{{ [[$:/state/outline/dashboard/collapsed/]addsuffix<pol>] }}} text="yes"/>
+<$list filter="[all[tiddlers]prefix<pol>] :filter[removeprefix<pol>prefix[(]]" variable="desc">
+  <$action-setfield $tiddler={{{ [[$:/state/outline/dashboard/collapsed/]addsuffix<desc>] }}} text="yes"/>
+</$list>
+\end dashboard-collapse-all
+
+\procedure dashboard-expand-all(pol, rootPol)
+<$action-deletetiddler $tiddler={{{ [[$:/state/outline/dashboard/hide-content/]addsuffix<rootPol>] }}}/>
+<$action-deletetiddler $tiddler={{{ [[$:/state/outline/dashboard/collapsed/]addsuffix<pol>] }}}/>
+<$list filter="[all[tiddlers]prefix<pol>] :filter[removeprefix<pol>prefix[(]]" variable="desc">
+  <$action-deletetiddler $tiddler={{{ [[$:/state/outline/dashboard/collapsed/]addsuffix<desc>] }}}/>
+</$list>
+\end dashboard-expand-all
+
+\procedure dashboard-show-tree(pol, rootPol)
+<$action-setfield $tiddler={{{ [[$:/state/outline/dashboard/hide-content/]addsuffix<rootPol>] }}} text="yes"/>
+<$action-deletetiddler $tiddler={{{ [[$:/state/outline/dashboard/collapsed/]addsuffix<pol>] }}}/>
+<$list filter="[all[tiddlers]prefix<pol>] :filter[removeprefix<pol>prefix[(]]" variable="desc">
+  <$action-deletetiddler $tiddler={{{ [[$:/state/outline/dashboard/collapsed/]addsuffix<desc>] }}}/>
+</$list>
+\end dashboard-show-tree
+
 \procedure dashboard-section-editor(mode, child, parent, rootPol)
   <$let
     editingState={{{ [[$:/state/outline/dashboard/editing/]addsuffix<rootPol>] }}}
@@ -291,6 +314,9 @@ type: text/vnd.tiddlywiki
     moveTargetState={{{ [[$:/state/outline/dashboard/move-target/]addsuffix<rootPol>] }}}
     isMoving={{{ [<movingState>get[text]!is[blank]then[yes]else[no]] }}}
     movingNode={{{ [<movingState>get[text]] }}}
+    editingState={{{ [[$:/state/outline/dashboard/editing/]addsuffix<rootPol>] }}}
+    hideContentState={{{ [[$:/state/outline/dashboard/hide-content/]addsuffix<rootPol>] }}}
+    isHideContent={{{ [<hideContentState>get[text]match[yes]then[yes]else[no]] }}}
   >
     <$list filter="[all[tiddlers]prefix<pol>] :filter[removeprefix<pol>split[(]count[]match[2]] +[sortsub:string<outlineOrder>]" variable="child">
       <$let
@@ -300,7 +326,6 @@ type: text/vnd.tiddlywiki
         isMandatory={{{ [function[outline-all-special-sections]] :filter[get[suffix]match<rawSuffix>] :filter[get[mandatory]match[yes]] +[count[]compare:integer:gt[0]then[yes]else[no]] }}}
         marker={{{ [<isSpecial>match[yes]then[]] :else[<rawSuffix>] +[first[]] }}}
         hasChildren={{{ [all[tiddlers]prefix<child>] :filter[removeprefix<child>split[(]count[]match[2]] +[count[]] }}}
-        editingState={{{ [[$:/state/outline/dashboard/editing/]addsuffix<rootPol>] }}}
         isEditing={{{ [<editingState>get[text]match<child>then[yes]else[no]] }}}
         isAdding={{{ [<addingState>get[text]match<child>then[yes]else[no]] }}}
         isSettingUp={{{ [<setupState>get[text]match<child>then[yes]else[no]] }}}
@@ -309,6 +334,9 @@ type: text/vnd.tiddlywiki
         suggestedMarker={{{ [<lastChildMarker>next-marker[]] :else[[1]] +[first[]] }}}
         prevSibling={{{ [all[tiddlers]prefix<pol>] :filter[removeprefix<pol>split[(]count[]match[2]] :filter[<currentTiddler>outline-sort-key[]!prefix[!]!prefix[~]] +[sortsub:string<outlineOrder>before<child>] }}}
         nextSibling={{{ [all[tiddlers]prefix<pol>] :filter[removeprefix<pol>split[(]count[]match[2]] :filter[<currentTiddler>outline-sort-key[]!prefix[!]!prefix[~]] +[sortsub:string<outlineOrder>after<child>] }}}
+        collapsedState={{{ [[$:/state/outline/dashboard/collapsed/]addsuffix<child>] }}}
+        isCollapsed={{{ [<collapsedState>get[text]match[yes]then[yes]else[no]] }}}
+        showContent={{{ [<isCollapsed>match[yes]then[no]] :else[<isHideContent>match[yes]then[no]] :else[[yes]] +[first[]] }}}
       >
         <% if [<isMoving>match[yes]] [<isSpecial>match[no]] +[allafter[yes]first[]match[]] %>
           <$let isDescendant={{{ [<child>removeprefix<movingNode>prefix[(]then[yes]] [<child>match<movingNode>then[yes]] +[first[]] }}}
@@ -325,6 +353,27 @@ type: text/vnd.tiddlywiki
         <% endif %>
         <div class={{{ [<isSpecial>match[yes]addprefix[dashboard-node dashboard-node-]addsuffix<rawSuffix>] :else[<movingNode>match<child>then[dashboard-node dashboard-node-moving]] :else[[dashboard-node]] }}}>
           <div class="dashboard-node-header">
+            <span class="dashboard-node-collapse-actions">
+              <% if [<isCollapsed>match[no]] %>
+                <$button class="tc-btn-invisible dashboard-btn-collapse dashboard-btn-collapse-rotated" title="Collapse">
+                  <$action-setfield $tiddler=<<collapsedState>> text="yes"/>
+                  &#9654;&#xFE0E;
+                </$button>
+                <$button class="tc-btn-invisible dashboard-btn-collapse dashboard-btn-collapse-double dashboard-btn-collapse-rotated" title="Collapse all">
+                  <$transclude $variable="dashboard-collapse-all" pol=<<child>>/>
+                  &#9654;&#xFE0E;&#9654;&#xFE0E;
+                </$button>
+              <% else %>
+                <$button class="tc-btn-invisible dashboard-btn-collapse" title="Expand">
+                  <$action-deletetiddler $tiddler=<<collapsedState>>/>
+                  &#9654;&#xFE0E;
+                </$button>
+                <$button class="tc-btn-invisible dashboard-btn-collapse dashboard-btn-collapse-double" title="Expand all">
+                  <$transclude $variable="dashboard-expand-all" pol=<<child>> rootPol=<<rootPol>>/>
+                  &#9654;&#xFE0E;&#9654;&#xFE0E;
+                </$button>
+              <% endif %>
+            </span>
             <% if [<isSpecial>!match[yes]] %>
               <span class="dashboard-node-marker">
                 <% if [<marker>!is[blank]] %>
@@ -336,6 +385,7 @@ type: text/vnd.tiddlywiki
             <span class="dashboard-node-actions">
               <% if [<isEditing>match[yes]] %>
                 <$button class="dashboard-btn dashboard-btn-save">
+                  <$action-deletetiddler $tiddler=<<collapsedState>>/>
                   <$action-setfield $tiddler=<<editingState>> text=""/>
                   Save
                 </$button>
@@ -343,6 +393,7 @@ type: text/vnd.tiddlywiki
                   <$action-setfield $tiddler=<<child>> caption={{{ [{$:/temp/outline/edit/caption}] }}}/>
                   <$action-setfield $tiddler=<<child>> text={{{ [{$:/temp/outline/edit/text}] }}}/>
                   <$action-setfield $tiddler=<<child>> display-style={{{ [{$:/temp/outline/edit/display-style}] }}}/>
+                  <$action-deletetiddler $tiddler=<<collapsedState>>/>
                   <$action-setfield $tiddler=<<editingState>> text=""/>
                   Cancel
                 </$button>
@@ -447,6 +498,7 @@ type: text/vnd.tiddlywiki
               <% endif %>
             </span>
           </div>
+          <!-- Edit/delete/setup reveals — outside collapse gate -->
           <$reveal type="match" stateTitle=<<editingState>> text=<<child>> animate="yes">
             <$transclude $variable="dashboard-section-editor" mode="edit" child=<<child>> parent=<<pol>> rootPol=<<rootPol>>/>
           </$reveal>
@@ -456,23 +508,35 @@ type: text/vnd.tiddlywiki
           <$reveal type="match" stateTitle=<<setupState>> text=<<child>> animate="yes">
             <$transclude $variable="dashboard-parent-setup" parent=<<child>> rootPol=<<rootPol>>/>
           </$reveal>
-          <% if [<hasChildren>compare:integer:gt[0]] %>
-            <div class="dashboard-children">
-              <$transclude $variable="dashboard-node" pol=<<child>> rootPol=<<rootPol>>/>
-              <% if [<isMoving>match[yes]] [<isSpecial>match[no]] +[allafter[yes]first[]match[]] %>
-                <$let isDescendant={{{ [<child>removeprefix<movingNode>search[(]count[]compare:integer:gt[0]then[yes]] [<child>match<movingNode>then[yes]] +[first[]] }}}>
-                  <% if [<isDescendant>!match[yes]] %>
-                    <div class="dashboard-move-target">
-                      <$button class="tc-btn-invisible">
-                        <$action-setfield $tiddler=<<moveTargetState>> text={{{ [<child>addsuffix[|end]] }}}/>
-                        &#8594;&nbsp;move here
-                      </$button>
-                    </div>
-                  <% endif %>
-                </$let>
-              <% endif %>
-            </div>
+          <!-- Content — hidden when collapsed OR hide-content is active -->
+          <% if [<showContent>match[yes]] %>
+            <$reveal type="nomatch" stateTitle=<<editingState>> text=<<child>> animate="yes">
+              <div class="dashboard-node-content">
+                <$transclude $variable="dashboard-preview-content" child=<<child>>/>
+              </div>
+            </$reveal>
           <% endif %>
+          <!-- Children — hidden only when collapsed -->
+          <$reveal type="nomatch" stateTitle=<<collapsedState>> text="yes" default="" animate="yes">
+            <% if [<hasChildren>compare:integer:gt[0]] %>
+              <div class="dashboard-children">
+                <$transclude $variable="dashboard-node" pol=<<child>> rootPol=<<rootPol>>/>
+                <% if [<isMoving>match[yes]] [<isSpecial>match[no]] +[allafter[yes]first[]match[]] %>
+                  <$let isDescendant={{{ [<child>removeprefix<movingNode>search[(]count[]compare:integer:gt[0]then[yes]] [<child>match<movingNode>then[yes]] +[first[]] }}}>
+                    <% if [<isDescendant>!match[yes]] %>
+                      <div class="dashboard-move-target">
+                        <$button class="tc-btn-invisible">
+                          <$action-setfield $tiddler=<<moveTargetState>> text={{{ [<child>addsuffix[|end]] }}}/>
+                          &#8594;&nbsp;move here
+                        </$button>
+                      </div>
+                    <% endif %>
+                  </$let>
+                <% endif %>
+              </div>
+            <% endif %>
+          </$reveal>
+          <!-- Add-child panel — outside collapse gate -->
           <$reveal type="match" stateTitle=<<addingState>> text=<<child>> animate="yes">
             <$transclude $variable="dashboard-section-editor" mode="add" parent=<<child>> rootPol=<<rootPol>>/>
           </$reveal>
@@ -488,80 +552,12 @@ type: text/vnd.tiddlywiki
 </$let>
 \end dashboard-preview-content
 
-\procedure dashboard-preview-node(pol, rootPol)
-  <$let
-    editingState={{{ [[$:/state/outline/dashboard/editing/]addsuffix<rootPol>] }}}
-  >
-    <$list filter="[all[tiddlers]prefix<pol>] :filter[removeprefix<pol>split[(]count[]match[2]] +[sortsub:string<outlineOrder>]" variable="child">
-      <$let
-        rawSuffix={{{ [<child>search-replace::regexp<markerRegex>,[$1]] }}}
-        isSpecial={{{ [function[outline-is-special],<rawSuffix>] }}}
-        specialCaption={{{ [function[outline-special-caption],<rawSuffix>] }}}
-        marker={{{ [<isSpecial>match[yes]then[]] :else[<rawSuffix>] +[first[]] }}}
-        hasChildren={{{ [all[tiddlers]prefix<child>] :filter[removeprefix<child>split[(]count[]match[2]] +[count[]] }}}
-        isEditing={{{ [<editingState>get[text]match<child>then[yes]else[no]] }}}
-      >
-        <div class={{{ [<isSpecial>match[yes]addprefix[dashboard-preview-section dashboard-preview-section-]addsuffix<rawSuffix>] :else[[dashboard-preview-section]] }}}>
-          <div class="dashboard-preview-heading">
-            <% if [<isSpecial>!match[yes]] %>
-              <span class="dashboard-preview-marker">
-                <% if [<marker>!is[blank]] %>
-                  (<$text text=<<marker>>/>)
-                <% endif %>
-              </span>
-            <% endif %>
-            <span class="dashboard-preview-caption"><$text text={{{ [<child>get[caption]] }}}/></span>
-            <span class="dashboard-preview-actions">
-              <% if [<isEditing>match[yes]] %>
-                <$button class="dashboard-btn dashboard-btn-save">
-                  <$action-setfield $tiddler=<<editingState>> text=""/>
-                  Save
-                </$button>
-                <$button class="dashboard-btn">
-                  <$action-setfield $tiddler=<<child>> caption={{{ [{$:/temp/outline/edit/caption}] }}}/>
-                  <$action-setfield $tiddler=<<child>> text={{{ [{$:/temp/outline/edit/text}] }}}/>
-                  <$action-setfield $tiddler=<<child>> display-style={{{ [{$:/temp/outline/edit/display-style}] }}}/>
-                  <$action-setfield $tiddler=<<editingState>> text=""/>
-                  Cancel
-                </$button>
-              <% else %>
-                <$button class="tc-btn-invisible dashboard-btn">
-                  <$action-setfield $tiddler="$:/temp/outline/edit/caption" text={{{ [<child>get[caption]] }}}/>
-                  <$action-setfield $tiddler="$:/temp/outline/edit/text" text={{{ [<child>get[text]] }}}/>
-                  <$action-setfield $tiddler="$:/temp/outline/edit/display-style" text={{{ [<child>get[display-style]] }}}/>
-                  <$action-setfield $tiddler=<<editingState>> text=<<child>>/>
-                  edit
-                </$button>
-              <% endif %>
-            </span>
-          </div>
-          <$reveal type="match" stateTitle=<<editingState>> text=<<child>> animate="yes">
-            <$transclude $variable="dashboard-section-editor" mode="edit" child=<<child>> parent=<<pol>> rootPol=<<rootPol>>/>
-          </$reveal>
-          <$reveal type="nomatch" stateTitle=<<editingState>> text=<<child>> animate="yes">
-            <div class="dashboard-preview-content">
-              <$transclude $variable="dashboard-preview-content" child=<<child>>/>
-            </div>
-          </$reveal>
-          <% if [<hasChildren>compare:integer:gt[0]] %>
-            <div class="dashboard-preview-children">
-              <$transclude $variable="dashboard-preview-node" pol=<<child>> rootPol=<<rootPol>>/>
-            </div>
-          <% endif %>
-        </div>
-      </$let>
-    </$list>
-  </$let>
-\end dashboard-preview-node
-
 \procedure outline-dashboard(pol)
 <$let
   hasChildren={{{ [all[tiddlers]prefix<pol>] :filter[removeprefix<pol>split[(]count[]match[2]] +[count[]] }}}
   lastChild={{{ [all[tiddlers]prefix<pol>] :filter[removeprefix<pol>split[(]count[]match[2]] :filter[<currentTiddler>outline-sort-key[]!prefix[!]!prefix[~]] +[sortsub:string<outlineOrder>last[]] }}}
   lastMarker={{{ [<lastChild>search-replace::regexp<markerRegex>,[$1]] }}}
   suggestedMarker={{{ [<lastMarker>next-marker[]] :else[[1]] +[first[]] }}}
-  modeState={{{ [[$:/state/outline/dashboard/mode/]addsuffix<pol>] }}}
-  currentMode={{{ [<modeState>get[text]] :else[[preview]] +[first[]] }}}
   outlineTag={{{ [function[outline-tag]] }}}
 >
 <div class="policy-dashboard">
@@ -621,14 +617,18 @@ type: text/vnd.tiddlywiki
     <% endif %>
   </$let>
 
-  <div class="dashboard-mode-tabs">
-    <$button class={{{ [<currentMode>match[preview]then[dashboard-tab dashboard-tab-active]] :else[[dashboard-tab]] +[first[]] }}}>
-      <$action-setfield $tiddler=<<modeState>> text="preview"/>
-      Preview
+  <div class="dashboard-view-controls">
+    <$button class="tc-btn-invisible dashboard-btn">
+      <$transclude $variable="dashboard-expand-all" pol=<<pol>> rootPol=<<pol>>/>
+      Expand All
     </$button>
-    <$button class={{{ [<currentMode>match[structure]then[dashboard-tab dashboard-tab-active]] :else[[dashboard-tab]] +[first[]] }}}>
-      <$action-setfield $tiddler=<<modeState>> text="structure"/>
-      Structure
+    <$button class="tc-btn-invisible dashboard-btn">
+      <$transclude $variable="dashboard-show-tree" pol=<<pol>> rootPol=<<pol>>/>
+      Show Tree
+    </$button>
+    <$button class="tc-btn-invisible dashboard-btn">
+      <$transclude $variable="dashboard-collapse-all" pol=<<pol>>/>
+      Collapse All
     </$button>
     <span class="dashboard-tab-actions">
       <% if [<pol>has[draft-of-outline]] %>
@@ -680,7 +680,6 @@ type: text/vnd.tiddlywiki
     </div>
   </$reveal>
 
-  <$reveal type="nomatch" stateTitle=<<modeState>> default="preview" text="preview" animate="yes">
   <div class="dashboard-tree">
     <$transclude $variable="dashboard-node" pol=<<pol>> rootPol=<<pol>>/>
   </div>
@@ -749,15 +748,7 @@ type: text/vnd.tiddlywiki
       <$transclude $variable="dashboard-section-editor" mode="add" parent=<<pol>> rootPol=<<pol>>/>
     </div>
   </$reveal>
-  </$reveal>
 
-  <$reveal type="match" stateTitle=<<modeState>> default="preview" text="preview" animate="yes">
-  <div class="dashboard-preview">
-    <$transclude $variable="dashboard-preview-node" pol=<<pol>> rootPol=<<pol>>/>
-  </div>
-  </$reveal>
-
-  <$reveal type="nomatch" stateTitle=<<modeState>> default="preview" text="preview" animate="yes">
   <div class="dashboard-footer">
     <% if [<hasChildren>compare:integer:gt[0]] %>
       <$button class="tc-btn-invisible dashboard-btn">
@@ -786,7 +777,6 @@ type: text/vnd.tiddlywiki
       </$let>
     </$list>
   </div>
-  </$reveal>
   </$let>
 </div>
 </$let>
