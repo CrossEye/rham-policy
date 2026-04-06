@@ -1,8 +1,7 @@
-caption: Assets Acquited by Capital Lease
-created: 20250827032033664
-modified: 20250827032033664
-revision: 0
-display-style: definition
+caption: Assets Acquired by Capital Lease
+created: 20260405120000000
+modified: 20260405120000000
 title: Policy3265(V)(s8)
+type: text/vnd.tiddlywiki
 
-<<sections>>
+A. Assets acquired by Capital Lease are recorded at the net present value of the future minimum lease payments. A corresponding liability is established at this time. Assets acquired under the terms of capital leases are depreciated over the useful lives designated for the asset class.

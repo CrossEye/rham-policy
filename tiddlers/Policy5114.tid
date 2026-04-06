@@ -1,7 +1,12 @@
-caption: 5114 - Discipline (Students)
-description: Discipline (Students)
+caption: 5114 - Student Discipline
+created: 20260405120000000
+description: Student Discipline
+display-style: heading3-underline
+modified: 20260405120000000
 pdf-url: https://www.rhamschools.org/common/pages/GetFile.ashx?key=yl1QBmWk
 policy-nbr: 5114
-display-style: 
 tags: Policy
 title: Policy5114
+type: text/vnd.tiddlywiki
+
+<<sections>>

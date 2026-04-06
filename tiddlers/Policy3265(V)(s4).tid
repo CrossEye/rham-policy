@@ -1,10 +1,11 @@
 caption: Infrastructure
-revision: 0
-display-style: outline-block
+created: 20260405120000000
+modified: 20260405120000000
 title: Policy3265(V)(s4)
+type: text/vnd.tiddlywiki
 
-Definition: Infrastructure (fixed) assets are long lived capital assets that normally are stationary in nature
-and can normally be preserved for a significantly greater number of years that most capital assets.
-Infrastructure includes roads, electrical distribution systems, street lighting, water wells, etc.
+Definition: Infrastructure (fixed) assets are long lived capital assets that normally are stationary in nature and can normally be preserved for a significantly greater number of years than most capital assets. Infrastructure includes roads, electrical distribution systems, street lighting, water wells, etc.
 
-<<sections>>
+A. Infrastructure assets should be depreciated over the useful lives.
+
+B. Routine repairs and maintenance costs are charged to operations as incurred. Expenditures that extend the useful life of the infrastructure are capitalized as part of the asset and depreciated over the newly established useful life.
